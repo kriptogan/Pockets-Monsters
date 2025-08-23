@@ -2,7 +2,9 @@ package com.kriptogan.pocketsmonsters.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,9 +19,25 @@ fun PokemonListScreen(
     uiState: PokemonUiState,
     pokemonList: List<PokemonListItem>,
     searchQuery: String,
+    scrollPosition: Int,
     onPokemonClick: (String) -> Unit,
-    onSearchQueryChange: (String) -> Unit
+    onSearchQueryChange: (String) -> Unit,
+    onScrollPositionChange: (Int) -> Unit
 ) {
+    val listState = rememberLazyListState()
+    
+    // Restore scroll position when the screen is displayed
+    LaunchedEffect(scrollPosition) {
+        if (scrollPosition > 0) {
+            listState.animateScrollToItem(scrollPosition)
+        }
+    }
+    
+    // Update scroll position when user scrolls
+    LaunchedEffect(listState.firstVisibleItemIndex) {
+        onScrollPositionChange(listState.firstVisibleItemIndex)
+    }
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,6 +78,7 @@ fun PokemonListScreen(
                     }
                 } else {
                     LazyColumn(
+                        state = listState,
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(pokemonList) { pokemon ->

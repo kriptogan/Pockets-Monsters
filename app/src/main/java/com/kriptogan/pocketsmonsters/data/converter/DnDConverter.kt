@@ -99,11 +99,12 @@ class DnDConverter {
      */
     private fun calculateMovement(stats: List<Stat>, weight: Int): Int {
         Log.d(TAG, "=== Movement Calculation ===")
-        Log.d(TAG, "Input - Weight: $weight (decigrams), Stats: ${stats.map { "${it.stat.name}: ${it.baseStat}" }}")
+        Log.d(TAG, "Input - Weight: $weight (API value), Stats: ${stats.map { "${it.stat.name}: ${it.baseStat}" }}")
         
-        // Convert weight from decigrams to kilograms (divide by 100)
-        val weightInKg = weight / 100.0
-        Log.d(TAG, "Weight Conversion: $weight decigrams = $weightInKg kg")
+        // Convert weight from API value to kilograms (division by 10)
+        // PokéAPI provides weight in a format where division by 10 gives us kg
+        val weightInKg = weight / 10
+        Log.d(TAG, "Weight Conversion: $weight ÷ 10 = $weightInKg kg")
         
         val speedStat = stats.find { it.stat.name == "speed" }?.baseStat ?: 0
         Log.d(TAG, "Speed Stat Found: $speedStat")
@@ -112,13 +113,13 @@ class DnDConverter {
         val baseScore = floor(speedStat / 10.0 + 5).toInt()
         Log.d(TAG, "Step 1 - Base Score: floor($speedStat ÷ 10 + 5) = floor(${speedStat / 10.0 + 5}) = $baseScore")
         
-        // Step 2: Weight Modifier (now using kg)
+        // Step 2: Weight Modifier (using correct ranges)
         val weightModifier = when {
-            weightInKg < 0.1 -> 1      // < 0.1 kg
-            weightInKg < 0.5 -> 0      // 0.1 - 0.49 kg
-            weightInKg < 1.5 -> -1     // 0.5 - 1.49 kg
-            weightInKg < 3.0 -> -2     // 1.5 - 2.99 kg
-            else -> -3                 // ≥ 3.0 kg
+            weightInKg < 10 -> 1       // 0-9.9 kg: +1
+            weightInKg < 50 -> 0       // 10-49.9 kg: +0
+            weightInKg < 150 -> -1     // 50-149.9 kg: -1
+            weightInKg < 300 -> -2     // 150-299.9 kg: -2
+            else -> -3                 // ≥ 300 kg: -3
         }
         Log.d(TAG, "Step 2 - Weight Modifier: Weight $weightInKg kg falls in range → Modifier: $weightModifier")
         
