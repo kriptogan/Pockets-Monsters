@@ -6,7 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -63,7 +63,7 @@ fun PokemonDetailScreen(
                 ) {
                     IconButton(onClick = onBackClick) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
                             tint = MaterialTheme.colorScheme.onPrimaryContainer
                         )
@@ -96,7 +96,13 @@ fun PokemonDetailScreen(
                         ),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Pokémon View")
+                        Text(
+                            text = "Pokémon View",
+                            color = if (!showDnDView) 
+                                MaterialTheme.colorScheme.onPrimary 
+                            else 
+                                androidx.compose.ui.graphics.Color.Black
+                        )
                     }
                     
                     Spacer(modifier = Modifier.width(8.dp))
@@ -111,7 +117,13 @@ fun PokemonDetailScreen(
                         ),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("D&D View")
+                        Text(
+                            text = "D&D View",
+                            color = if (showDnDView) 
+                                MaterialTheme.colorScheme.onPrimary 
+                            else 
+                                androidx.compose.ui.graphics.Color.Black
+                        )
                     }
                 }
             }
@@ -348,7 +360,7 @@ private fun StatRow(
         
         // Visual stat bar
         LinearProgressIndicator(
-            progress = statValue / 255f, // Max stat value in Pokémon
+            progress = { statValue / 255f }, // Max stat value in Pokémon
             modifier = Modifier
                 .width(100.dp)
                 .height(8.dp),

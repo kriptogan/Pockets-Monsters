@@ -39,13 +39,21 @@ fun MainScreen(
 ) {
     val currentScreen by viewModel.currentScreen.collectAsState()
     val selectedPokemon by viewModel.selectedPokemon.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+    val pokemonList by viewModel.filteredPokemonList.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
     
     when (currentScreen) {
         is PokemonScreen.List -> {
             PokemonListScreen(
-                viewModel = viewModel,
+                uiState = uiState,
+                pokemonList = pokemonList,
+                searchQuery = searchQuery,
                 onPokemonClick = { pokemonName ->
                     viewModel.loadPokemon(pokemonName)
+                },
+                onSearchQueryChange = { query ->
+                    viewModel.updateSearchQuery(query)
                 }
             )
         }

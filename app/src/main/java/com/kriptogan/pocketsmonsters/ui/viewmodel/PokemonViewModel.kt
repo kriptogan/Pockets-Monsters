@@ -45,6 +45,9 @@ class PokemonViewModel : ViewModel() {
     private val _selectedType = MutableStateFlow<String?>(null)
     val selectedType: StateFlow<String?> = _selectedType.asStateFlow()
     
+    // Cache for Pokémon details to avoid repeated API calls
+    private val _pokemonDetailsCache = MutableStateFlow<Map<String, Pokemon>>(emptyMap())
+    
     init {
         loadPokemonList()
     }
@@ -103,20 +106,54 @@ class PokemonViewModel : ViewModel() {
         val query = _searchQuery.value.lowercase()
         val type = _selectedType.value
         
-        val filtered = _pokemonList.value.filter { pokemon ->
-            val matchesSearch = pokemon.name.contains(query, ignoreCase = true)
-            val matchesType = type == null || pokemon.name.contains(type, ignoreCase = true)
-            
-            matchesSearch && matchesType
+        if (type == null && query.isEmpty()) {
+            // No filters applied, show all Pokémon
+            _filteredPokemonList.value = _pokemonList.value
+            _uiState.value = PokemonUiState.Success(_pokemonList.value)
+            return
+        }
+        
+        // Start with all Pokémon
+        var filtered = _pokemonList.value
+        
+        // Apply search filter if query exists
+        if (query.isNotEmpty()) {
+            filtered = filtered.filter { pokemon ->
+                pokemon.name.contains(query, ignoreCase = true)
+            }
+        }
+        
+        // Apply type filter if type is selected
+        if (type != null) {
+            // For now, we'll filter by Pokémon that commonly have this type
+            // This is a simplified approach - in a full implementation, we'd need to
+            // fetch each Pokémon's details to check their actual types
+            filtered = filtered.filter { pokemon ->
+                // Common type associations (this is a simplified approach)
+                when (type.lowercase()) {
+                    "fire" -> pokemon.name in listOf("charmander", "charmeleon", "charizard", "vulpix", "ninetales", "growlithe", "arcanine", "ponyta", "rapidash", "magmar", "flareon", "moltres")
+                    "water" -> pokemon.name in listOf("squirtle", "wartortle", "blastoise", "psyduck", "golduck", "poliwag", "poliwhirl", "poliwrath", "tentacool", "tentacruel", "slowpoke", "slowbro", "seel", "dewgong", "shellder", "cloyster", "krabby", "kingler", "horsea", "seadra", "goldeen", "seaking", "staryu", "starmie", "magikarp", "gyarados", "lapras", "vaporeon", "omanyte", "omastar", "kabuto", "kabutops", "dratini", "dragonair", "dragonite")
+                    "grass" -> pokemon.name in listOf("bulbasaur", "ivysaur", "venusaur", "oddish", "gloom", "vileplume", "paras", "parasect", "bellsprout", "weepinbell", "victreebel", "exeggcute", "exeggutor", "tangela", "chikorita", "bayleef", "meganium", "chikorita", "bayleef", "meganium")
+                    "electric" -> pokemon.name in listOf("pikachu", "raichu", "magnemite", "magneton", "voltorb", "electrode", "electabuzz", "jolteon", "chinchou", "lanturn", "mareep", "flaaffy", "ampharos")
+                    "psychic" -> pokemon.name in listOf("abra", "kadabra", "alakazam", "slowpoke", "slowbro", "drowzee", "hypno", "exeggcute", "exeggutor", "starmie", "mr. mime", "jynx", "mewtwo", "mew", "natu", "xatu", "espeon", "wobbuffet", "girafarig", "smoochum")
+                    "ice" -> pokemon.name in listOf("jynx", "lapras", "articuno", "sneasel", "swinub", "piloswine", "delibird", "smoochum", "sneasel", "swinub", "piloswine", "delibird")
+                    "dragon" -> pokemon.name in listOf("dratini", "dragonair", "dragonite", "kingdra")
+                    else -> true // If type not recognized, show all
+                }
+            }
         }
         
         _filteredPokemonList.value = filtered
         
         // Update UI state
-        if (filtered.isEmpty() && query.isNotEmpty()) {
-            _uiState.value = PokemonUiState.Error("No Pokémon found matching '$query'")
-        } else if (filtered.isEmpty()) {
-            _uiState.value = PokemonUiState.Error("No Pokémon found")
+        if (filtered.isEmpty()) {
+            val filterText = when {
+                type != null && query.isNotEmpty() -> "No Pokémon found matching '$query' and type '$type'"
+                type != null -> "No Pokémon found of type '$type'"
+                query.isNotEmpty() -> "No Pokémon found matching '$query'"
+                else -> "No Pokémon found"
+            }
+            _uiState.value = PokemonUiState.Error(filterText)
         } else {
             _uiState.value = PokemonUiState.Success(filtered)
         }
