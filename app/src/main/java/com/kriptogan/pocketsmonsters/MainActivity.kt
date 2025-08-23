@@ -7,11 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kriptogan.pocketsmonsters.ui.components.PokemonDetailScreen
+import com.kriptogan.pocketsmonsters.ui.components.PokemonListScreen
 import com.kriptogan.pocketsmonsters.ui.theme.PocketsMonstersTheme
+import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonScreen
+import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,8 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PocketsMonstersTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    MainScreen(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -31,17 +33,29 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PocketsMonstersTheme {
-        Greeting("Android")
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    viewModel: PokemonViewModel = viewModel()
+) {
+    val currentScreen by viewModel.currentScreen.collectAsState()
+    val selectedPokemon by viewModel.selectedPokemon.collectAsState()
+    
+    when (currentScreen) {
+        is PokemonScreen.List -> {
+            PokemonListScreen(
+                viewModel = viewModel,
+                onPokemonClick = { pokemonName ->
+                    viewModel.loadPokemon(pokemonName)
+                }
+            )
+        }
+        is PokemonScreen.Detail -> {
+            PokemonDetailScreen(
+                pokemon = selectedPokemon,
+                onBackClick = {
+                    viewModel.navigateToList()
+                }
+            )
+        }
     }
 }
