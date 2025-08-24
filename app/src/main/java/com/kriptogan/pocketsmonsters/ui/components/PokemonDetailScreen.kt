@@ -16,6 +16,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
+import androidx.activity.compose.BackHandler
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kriptogan.pocketsmonsters.data.converter.DnDConverter
@@ -27,6 +29,11 @@ fun PokemonDetailScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Handle system back button
+    BackHandler {
+        onBackClick()
+    }
+    
     if (pokemon == null) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -45,6 +52,7 @@ fun PokemonDetailScreen(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .padding(top = 20.dp)
     ) {
         // Custom header with back button
         Card(
@@ -148,44 +156,77 @@ private fun PokemonView(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Large Pokémon sprite
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .background(MaterialTheme.colorScheme.secondaryContainer),
-                contentAlignment = Alignment.Center
-            ) {
-                val spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png"
-                
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(spriteUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "Official artwork of ${pokemon.name}",
-                    modifier = Modifier
-                        .size(180.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    contentScale = ContentScale.Fit
-                )
-            }
-        }
-
-        // Content
-        Column(
+        // Row containing image and basic info
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(bottom = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // Large Pokémon sprite with types
+            Card(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(200.dp),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.secondaryContainer),
+                    contentAlignment = Alignment.Center
+                ) {
+                    val spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png"
+                    
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(spriteUrl)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "Official artwork of ${pokemon.name}",
+                        modifier = Modifier
+                            .size(180.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Fit
+                    )
+                    
+                    // Types positioned at bottom of image
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 20.dp),
+                        contentAlignment = Alignment.BottomCenter
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            pokemon.types.forEach { typeSlot ->
+                                val typeColors = getTypeColors(typeSlot.type.name)
+                                Card(
+                                    modifier = Modifier.padding(4.dp),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = typeColors.background
+                                    ),
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+                                    Text(
+                                        text = typeSlot.type.name.replaceFirstChar { it.uppercase() },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = typeColors.text,
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             // Basic Info Card
             Card(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
@@ -217,39 +258,16 @@ private fun PokemonView(
                             value = "${pokemon.weight / 10.0}kg"
                         )
                     }
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    // Types
-                    Text(
-                        text = "Types",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    
-                    Spacer(modifier = Modifier.height(8.dp))
-                    
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        pokemon.types.forEach { typeSlot ->
-                            Card(
-                                modifier = Modifier.padding(4.dp),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.secondaryContainer
-                                ),
-                                shape = RoundedCornerShape(16.dp)
-                            ) {
-                                Text(
-                                    text = typeSlot.type.name.replaceFirstChar { it.uppercase() },
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                                )
-                            }
-                        }
-                    }
                 }
             }
+        }
+
+        // Content
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
             
             Spacer(modifier = Modifier.height(16.dp))
             
@@ -332,6 +350,42 @@ private fun InfoItem(
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
+    }
+}
+
+/**
+ * Data class for type colors
+ */
+data class TypeColors(
+    val background: Color,
+    val text: Color
+)
+
+/**
+ * Get colors for Pokémon types
+ */
+@Composable
+fun getTypeColors(typeName: String): TypeColors {
+    return when (typeName.lowercase()) {
+        "normal" -> TypeColors(Color(0.66f, 0.66f, 0.47f), Color.White)
+        "fire" -> TypeColors(Color(0.94f, 0.50f, 0.19f), Color.White)
+        "water" -> TypeColors(Color(0.41f, 0.56f, 0.94f), Color.White)
+        "electric" -> TypeColors(Color(0.97f, 0.82f, 0.19f), Color.Black)
+        "grass" -> TypeColors(Color(0.47f, 0.78f, 0.31f), Color.White)
+        "ice" -> TypeColors(Color(0.60f, 0.85f, 0.85f), Color.Black)
+        "fighting" -> TypeColors(Color(0.75f, 0.19f, 0.16f), Color.White)
+        "poison" -> TypeColors(Color(0.63f, 0.25f, 0.63f), Color.White)
+        "ground" -> TypeColors(Color(0.88f, 0.75f, 0.41f), Color.Black)
+        "flying" -> TypeColors(Color(0.66f, 0.56f, 0.94f), Color.White)
+        "psychic" -> TypeColors(Color(0.97f, 0.35f, 0.53f), Color.White)
+        "bug" -> TypeColors(Color(0.66f, 0.72f, 0.13f), Color.White)
+        "rock" -> TypeColors(Color(0.72f, 0.63f, 0.22f), Color.White)
+        "ghost" -> TypeColors(Color(0.44f, 0.35f, 0.60f), Color.White)
+        "dragon" -> TypeColors(Color(0.44f, 0.22f, 0.97f), Color.White)
+        "dark" -> TypeColors(Color(0.44f, 0.35f, 0.28f), Color.White)
+        "steel" -> TypeColors(Color(0.72f, 0.72f, 0.82f), Color.Black)
+        "fairy" -> TypeColors(Color(0.93f, 0.60f, 0.67f), Color.Black)
+        else -> TypeColors(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.onPrimaryContainer)
     }
 }
 
