@@ -46,8 +46,8 @@ class PokemonViewModel : ViewModel() {
     val selectedType: StateFlow<String?> = _selectedType.asStateFlow()
     
     // Scroll position preservation
-    private val _scrollPosition = MutableStateFlow(0)
-    val scrollPosition: StateFlow<Int> = _scrollPosition.asStateFlow()
+    private val _lastViewedPokemonIndex = MutableStateFlow<Int>(-1)
+    val lastViewedPokemonIndex: StateFlow<Int> = _lastViewedPokemonIndex.asStateFlow()
     
     // Cache for Pokémon details to avoid repeated API calls
     private val _pokemonDetailsCache = MutableStateFlow<Map<String, Pokemon>>(emptyMap())
@@ -211,10 +211,13 @@ class PokemonViewModel : ViewModel() {
     }
     
     /**
-     * Update scroll position when user scrolls
+     * Save the index of the Pokémon that was clicked for viewing
      */
-    fun updateScrollPosition(position: Int) {
-        _scrollPosition.value = position
+    fun saveClickedPokemonIndex(pokemonName: String) {
+        val index = _filteredPokemonList.value.indexOfFirst { it.name == pokemonName }
+        if (index >= 0) {
+            _lastViewedPokemonIndex.value = index
+        }
     }
     
     /**
@@ -235,8 +238,8 @@ class PokemonViewModel : ViewModel() {
      * Refresh the Pokémon list
      */
     fun refreshPokemonList() {
-        // Reset scroll position when refreshing
-        _scrollPosition.value = 0
+        // Reset last viewed Pokémon when refreshing
+        _lastViewedPokemonIndex.value = -1
         loadPokemonList()
     }
 }

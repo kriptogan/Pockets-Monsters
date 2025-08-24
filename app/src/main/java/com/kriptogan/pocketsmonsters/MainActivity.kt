@@ -42,7 +42,7 @@ fun MainScreen(
     val uiState by viewModel.uiState.collectAsState()
     val pokemonList by viewModel.filteredPokemonList.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
-    val scrollPosition by viewModel.scrollPosition.collectAsState()
+    val lastViewedPokemonIndex by viewModel.lastViewedPokemonIndex.collectAsState()
     
     when (currentScreen) {
         is PokemonScreen.List -> {
@@ -50,15 +50,13 @@ fun MainScreen(
                 uiState = uiState,
                 pokemonList = pokemonList,
                 searchQuery = searchQuery,
-                scrollPosition = scrollPosition,
+                lastViewedPokemonIndex = lastViewedPokemonIndex,
                 onPokemonClick = { pokemonName ->
+                    viewModel.saveClickedPokemonIndex(pokemonName)
                     viewModel.loadPokemon(pokemonName)
                 },
                 onSearchQueryChange = { query ->
                     viewModel.updateSearchQuery(query)
-                },
-                onScrollPositionChange = { position ->
-                    viewModel.updateScrollPosition(position)
                 }
             )
         }

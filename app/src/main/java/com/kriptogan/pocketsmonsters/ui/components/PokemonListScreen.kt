@@ -19,23 +19,17 @@ fun PokemonListScreen(
     uiState: PokemonUiState,
     pokemonList: List<PokemonListItem>,
     searchQuery: String,
-    scrollPosition: Int,
+    lastViewedPokemonIndex: Int,
     onPokemonClick: (String) -> Unit,
-    onSearchQueryChange: (String) -> Unit,
-    onScrollPositionChange: (Int) -> Unit
+    onSearchQueryChange: (String) -> Unit
 ) {
     val listState = rememberLazyListState()
     
-    // Restore scroll position when the screen is displayed
-    LaunchedEffect(scrollPosition) {
-        if (scrollPosition > 0) {
-            listState.animateScrollToItem(scrollPosition)
+    // Restore scroll position to the last viewed Pokémon index
+    LaunchedEffect(lastViewedPokemonIndex) {
+        if (lastViewedPokemonIndex >= 0 && lastViewedPokemonIndex < pokemonList.size) {
+            listState.animateScrollToItem(lastViewedPokemonIndex)
         }
-    }
-    
-    // Update scroll position when user scrolls
-    LaunchedEffect(listState.firstVisibleItemIndex) {
-        onScrollPositionChange(listState.firstVisibleItemIndex)
     }
     
     Column(
