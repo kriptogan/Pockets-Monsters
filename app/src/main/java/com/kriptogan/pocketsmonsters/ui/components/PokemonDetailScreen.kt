@@ -37,7 +37,7 @@ fun PokemonDetailScreen(
         return
     }
 
-    var showDnDView by remember { mutableStateOf(false) }
+    var showDnDView by remember { mutableStateOf(true) }
     val dndConverter = remember { DnDConverter() }
     val dndView = remember(pokemon) { dndConverter.convertPokemonToDnD(pokemon) }
 
@@ -87,6 +87,27 @@ fun PokemonDetailScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Button(
+                        onClick = { showDnDView = true },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (showDnDView) 
+                                MaterialTheme.colorScheme.primary 
+                            else 
+                                MaterialTheme.colorScheme.surface
+                        ),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            text = "D&D View (Primary)",
+                            color = if (showDnDView) 
+                                MaterialTheme.colorScheme.onPrimary 
+                            else 
+                                androidx.compose.ui.graphics.Color.Black
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.width(8.dp))
+                    
+                    Button(
                         onClick = { showDnDView = false },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (!showDnDView) 
@@ -99,27 +120,6 @@ fun PokemonDetailScreen(
                         Text(
                             text = "Pokémon View",
                             color = if (!showDnDView) 
-                                MaterialTheme.colorScheme.onPrimary 
-                            else 
-                                androidx.compose.ui.graphics.Color.Black
-                        )
-                    }
-                    
-                    Spacer(modifier = Modifier.width(8.dp))
-                    
-                    Button(
-                        onClick = { showDnDView = true },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = if (showDnDView) 
-                                MaterialTheme.colorScheme.primary 
-                            else 
-                                MaterialTheme.colorScheme.surface
-                        ),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            text = "D&D View",
-                            color = if (showDnDView) 
                                 MaterialTheme.colorScheme.onPrimary 
                             else 
                                 androidx.compose.ui.graphics.Color.Black

@@ -94,10 +94,6 @@ fun DnDView(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         InfoItem(
-                            label = "D&D Level",
-                            value = "1" // We'll add level calculation later
-                        )
-                        InfoItem(
                             label = "Hit Dice",
                             value = dndView.hitDice
                         )
@@ -145,46 +141,53 @@ fun DnDView(
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     // Display each stat with original and converted values
+                    // HP should show original value only (not converted)
                     StatRow(
                         statName = "HP",
                         originalValue = dndView.pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0,
-                        convertedValue = dndView.convertedStats["HP"] ?: 0,
-                        modifier = dndView.modifiers["HP"] ?: 0
+                        convertedValue = dndView.pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0, // Use original HP
+                        modifier = null, // No modifier for HP
+                        showOriginalInBrackets = false // Don't show [original] for HP since it's the same
                     )
                     
                     StatRow(
                         statName = "Attack",
                         originalValue = dndView.pokemon.stats.find { it.stat.name == "attack" }?.baseStat ?: 0,
                         convertedValue = dndView.convertedStats["Attack"] ?: 0,
-                        modifier = dndView.modifiers["Attack"] ?: 0
+                        modifier = dndView.modifiers["Attack"] ?: 0,
+                        showOriginalInBrackets = false // Don't show [original] for other stats in DnD view
                     )
                     
                     StatRow(
                         statName = "Defense",
                         originalValue = dndView.pokemon.stats.find { it.stat.name == "defense" }?.baseStat ?: 0,
                         convertedValue = dndView.convertedStats["Defense"] ?: 0,
-                        modifier = dndView.modifiers["Defense"] ?: 0
+                        modifier = dndView.modifiers["Defense"] ?: 0,
+                        showOriginalInBrackets = false // Don't show [original] for other stats in DnD view
                     )
                     
                     StatRow(
                         statName = "Sp.Atk",
                         originalValue = dndView.pokemon.stats.find { it.stat.name == "special-attack" }?.baseStat ?: 0,
                         convertedValue = dndView.convertedStats["Sp.Atk"] ?: 0,
-                        modifier = dndView.modifiers["Sp.Atk"] ?: 0
+                        modifier = dndView.modifiers["Sp.Atk"] ?: 0,
+                        showOriginalInBrackets = false // Don't show [original] for other stats in DnD view
                     )
                     
                     StatRow(
                         statName = "Sp.Def",
                         originalValue = dndView.pokemon.stats.find { it.stat.name == "special-defense" }?.baseStat ?: 0,
                         convertedValue = dndView.convertedStats["Sp.Def"] ?: 0,
-                        modifier = dndView.modifiers["Sp.Def"] ?: 0
+                        modifier = dndView.modifiers["Sp.Def"] ?: 0,
+                        showOriginalInBrackets = false // Don't show [original] for other stats in DnD view
                     )
                     
                     StatRow(
                         statName = "Speed",
                         originalValue = dndView.pokemon.stats.find { it.stat.name == "speed" }?.baseStat ?: 0,
                         convertedValue = dndView.convertedStats["Speed"] ?: 0,
-                        modifier = dndView.modifiers["Speed"] ?: 0
+                        modifier = dndView.modifiers["Speed"] ?: 0,
+                        showOriginalInBrackets = false // Don't show [original] for other stats in DnD view
                     )
                 }
             }
@@ -238,7 +241,8 @@ private fun StatRow(
     statName: String,
     originalValue: Int,
     convertedValue: Int,
-    modifier: Int
+    modifier: Int?,
+    showOriginalInBrackets: Boolean = true
 ) {
     Row(
         modifier = Modifier
@@ -254,16 +258,18 @@ private fun StatRow(
         )
         
         Text(
-            text = "$convertedValue (${formatModifier(modifier)})",
+            text = if (modifier != null) "$convertedValue (${formatModifier(modifier)})" else "$convertedValue",
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold
         )
         
-        Text(
-            text = "[$originalValue]",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        if (showOriginalInBrackets) {
+            Text(
+                text = "[$originalValue]",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
