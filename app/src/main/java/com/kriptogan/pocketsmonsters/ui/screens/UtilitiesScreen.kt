@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 fun UtilitiesScreen(
     onWeaknessesClick: () -> Unit,
     onNaturesClick: () -> Unit,
+    onEnergySlotsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -99,51 +100,98 @@ fun UtilitiesScreen(
             }
         }
         
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        // Natures Card
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onNaturesClick() },
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer
-            )
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = androidx.compose.material.icons.Icons.Default.Person,
-                    contentDescription = "Natures",
-                    modifier = Modifier.size(48.dp),
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-                
-                Spacer(modifier = Modifier.width(16.dp))
-                
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Natures",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Personality traits that affect Pokémon stats",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                
-                Icon(
-                    imageVector = androidx.compose.material.icons.Icons.Default.ArrowForward,
-                    contentDescription = "View",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
+                     Spacer(modifier = Modifier.height(16.dp))
+
+             // Natures Card
+             Card(
+                 modifier = Modifier
+                     .fillMaxWidth()
+                     .clickable { onNaturesClick() },
+                 colors = CardDefaults.cardColors(
+                     containerColor = MaterialTheme.colorScheme.secondaryContainer
+                 )
+             ) {
+                 Row(
+                     modifier = Modifier
+                         .fillMaxWidth()
+                         .padding(20.dp),
+                     verticalAlignment = Alignment.CenterVertically
+                 ) {
+                     Icon(
+                         imageVector = androidx.compose.material.icons.Icons.Default.Person,
+                         contentDescription = "Natures",
+                         modifier = Modifier.size(48.dp),
+                         tint = MaterialTheme.colorScheme.secondary
+                     )
+
+                     Spacer(modifier = Modifier.width(16.dp))
+
+                     Column(modifier = Modifier.weight(1f)) {
+                         Text(
+                             text = "Natures",
+                             style = MaterialTheme.typography.titleLarge,
+                             fontWeight = FontWeight.Bold
+                         )
+                         Text(
+                             text = "Personality traits that affect Pokémon stats",
+                             style = MaterialTheme.typography.bodyMedium,
+                             color = MaterialTheme.colorScheme.onSurfaceVariant
+                         )
+                     }
+
+                     Icon(
+                         imageVector = androidx.compose.material.icons.Icons.Default.ArrowForward,
+                         contentDescription = "View",
+                         tint = MaterialTheme.colorScheme.onSurfaceVariant
+                     )
+                 }
+             }
+
+             Spacer(modifier = Modifier.height(16.dp))
+
+             // Energy Slots Card
+             Card(
+                 modifier = Modifier
+                     .fillMaxWidth()
+                     .clickable { onEnergySlotsClick() },
+                 colors = CardDefaults.cardColors(
+                     containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                 )
+             ) {
+                 Row(
+                     modifier = Modifier
+                         .fillMaxWidth()
+                         .padding(20.dp),
+                     verticalAlignment = Alignment.CenterVertically
+                 ) {
+                     Icon(
+                         imageVector = androidx.compose.material.icons.Icons.Default.Star,
+                         contentDescription = "Energy Slots",
+                         modifier = Modifier.size(48.dp),
+                         tint = MaterialTheme.colorScheme.tertiary
+                     )
+
+                     Spacer(modifier = Modifier.width(16.dp))
+
+                     Column(modifier = Modifier.weight(1f)) {
+                         Text(
+                             text = "Energy Slots",
+                             style = MaterialTheme.typography.titleLarge,
+                             fontWeight = FontWeight.Bold
+                         )
+                         Text(
+                             text = "D&D spell slot progression for Pokémon moves",
+                             style = MaterialTheme.typography.bodyMedium,
+                             color = MaterialTheme.colorScheme.onSurfaceVariant
+                         )
+                     }
+
+                     Icon(
+                         imageVector = androidx.compose.material.icons.Icons.Default.ArrowForward,
+                         contentDescription = "View",
+                         tint = MaterialTheme.colorScheme.onSurfaceVariant
+                     )
+                 }
+             }
     }
 }

@@ -19,6 +19,7 @@ import com.kriptogan.pocketsmonsters.ui.screens.PokedexScreen
 import com.kriptogan.pocketsmonsters.ui.screens.UtilitiesScreen
 import com.kriptogan.pocketsmonsters.ui.screens.WeaknessesScreen
 import com.kriptogan.pocketsmonsters.ui.screens.NaturesScreen
+import com.kriptogan.pocketsmonsters.ui.screens.EnergySlotsScreen
 import com.kriptogan.pocketsmonsters.ui.screens.MyPartyScreen
 import com.kriptogan.pocketsmonsters.ui.theme.PocketsMonstersTheme
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonScreen
@@ -95,29 +96,36 @@ fun MainScreen(
                     modifier = Modifier.padding(innerPadding)
                 )
             }
-            "utilities" -> {
-                when (currentUtilityScreen) {
-                    "weaknesses" -> {
-                        WeaknessesScreen(
-                            onBackClick = { currentUtilityScreen = null },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    }
-                    "natures" -> {
-                        NaturesScreen(
-                            onBackClick = { currentUtilityScreen = null },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    }
-                    else -> {
-                        UtilitiesScreen(
-                            onWeaknessesClick = { currentUtilityScreen = "weaknesses" },
-                            onNaturesClick = { currentUtilityScreen = "natures" },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    }
-                }
-            }
+                             "utilities" -> {
+                     when (currentUtilityScreen) {
+                         "weaknesses" -> {
+                             WeaknessesScreen(
+                                 onBackClick = { currentUtilityScreen = null },
+                                 modifier = Modifier.padding(innerPadding)
+                             )
+                         }
+                         "natures" -> {
+                             NaturesScreen(
+                                 onBackClick = { currentUtilityScreen = null },
+                                 modifier = Modifier.padding(innerPadding)
+                             )
+                         }
+                         "energy_slots" -> {
+                             EnergySlotsScreen(
+                                 onBackClick = { currentUtilityScreen = null },
+                                 modifier = Modifier.padding(innerPadding)
+                             )
+                         }
+                         else -> {
+                             UtilitiesScreen(
+                                 onWeaknessesClick = { currentUtilityScreen = "weaknesses" },
+                                 onNaturesClick = { currentUtilityScreen = "natures" },
+                                 onEnergySlotsClick = { currentUtilityScreen = "energy_slots" },
+                                 modifier = Modifier.padding(innerPadding)
+                             )
+                         }
+                     }
+                 }
             "my_party" -> {
                 MyPartyScreen(
                     modifier = Modifier.padding(innerPadding)
