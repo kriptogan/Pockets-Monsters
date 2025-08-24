@@ -97,7 +97,7 @@ fun PokemonDetailScreen(
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(
-                            text = "D&D View (Primary)",
+                            text = "D&D View",
                             color = if (showDnDView) 
                                 MaterialTheme.colorScheme.onPrimary 
                             else 

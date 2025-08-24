@@ -35,46 +35,46 @@ fun DnDView(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        // Large Pokémon sprite
-        Card(
+        // Row containing image and D&D character sheet
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Box(
+            // Large Pokémon sprite
+            Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .background(MaterialTheme.colorScheme.secondaryContainer),
-                contentAlignment = Alignment.Center
+                    .weight(1f)
+                    .height(200.dp),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
-                val spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dndView.pokemon.id}.png"
-                
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(spriteUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "Official artwork of ${dndView.pokemon.name}",
+                Box(
                     modifier = Modifier
-                        .size(180.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    contentScale = ContentScale.Fit
-                )
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.secondaryContainer),
+                    contentAlignment = Alignment.Center
+                ) {
+                    val spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dndView.pokemon.id}.png"
+                    
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(spriteUrl)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "Official artwork of ${dndView.pokemon.name}",
+                        modifier = Modifier
+                            .size(180.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Fit
+                    )
+                }
             }
-        }
 
-        // D&D Stats Cards
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
             // Basic D&D Info Card
             Card(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
@@ -120,6 +120,14 @@ fun DnDView(
                     }
                 }
             }
+        }
+
+        // D&D Stats Cards
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
             
             Spacer(modifier = Modifier.height(16.dp))
             
