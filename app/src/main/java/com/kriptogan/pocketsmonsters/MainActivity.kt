@@ -17,6 +17,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kriptogan.pocketsmonsters.ui.navigation.BottomNavigation
 import com.kriptogan.pocketsmonsters.ui.screens.PokedexScreen
 import com.kriptogan.pocketsmonsters.ui.screens.UtilitiesScreen
+import com.kriptogan.pocketsmonsters.ui.screens.WeaknessesScreen
+import com.kriptogan.pocketsmonsters.ui.screens.NaturesScreen
 import com.kriptogan.pocketsmonsters.ui.screens.MyPartyScreen
 import com.kriptogan.pocketsmonsters.ui.theme.PocketsMonstersTheme
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonScreen
@@ -47,6 +49,7 @@ fun MainScreen(
     viewModel: PokemonViewModel = viewModel()
 ) {
     var currentTab by remember { mutableStateOf("pokedex") }
+    var currentUtilityScreen by remember { mutableStateOf<String?>(null) }
     val currentScreen by viewModel.currentScreen.collectAsState()
     val selectedPokemon by viewModel.selectedPokemon.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
@@ -65,6 +68,8 @@ fun MainScreen(
                     if (route != "pokedex") {
                         viewModel.navigateToList()
                     }
+                    // Reset utility screen when switching tabs
+                    currentUtilityScreen = null
                 }
             )
         }
@@ -91,9 +96,27 @@ fun MainScreen(
                 )
             }
             "utilities" -> {
-                UtilitiesScreen(
-                    modifier = Modifier.padding(innerPadding)
-                )
+                when (currentUtilityScreen) {
+                    "weaknesses" -> {
+                        WeaknessesScreen(
+                            onBackClick = { currentUtilityScreen = null },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
+                    "natures" -> {
+                        NaturesScreen(
+                            onBackClick = { currentUtilityScreen = null },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
+                    else -> {
+                        UtilitiesScreen(
+                            onWeaknessesClick = { currentUtilityScreen = "weaknesses" },
+                            onNaturesClick = { currentUtilityScreen = "natures" },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
+                }
             }
             "my_party" -> {
                 MyPartyScreen(

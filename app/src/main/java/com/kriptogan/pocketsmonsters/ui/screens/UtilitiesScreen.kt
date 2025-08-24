@@ -1,8 +1,11 @@
 package com.kriptogan.pocketsmonsters.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.filled.Build
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,6 +16,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun UtilitiesScreen(
+    onWeaknessesClick: () -> Unit,
+    onNaturesClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -20,8 +25,7 @@ fun UtilitiesScreen(
             .fillMaxSize()
             .padding(16.dp)
             .padding(top = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
             imageVector = androidx.compose.material.icons.Icons.Default.Star,
@@ -42,7 +46,7 @@ fun UtilitiesScreen(
         Spacer(modifier = Modifier.height(16.dp))
         
         Text(
-            text = "Coming soon! This section will contain useful tools and calculators for your D&D Pokémon adventures.",
+            text = "Essential tools for your D&D Pokémon adventures",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -50,29 +54,95 @@ fun UtilitiesScreen(
         
         Spacer(modifier = Modifier.height(32.dp))
         
+        // Weaknesses/Resistance Card
         Card(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onWeaknessesClick() },
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.ArrowDropDown,
+                    contentDescription = "Weaknesses",
+                    modifier = Modifier.size(48.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                
+                Spacer(modifier = Modifier.width(16.dp))
+                
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Weaknesses & Resistance",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Type effectiveness chart for all Pokémon types",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.ArrowForward,
+                    contentDescription = "View",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // Natures Card
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onNaturesClick() },
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Planned Features:",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.Person,
+                    contentDescription = "Natures",
+                    modifier = Modifier.size(48.dp),
+                    tint = MaterialTheme.colorScheme.secondary
                 )
                 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.width(16.dp))
                 
-                Text("• D&D Stat Calculator")
-                Text("• Move Power Calculator")
-                Text("• Type Effectiveness Chart")
-                Text("• Experience Calculator")
-                Text("• Level Up Guide")
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Natures",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Personality traits that affect Pokémon stats",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.ArrowForward,
+                    contentDescription = "View",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }
