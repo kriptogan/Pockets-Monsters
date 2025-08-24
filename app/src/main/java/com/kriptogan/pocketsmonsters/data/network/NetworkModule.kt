@@ -1,8 +1,11 @@
 package com.kriptogan.pocketsmonsters.data.network
 
+import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kriptogan.pocketsmonsters.data.api.PokeApiService
+import com.kriptogan.pocketsmonsters.data.local.LocalStorage
+import com.kriptogan.pocketsmonsters.data.repository.PokemonRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -55,5 +58,20 @@ object NetworkModule {
      */
     fun createPokeApiService(): PokeApiService {
         return createRetrofit().create(PokeApiService::class.java)
+    }
+    
+    /**
+     * Create LocalStorage instance
+     */
+    fun createLocalStorage(context: Context): LocalStorage {
+        return LocalStorage(context)
+    }
+    
+    /**
+     * Create PokemonRepository instance
+     */
+    fun createPokemonRepository(context: Context): PokemonRepository {
+        val localStorage = createLocalStorage(context)
+        return PokemonRepository(localStorage)
     }
 }

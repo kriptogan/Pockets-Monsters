@@ -77,24 +77,29 @@ fun MainScreen(
     ) { innerPadding ->
         when (currentTab) {
             "pokedex" -> {
-                PokedexScreen(
-                    uiState = uiState,
-                    pokemonList = pokemonList,
-                    searchQuery = searchQuery,
-                    lastViewedPokemonIndex = lastViewedPokemonIndex,
-                    selectedPokemon = selectedPokemon,
-                    onPokemonClick = { pokemonName ->
-                        viewModel.saveClickedPokemonIndex(pokemonName)
-                        viewModel.loadPokemon(pokemonName)
-                    },
-                    onSearchQueryChange = { query ->
-                        viewModel.updateSearchQuery(query)
-                    },
-                    onBackClick = {
-                        viewModel.navigateToList()
-                    },
-                    modifier = Modifier.padding(innerPadding)
-                )
+                                     PokedexScreen(
+                         uiState = uiState,
+                         pokemonList = pokemonList,
+                         searchQuery = searchQuery,
+                         lastViewedPokemonIndex = lastViewedPokemonIndex,
+                         selectedPokemon = selectedPokemon,
+                         isLocalDataAvailable = viewModel.isLocalDataAvailable(),
+                         lastUpdateTime = viewModel.getLastUpdateTime(),
+                         onPokemonClick = { pokemonName ->
+                             viewModel.saveClickedPokemonIndex(pokemonName)
+                             viewModel.loadPokemon(pokemonName)
+                         },
+                         onSearchQueryChange = { query ->
+                             viewModel.updateSearchQuery(query)
+                         },
+                         onRefreshClick = {
+                             viewModel.refreshPokemonList()
+                         },
+                         onBackClick = {
+                             viewModel.navigateToList()
+                         },
+                         modifier = Modifier.padding(innerPadding)
+                     )
             }
                              "utilities" -> {
                      when (currentUtilityScreen) {

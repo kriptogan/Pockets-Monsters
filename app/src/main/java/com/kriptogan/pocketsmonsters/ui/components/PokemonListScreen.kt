@@ -20,8 +20,11 @@ fun PokemonListScreen(
     pokemonList: List<PokemonListItem>,
     searchQuery: String,
     lastViewedPokemonIndex: Int,
+    isLocalDataAvailable: Boolean,
+    lastUpdateTime: String,
     onPokemonClick: (String) -> Unit,
-    onSearchQueryChange: (String) -> Unit
+    onSearchQueryChange: (String) -> Unit,
+    onRefreshClick: () -> Unit
 ) {
     val listState = rememberLazyListState()
     
@@ -48,6 +51,37 @@ fun PokemonListScreen(
                 .padding(bottom = 16.dp),
             singleLine = true
         )
+        
+        // Local Storage Status and Refresh Button
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = if (isLocalDataAvailable) "Data from local storage" else "Loading from API...",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                if (isLocalDataAvailable) {
+                    Text(
+                        text = "Last updated: $lastUpdateTime",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            
+            Button(
+                onClick = onRefreshClick,
+                enabled = uiState !is PokemonUiState.Loading
+            ) {
+                Text("Refresh")
+            }
+        }
         
         when (uiState) {
             is PokemonUiState.Loading -> {

@@ -1,28 +1,46 @@
 package com.kriptogan.pocketsmonsters.data.repository
 
 import com.kriptogan.pocketsmonsters.data.api.PokeApiService
+import com.kriptogan.pocketsmonsters.data.local.LocalStorage
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.data.models.PokemonListResponse
 import com.kriptogan.pocketsmonsters.data.network.NetworkModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PokemonRepository {
+class PokemonRepository(private val localStorage: LocalStorage) {
     
     private val apiService: PokeApiService = NetworkModule.createPokeApiService()
     
     /**
-     * Get a list of Pokémon with pagination support
-     * @param limit Maximum number of Pokémon to return
-     * @param offset Number of Pokémon to skip for pagination
+     * Get a list of Pokémon with local storage support
      * @return PokemonListResponse or null if error occurs
      */
-    suspend fun getPokemonList(
-        limit: Int = 151,
-        offset: Int = 0
-    ): Result<PokemonListResponse> = withContext(Dispatchers.IO) {
+    suspend fun getPokemonList(): Result<PokemonListResponse> = withContext(Dispatchers.IO) {
         try {
-            val response = apiService.getPokemonList(limit, offset)
+            // First try to get from local storage
+            val localData = localStorage.getPokemonList()
+            if (localData != null) {
+                return@withContext Result.success(PokemonListResponse(localData.size, null, null, localData))
+            }
+            
+            // If no local data, fetch from API and save
+            val response = apiService.getPokemonList()
+            localStorage.savePokemonList(response.results)
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    /**
+     * Force refresh Pokémon list from API
+     * @return PokemonListResponse or null if error occurs
+     */
+    suspend fun refreshPokemonList(): Result<PokemonListResponse> = withContext(Dispatchers.IO) {
+        try {
+            val response = apiService.getPokemonList()
+            localStorage.savePokemonList(response.results)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -76,5 +94,19 @@ class PokemonRepository {
         }
         
         pokemonList
+    }
+    
+    /**
+     * Check if local data is available
+     */
+    fun isLocalDataAvailable(): Boolean {
+        return localStorage.isDataAvailable()
+    }
+    
+    /**
+     * Get formatted last update time
+     */
+    fun getLastUpdateTime(): String {
+        return localStorage.getFormattedLastUpdateTime()
     }
 }

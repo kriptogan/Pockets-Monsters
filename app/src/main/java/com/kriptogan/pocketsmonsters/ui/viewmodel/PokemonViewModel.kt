@@ -1,19 +1,20 @@
 package com.kriptogan.pocketsmonsters.ui.viewmodel
 
+import android.app.Application
 import androidx.compose.runtime.*
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.data.models.PokemonListItem
-import com.kriptogan.pocketsmonsters.data.repository.PokemonRepository
+import com.kriptogan.pocketsmonsters.data.network.NetworkModule
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class PokemonViewModel : ViewModel() {
+class PokemonViewModel(application: Application) : AndroidViewModel(application) {
     
-    private val repository = PokemonRepository()
+    private val repository = NetworkModule.createPokemonRepository(application)
     
     // UI State
     private val _uiState = MutableStateFlow<PokemonUiState>(PokemonUiState.Loading)
@@ -81,6 +82,37 @@ class PokemonViewModel : ViewModel() {
             } catch (e: Exception) {
                 _uiState.value = PokemonUiState.Error(e.message ?: "Unknown error")
                 _errorMessage.value = e.message ?: "Failed to load Pokémon list"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+    
+    /**
+     * Force refresh Pokémon list from API
+     */
+    fun refreshPokemonList() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _uiState.value = PokemonUiState.Loading
+            
+            try {
+                val result = repository.refreshPokemonList()
+                result.fold(
+                    onSuccess = { response ->
+                        _pokemonList.value = response.results
+                        _filteredPokemonList.value = response.results
+                        _uiState.value = PokemonUiState.Success(response.results)
+                        _errorMessage.value = null
+                    },
+                    onFailure = { exception ->
+                        _uiState.value = PokemonUiState.Error(exception.message ?: "Unknown error")
+                        _errorMessage.value = exception.message ?: "Failed to refresh Pokémon list"
+                    }
+                )
+            } catch (e: Exception) {
+                _uiState.value = PokemonUiState.Error(e.message ?: "Unknown error")
+                _errorMessage.value = e.message ?: "Failed to refresh Pokémon list"
             } finally {
                 _isLoading.value = false
             }
@@ -234,13 +266,20 @@ class PokemonViewModel : ViewModel() {
         _errorMessage.value = null
     }
     
+
+    
     /**
-     * Refresh the Pokémon list
+     * Check if local data is available
      */
-    fun refreshPokemonList() {
-        // Reset last viewed Pokémon when refreshing
-        _lastViewedPokemonIndex.value = -1
-        loadPokemonList()
+    fun isLocalDataAvailable(): Boolean {
+        return repository.isLocalDataAvailable()
+    }
+    
+    /**
+     * Get formatted last update time
+     */
+    fun getLastUpdateTime(): String {
+        return repository.getLastUpdateTime()
     }
 }
 
