@@ -81,7 +81,7 @@ fun UtilitiesScreen(
                 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Weaknesses & Resistance",
+                        text = "Weaknesses",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
