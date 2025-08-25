@@ -238,6 +238,62 @@ fun DnDView(
                 }
             }
             
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Moves by D&D Level Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Moves by D&D Level",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    if (dndView.movesByDnDLevel.isNotEmpty()) {
+                        dndView.movesByDnDLevel.entries.sortedBy { it.key }.forEach { (dndLevel, moves) ->
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
+                            ) {
+                                Text(
+                                    text = "D&D Level $dndLevel",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = moves.sorted().joinToString(", ") { it.replaceFirstChar { char -> char.uppercase() } },
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            if (dndLevel != dndView.movesByDnDLevel.keys.maxOrNull()) {
+                                Divider(
+                                    modifier = Modifier.padding(vertical = 4.dp),
+                                    color = MaterialTheme.colorScheme.outlineVariant
+                                )
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = "No moves available",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+            
 
         }
     }

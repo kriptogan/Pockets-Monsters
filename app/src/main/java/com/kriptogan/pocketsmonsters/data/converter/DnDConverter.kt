@@ -3,6 +3,7 @@ package com.kriptogan.pocketsmonsters.data.converter
 import android.util.Log
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.data.models.Stat
+import com.kriptogan.pocketsmonsters.data.models.LevelUpMove
 import kotlin.math.*
 
 class DnDConverter {
@@ -27,6 +28,9 @@ class DnDConverter {
         val ac = 10 + min(speedModifier, 5) // Capped at +5 as per rules
         val initiative = speedModifier
         
+        // Group moves by D&D level
+        val movesByDnDLevel = groupMovesByDnDLevel(pokemon.levelUpMoves)
+        
         Log.d(TAG, "=== Final Results for ${pokemon.name} ===")
         Log.d(TAG, "Movement: $movement feet")
         Log.d(TAG, "AC: $ac")
@@ -34,6 +38,7 @@ class DnDConverter {
         Log.d(TAG, "Hit Dice: $hitDice")
         Log.d(TAG, "Converted Stats: $convertedStats")
         Log.d(TAG, "Modifiers: $modifiers")
+        Log.d(TAG, "Moves by D&D Level: $movesByDnDLevel")
         
         return DnDView(
             pokemon = pokemon,
@@ -42,7 +47,8 @@ class DnDConverter {
             hitDice = hitDice,
             movement = movement,
             ac = ac,
-            initiative = initiative
+            initiative = initiative,
+            movesByDnDLevel = movesByDnDLevel
         )
     }
     
@@ -155,10 +161,28 @@ class DnDConverter {
         Log.d(TAG, "Rounded: round($dividedBy5) = $rounded")
         
         val result = rounded * 5.0
-        Log.d(TAG, "Multiplied by 5: $rounded × 5 = $result")
-        
         Log.d(TAG, "Final rounded value: $result")
         return result
+    }
+    
+    /**
+     * Group moves by D&D level using formula: ceil(Pokemon Level ÷ 5)
+     */
+    private fun groupMovesByDnDLevel(levelUpMoves: List<LevelUpMove>): Map<Int, List<String>> {
+        Log.d(TAG, "=== Grouping Moves by D&D Level ===")
+        
+        val groupedMoves = levelUpMoves.groupBy { move ->
+            val dndLevel = ceil(move.levelLearnedAt / 5.0).toInt()
+            Log.d(TAG, "Move: ${move.name}, Pokemon Level: ${move.levelLearnedAt} → D&D Level: ceil(${move.levelLearnedAt} ÷ 5) = ceil(${move.levelLearnedAt / 5.0}) = $dndLevel")
+            dndLevel
+        }.mapValues { (dndLevel, moves) ->
+            val moveNames = moves.map { it.name }
+            Log.d(TAG, "D&D Level $dndLevel: ${moveNames.joinToString(", ")}")
+            moveNames
+        }
+        
+        Log.d(TAG, "Final grouped moves: $groupedMoves")
+        return groupedMoves
     }
 }
 
@@ -172,5 +196,6 @@ data class DnDView(
     val hitDice: String,                  // "d8"
     val movement: Int,                    // 25 feet
     val ac: Int,                          // 13
-    val initiative: Int                   // +3
+    val initiative: Int,                  // +3
+    val movesByDnDLevel: Map<Int, List<String>>  // D&D Level -> List of move names
 )
