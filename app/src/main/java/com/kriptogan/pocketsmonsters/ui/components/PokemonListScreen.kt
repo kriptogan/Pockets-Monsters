@@ -36,7 +36,6 @@ fun PokemonListScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .padding(top = 20.dp)
     ) {
         // Search Bar
         OutlinedTextField(
