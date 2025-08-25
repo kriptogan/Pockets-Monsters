@@ -83,18 +83,12 @@ fun MainScreen(
                     searchQuery = searchQuery,
                     lastViewedPokemonIndex = lastViewedPokemonIndex,
                     selectedPokemon = selectedPokemon,
-                    isLocalDataAvailable = viewModel.isLocalDataAvailable(),
-                    lastUpdateTime = viewModel.getLastUpdateTime(),
-                    isDetailedDataAvailable = viewModel.isDetailedDataAvailable(),
                     onPokemonClick = { pokemonName ->
                         viewModel.saveClickedPokemonIndex(pokemonName)
                         viewModel.loadPokemon(pokemonName)
                     },
                     onSearchQueryChange = { query ->
                         viewModel.updateSearchQuery(query)
-                    },
-                    onRefreshClick = {
-                        viewModel.refreshPokemonList()
                     },
                     onBackClick = {
                         viewModel.navigateToList()

@@ -14,12 +14,8 @@ fun PokedexScreen(
     searchQuery: String,
     lastViewedPokemonIndex: Int,
     selectedPokemon: Pokemon?,
-    isLocalDataAvailable: Boolean,
-    lastUpdateTime: String,
-    isDetailedDataAvailable: Boolean,
     onPokemonClick: (String) -> Unit,
     onSearchQueryChange: (String) -> Unit,
-    onRefreshClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -37,12 +33,8 @@ fun PokedexScreen(
             pokemonList = pokemonList,
             searchQuery = searchQuery,
             lastViewedPokemonIndex = lastViewedPokemonIndex,
-            isLocalDataAvailable = isLocalDataAvailable,
-            lastUpdateTime = lastUpdateTime,
-            isDetailedDataAvailable = isDetailedDataAvailable,
             onPokemonClick = onPokemonClick,
-            onSearchQueryChange = onSearchQueryChange,
-            onRefreshClick = onRefreshClick
+            onSearchQueryChange = onSearchQueryChange
         )
     }
 }

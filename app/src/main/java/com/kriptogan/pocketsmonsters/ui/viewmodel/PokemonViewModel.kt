@@ -109,13 +109,6 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     }
     
     /**
-     * Force refresh Pokémon list from offline data
-     */
-    fun refreshPokemonList() {
-        loadPokemonList()
-    }
-    
-    /**
      * Load a specific Pokémon by name
      */
     fun loadPokemon(name: String) {
