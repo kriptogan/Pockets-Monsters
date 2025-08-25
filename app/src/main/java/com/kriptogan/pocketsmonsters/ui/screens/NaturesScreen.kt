@@ -1,5 +1,6 @@
 package com.kriptogan.pocketsmonsters.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,6 +23,11 @@ fun NaturesScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Handle system back button
+    BackHandler {
+        onBackClick()
+    }
+    
     Column(
         modifier = modifier
             .fillMaxSize()
