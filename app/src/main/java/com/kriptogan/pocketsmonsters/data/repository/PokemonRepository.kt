@@ -2,180 +2,164 @@ package com.kriptogan.pocketsmonsters.data.repository
 
 import com.kriptogan.pocketsmonsters.data.api.PokeApiService
 import com.kriptogan.pocketsmonsters.data.local.LocalStorage
+import com.kriptogan.pocketsmonsters.data.offline.OfflineDataLoader
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
-import com.kriptogan.pocketsmonsters.data.models.PokemonListResponse
 import com.kriptogan.pocketsmonsters.data.network.NetworkModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.delay
 
-class PokemonRepository(private val localStorage: LocalStorage) {
+class PokemonRepository(
+    private val localStorage: LocalStorage,
+    private val offlineDataLoader: OfflineDataLoader
+) {
     
     private val apiService: PokeApiService = NetworkModule.createPokeApiService()
     
     /**
-     * Get a list of Pokémon with local storage support
-     * @return PokemonListResponse or null if error occurs
+     * Get a list of Pokémon with offline data priority
+     * @return List of Pokemon or empty list if error occurs
      */
-    suspend fun getPokemonList(): Result<PokemonListResponse> = withContext(Dispatchers.IO) {
+    suspend fun getPokemonList(): List<Pokemon> = withContext(Dispatchers.IO) {
         try {
-            // First try to get from local storage
-            val localData = localStorage.getPokemonList()
-            if (localData != null) {
-                return@withContext Result.success(PokemonListResponse(localData.size, null, null, localData))
-            }
-            
-            // If no local data, fetch from API and save
-            val response = apiService.getPokemonList()
-            localStorage.savePokemonList(response.results)
-            Result.success(response)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    
-    /**
-     * Force refresh Pokémon list from API
-     * @return PokemonListResponse or null if error occurs
-     */
-    suspend fun refreshPokemonList(): Result<PokemonListResponse> = withContext(Dispatchers.IO) {
-        try {
-            val response = apiService.getPokemonList()
-            localStorage.savePokemonList(response.results)
-            Result.success(response)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    
-    /**
-     * Download all detailed Pokémon data and store locally
-     * @param onProgressUpdate Callback for progress updates (current, total)
-     * @return Result indicating success or failure
-     */
-    suspend fun downloadAllPokemonDetails(
-        onProgressUpdate: (current: Int, total: Int) -> Unit
-    ): Result<Unit> = withContext(Dispatchers.IO) {
-        try {
-            // Get the list of all Pokémon first
-            val pokemonList = localStorage.getPokemonList()
-            if (pokemonList == null) {
-                return@withContext Result.failure(Exception("Pokemon list not available"))
-            }
-            
-            val total = pokemonList.size
-            val pokemonDetails = mutableMapOf<String, Pokemon>()
-            
-            // Download each Pokémon's details
-            pokemonList.forEachIndexed { index, pokemonItem ->
-                try {
-                    val pokemon = apiService.getPokemon(pokemonItem.name.lowercase())
-                    pokemonDetails[pokemon.name.lowercase()] = pokemon
-                    
-                    // Update progress
-                    val current = index + 1
-                    onProgressUpdate(current, total)
-                    localStorage.saveDownloadProgress(current, total)
-                    
-                    // Small delay to avoid overwhelming the API
-                    delay(50)
-                    
-                } catch (e: Exception) {
-                    // Log error but continue with other Pokémon
-                    println("Failed to fetch Pokémon: ${pokemonItem.name} - ${e.message}")
+            // First try offline data
+            if (offlineDataLoader.isOfflineDataAvailable()) {
+                offlineDataLoader.loadAllPokemonData()
+            } else {
+                // Fallback to local storage if available
+                val localData = localStorage.getPokemonDetails()
+                if (localData != null && localData.isNotEmpty()) {
+                    localData.values.toList()
+                } else {
+                    emptyList()
                 }
             }
-            
-            // Save all details to local storage
-            localStorage.savePokemonDetails(pokemonDetails)
-            
-            // Clear progress
-            localStorage.saveDownloadProgress(0, 0)
-            
-            Result.success(Unit)
         } catch (e: Exception) {
-            Result.failure(e)
+            println("Error loading Pokémon list: ${e.message}")
+            emptyList()
         }
     }
     
     /**
-     * Get detailed information about a specific Pokémon by name
-     * @param name The name of the Pokémon
-     * @return Pokemon or null if error occurs
+     * Get a specific Pokémon by name
+     * @return Result containing the Pokémon or failure
      */
     suspend fun getPokemon(name: String): Result<Pokemon> = withContext(Dispatchers.IO) {
         try {
-            // First try to get from local storage
-            val localPokemon = localStorage.getPokemonDetail(name)
-            if (localPokemon != null) {
-                return@withContext Result.success(localPokemon)
+            // First try offline data
+            if (offlineDataLoader.isOfflineDataAvailable()) {
+                val pokemon = offlineDataLoader.loadPokemon(name)
+                if (pokemon != null) {
+                    Result.success(pokemon)
+                } else {
+                    Result.failure(Exception("Pokémon not found: $name"))
+                }
+            } else {
+                // Fallback to local storage
+                val localData = localStorage.getPokemonDetails()
+                val pokemon = localData?.get(name.lowercase())
+                if (pokemon != null) {
+                    Result.success(pokemon)
+                } else {
+                    // Last resort: try API
+                    val apiPokemon = apiService.getPokemon(name.lowercase())
+                    Result.success(apiPokemon)
+                }
             }
-            
-            // If not in local storage, fetch from API
-            val response = apiService.getPokemon(name.lowercase())
-            Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
     
     /**
-     * Get detailed information about a specific Pokémon by ID
-     * @param id The ID of the Pokémon
-     * @return Pokemon or null if error occurs
+     * Get a specific Pokémon by ID
+     * @return Result containing the Pokémon or failure
      */
     suspend fun getPokemonById(id: Int): Result<Pokemon> = withContext(Dispatchers.IO) {
         try {
-            val response = apiService.getPokemonById(id)
-            Result.success(response)
+            // First try offline data
+            if (offlineDataLoader.isOfflineDataAvailable()) {
+                val pokemon = offlineDataLoader.loadPokemonById(id)
+                if (pokemon != null) {
+                    Result.success(pokemon)
+                } else {
+                    Result.failure(Exception("Pokémon not found with ID: $id"))
+                }
+            } else {
+                // Fallback to local storage
+                val localData = localStorage.getPokemonDetails()
+                val pokemon = localData?.values?.find { it.id == id }
+                if (pokemon != null) {
+                    Result.success(pokemon)
+                } else {
+                    // Last resort: try API
+                    val apiPokemon = apiService.getPokemon(id.toString())
+                    Result.success(apiPokemon)
+                }
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
     
     /**
-     * Get multiple Pokémon by their names
-     * @param names List of Pokémon names to fetch
-     * @return List of successfully fetched Pokémon
+     * Get all Pokémon data from offline assets
+     * @return List of all Pokémon with full details
      */
-    suspend fun getMultiplePokemon(names: List<String>): List<Pokemon> = withContext(Dispatchers.IO) {
-        val pokemonList = mutableListOf<Pokemon>()
-        
-        names.forEach { name ->
-            try {
-                val pokemon = getPokemon(name)
-                pokemon.fold(
-                    onSuccess = { pokemonList.add(it) },
-                    onFailure = { println("Failed to fetch Pokémon: $name - ${it.message}") }
-                )
-            } catch (e: Exception) {
-                // Log error but continue with other Pokémon
-                println("Failed to fetch Pokémon: $name - ${e.message}")
+    suspend fun getAllPokemonData(): List<Pokemon> = withContext(Dispatchers.IO) {
+        try {
+            println("🔍 DEBUG: Repository.getAllPokemonData() called")
+            println("🔍 DEBUG: Offline data available: ${offlineDataLoader.isOfflineDataAvailable()}")
+            
+            if (offlineDataLoader.isOfflineDataAvailable()) {
+                println("🔍 DEBUG: Calling offlineDataLoader.loadAllPokemonData()")
+                val result = offlineDataLoader.loadAllPokemonData()
+                println("🔍 DEBUG: OfflineDataLoader returned ${result.size} Pokémon")
+                if (result.isNotEmpty()) {
+                    val firstPokemon = result.first()
+                    println("🔍 DEBUG: First Pokémon: ${firstPokemon.name}, Sprite: ${firstPokemon.spritePath}")
+                }
+                result
+            } else {
+                println("🔍 DEBUG: No offline data available, returning empty list")
+                emptyList()
             }
+        } catch (e: Exception) {
+            println("❌ Repository.getAllPokemonData() failed: ${e.message}")
+            e.printStackTrace()
+            emptyList()
         }
-        
-        pokemonList
+    }
+    
+    /**
+     * Check if offline data is available
+     */
+    fun isOfflineDataAvailable(): Boolean {
+        return offlineDataLoader.isOfflineDataAvailable()
     }
     
     /**
      * Check if local data is available
      */
     fun isLocalDataAvailable(): Boolean {
-        return localStorage.isDataAvailable()
+        return offlineDataLoader.isOfflineDataAvailable() || localStorage.isDataAvailable()
     }
     
     /**
      * Check if detailed Pokémon data is available locally
      */
     fun isDetailedDataAvailable(): Boolean {
-        return localStorage.isDetailedDataAvailable()
+        return offlineDataLoader.isOfflineDataAvailable() || localStorage.isDetailedDataAvailable()
     }
     
     /**
      * Get formatted last update time
      */
     fun getLastUpdateTime(): String {
-        return localStorage.getFormattedLastUpdateTime()
+        return if (offlineDataLoader.isOfflineDataAvailable()) {
+            "Offline data available"
+        } else {
+            localStorage.getFormattedLastUpdateTime()
+        }
     }
     
     /**
@@ -183,5 +167,20 @@ class PokemonRepository(private val localStorage: LocalStorage) {
      */
     fun getDownloadProgress(): Pair<Int, Int> {
         return localStorage.getDownloadProgress()
+    }
+    
+    /**
+     * Get offline data metadata
+     */
+    suspend fun getOfflineDataMetadata(): Map<String, Any>? {
+        return if (offlineDataLoader.isOfflineDataAvailable()) {
+            try {
+                offlineDataLoader.loadMetadata()
+            } catch (e: Exception) {
+                null
+            }
+        } else {
+            null
+        }
     }
 }

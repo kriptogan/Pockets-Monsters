@@ -11,20 +11,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.kriptogan.pocketsmonsters.data.models.PokemonListItem
+import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonUiState
 
 @Composable
 fun PokemonListScreen(
     uiState: PokemonUiState,
-    pokemonList: List<PokemonListItem>,
+    pokemonList: List<Pokemon>,
     searchQuery: String,
     lastViewedPokemonIndex: Int,
     isLocalDataAvailable: Boolean,
     lastUpdateTime: String,
     isDetailedDataAvailable: Boolean,
-    downloadProgress: Pair<Int, Int>,
-    isDownloading: Boolean,
     onPokemonClick: (String) -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onRefreshClick: () -> Unit
@@ -77,61 +75,21 @@ fun PokemonListScreen(
                     )
                 }
                 
-                // Detailed data status
-                if (isLocalDataAvailable) {
+                // Offline data status
+                if (isDetailedDataAvailable) {
                     Text(
-                        text = if (isDetailedDataAvailable) "✓ Detailed data available" else "⏳ Downloading detailed data...",
+                        text = "✓ Offline data available",
                         style = MaterialTheme.typography.bodySmall,
-                        color = if (isDetailedDataAvailable) 
-                            MaterialTheme.colorScheme.primary 
-                        else 
-                            MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
             
             Button(
                 onClick = onRefreshClick,
-                enabled = uiState !is PokemonUiState.Loading && !isDownloading
+                enabled = uiState !is PokemonUiState.Loading
             ) {
                 Text("Refresh")
-            }
-        }
-        
-        // Download Progress Bar
-        if (isDownloading && downloadProgress.second > 0) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer
-                )
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Downloading detailed Pokémon data...",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
-                    )
-                    
-                    Spacer(modifier = Modifier.height(8.dp))
-                    
-                    LinearProgressIndicator(
-                        progress = downloadProgress.first.toFloat() / downloadProgress.second.toFloat(),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    
-                    Spacer(modifier = Modifier.height(8.dp))
-                    
-                    Text(
-                        text = "${downloadProgress.first} / ${downloadProgress.second} Pokémon",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
             }
         }
         

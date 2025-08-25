@@ -177,11 +177,17 @@ private fun PokemonView(
                         .background(MaterialTheme.colorScheme.secondaryContainer),
                     contentAlignment = Alignment.Center
                 ) {
-                    val spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png"
+                    // Use high-quality front images (official artwork) from assets
+                    val frontImagePath = "file:///android_asset/front_images/${pokemon.name}.png"
+                    
+                    // Debug logging
+                    LaunchedEffect(pokemon.name) {
+                        println("🖼️ DEBUG: Pokemon View loading front image: $frontImagePath")
+                    }
                     
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(spriteUrl)
+                            .data(frontImagePath)
                             .crossfade(true)
                             .build(),
                         contentDescription = "Official artwork of ${pokemon.name}",

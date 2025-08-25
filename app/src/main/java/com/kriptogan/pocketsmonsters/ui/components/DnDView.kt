@@ -57,11 +57,17 @@ fun DnDView(
                         .background(MaterialTheme.colorScheme.secondaryContainer),
                     contentAlignment = Alignment.Center
                 ) {
-                    val spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dndView.pokemon.id}.png"
+                    // Use high-quality front images (official artwork) from assets
+                    val frontImagePath = "file:///android_asset/front_images/${dndView.pokemon.name}.png"
+                    
+                    // Debug logging
+                    LaunchedEffect(dndView.pokemon.name) {
+                        println("🖼️ DEBUG: DnD View loading front image: $frontImagePath")
+                    }
                     
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(spriteUrl)
+                            .data(frontImagePath)
                             .crossfade(true)
                             .build(),
                         contentDescription = "Official artwork of ${dndView.pokemon.name}",

@@ -57,8 +57,6 @@ fun MainScreen(
     val pokemonList by viewModel.filteredPokemonList.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val lastViewedPokemonIndex by viewModel.lastViewedPokemonIndex.collectAsState()
-    val downloadProgress by viewModel.downloadProgress.collectAsState()
-    val isDownloading by viewModel.isDownloading.collectAsState()
     
     Scaffold(
         modifier = modifier,
@@ -88,8 +86,6 @@ fun MainScreen(
                     isLocalDataAvailable = viewModel.isLocalDataAvailable(),
                     lastUpdateTime = viewModel.getLastUpdateTime(),
                     isDetailedDataAvailable = viewModel.isDetailedDataAvailable(),
-                    downloadProgress = downloadProgress,
-                    isDownloading = isDownloading,
                     onPokemonClick = { pokemonName ->
                         viewModel.saveClickedPokemonIndex(pokemonName)
                         viewModel.loadPokemon(pokemonName)

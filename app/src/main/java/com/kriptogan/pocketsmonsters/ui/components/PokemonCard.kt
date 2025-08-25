@@ -15,15 +15,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
-import com.kriptogan.pocketsmonsters.data.models.PokemonListItem
+import com.kriptogan.pocketsmonsters.data.models.Pokemon
+import android.util.Log
+import kotlinx.coroutines.launch
 
 @Composable
 fun PokemonCard(
-    pokemon: PokemonListItem,
+    pokemon: Pokemon,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val spritePath = "file:///android_asset/sprites/${pokemon.spritePath}"
+    
+    // Debug logging when component is created
+    LaunchedEffect(pokemon.name) {
+        Log.d("PokemonCard", "Created card for ${pokemon.name} with sprite: $spritePath")
+        println("🐛 DEBUG: Created card for ${pokemon.name} with sprite: $spritePath")
+    }
+    
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -38,12 +49,10 @@ fun PokemonCard(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Pokémon sprite from PokéAPI
-            val spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonIdFromUrl(pokemon.url)}.png"
-            
+            // Pokémon sprite from local assets - try different loading approaches
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(spriteUrl)
+                    .data("file:///android_asset/sprites/${pokemon.spritePath}")
                     .crossfade(true)
                     .build(),
                 contentDescription = "Sprite of ${pokemon.name}",
@@ -68,11 +77,19 @@ fun PokemonCard(
                 
                 Spacer(modifier = Modifier.height(4.dp))
                 
-                Text(
-                    text = "Click to view details",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                // Show types if available
+                if (pokemon.types.isNotEmpty()) {
+                    Row {
+                        pokemon.types.forEach { typeSlot ->
+                            Text(
+                                text = typeSlot.type.name.replaceFirstChar { it.uppercase() },
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(end = 4.dp)
+                            )
+                        }
+                    }
+                }
             }
             
             // Arrow indicator
@@ -83,13 +100,4 @@ fun PokemonCard(
             )
         }
     }
-}
-
-/**
- * Extract Pokémon ID from the URL
- * URL format: https://pokeapi.co/api/v2/pokemon/25/
- * Returns: 25
- */
-private fun getPokemonIdFromUrl(url: String): String {
-    return url.trimEnd('/').split('/').last()
 }

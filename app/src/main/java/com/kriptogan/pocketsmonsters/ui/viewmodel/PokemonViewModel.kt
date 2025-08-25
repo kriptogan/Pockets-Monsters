@@ -5,7 +5,6 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
-import com.kriptogan.pocketsmonsters.data.models.PokemonListItem
 import com.kriptogan.pocketsmonsters.data.network.NetworkModule
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,11 +19,11 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     private val _uiState = MutableStateFlow<PokemonUiState>(PokemonUiState.Loading)
     val uiState: StateFlow<PokemonUiState> = _uiState.asStateFlow()
     
-    private val _pokemonList = MutableStateFlow<List<PokemonListItem>>(emptyList())
-    val pokemonList: StateFlow<List<PokemonListItem>> = _pokemonList.asStateFlow()
+    private val _pokemonList = MutableStateFlow<List<Pokemon>>(emptyList())
+    val pokemonList: StateFlow<List<Pokemon>> = _pokemonList.asStateFlow()
     
-    private val _filteredPokemonList = MutableStateFlow<List<PokemonListItem>>(emptyList())
-    val filteredPokemonList: StateFlow<List<PokemonListItem>> = _filteredPokemonList.asStateFlow()
+    private val _filteredPokemonList = MutableStateFlow<List<Pokemon>>(emptyList())
+    val filteredPokemonList: StateFlow<List<Pokemon>> = _filteredPokemonList.asStateFlow()
     
     private val _selectedPokemon = MutableStateFlow<Pokemon?>(null)
     val selectedPokemon: StateFlow<Pokemon?> = _selectedPokemon.asStateFlow()
@@ -50,30 +49,16 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     private val _lastViewedPokemonIndex = MutableStateFlow<Int>(-1)
     val lastViewedPokemonIndex: StateFlow<Int> = _lastViewedPokemonIndex.asStateFlow()
     
-    // Cache for Pokémon details to avoid repeated API calls
-    private val _pokemonDetailsCache = MutableStateFlow<Map<String, Pokemon>>(emptyMap())
-    
-    // Download progress state
-    private val _downloadProgress = MutableStateFlow<Pair<Int, Int>>(Pair(0, 0))
-    val downloadProgress: StateFlow<Pair<Int, Int>> = _downloadProgress.asStateFlow()
-    
-    private val _isDownloading = MutableStateFlow(false)
-    val isDownloading: StateFlow<Boolean> = _isDownloading.asStateFlow()
+    // Offline data status
+    private val _isOfflineDataAvailable = MutableStateFlow(false)
+    val isOfflineDataAvailable: StateFlow<Boolean> = _isOfflineDataAvailable.asStateFlow()
     
     init {
         loadPokemonList()
-        checkDetailedDataAvailability()
     }
     
     /**
-     * Check if detailed Pokémon data is available locally
-     */
-    private fun checkDetailedDataAvailability() {
-        _downloadProgress.value = repository.getDownloadProgress()
-    }
-    
-    /**
-     * Load the initial list of Pokémon
+     * Load the initial list of Pokémon from offline data
      */
     fun loadPokemonList() {
         viewModelScope.launch {
@@ -81,27 +66,42 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
             _uiState.value = PokemonUiState.Loading
             
             try {
-                val result = repository.getPokemonList()
-                result.fold(
-                    onSuccess = { response ->
-                        _pokemonList.value = response.results
-                        _filteredPokemonList.value = response.results
-                        _uiState.value = PokemonUiState.Success(response.results)
-                        _errorMessage.value = null
-                        
-                        // Check if we should download detailed data
-                        if (!repository.isDetailedDataAvailable()) {
-                            downloadAllPokemonDetails()
-                        }
-                    },
-                    onFailure = { exception ->
-                        _uiState.value = PokemonUiState.Error(exception.message ?: "Unknown error")
-                        _errorMessage.value = exception.message ?: "Failed to load Pokémon list"
+                // Check if offline data is available
+                println("🔍 DEBUG: Checking if offline data is available...")
+                val isAvailable = repository.isOfflineDataAvailable()
+                println("🔍 DEBUG: Offline data available: $isAvailable")
+                
+                if (isAvailable) {
+                    _isOfflineDataAvailable.value = true
+                    
+                    // Load all Pokémon data from offline assets
+                    println("�� DEBUG: Loading all Pokémon data from repository...")
+                    val allPokemon = repository.getAllPokemonData()
+                    println("🔍 DEBUG: Repository returned ${allPokemon.size} Pokémon")
+                    
+                    if (allPokemon.isNotEmpty()) {
+                        val firstPokemon = allPokemon.first()
+                        println("🔍 DEBUG: First Pokémon from repository: ${firstPokemon.name}, Sprite: ${firstPokemon.spritePath}")
                     }
-                )
+                    
+                    _pokemonList.value = allPokemon
+                    _filteredPokemonList.value = allPokemon
+                    _uiState.value = PokemonUiState.Success(allPokemon)
+                    _errorMessage.value = null
+                    
+                    println("✅ Loaded ${allPokemon.size} Pokémon from offline data")
+                } else {
+                    // Fallback to API if no offline data
+                    _isOfflineDataAvailable.value = false
+                    _uiState.value = PokemonUiState.Error("No offline data available")
+                    _errorMessage.value = "No offline data available"
+                    println("❌ No offline data available")
+                }
             } catch (e: Exception) {
                 _uiState.value = PokemonUiState.Error(e.message ?: "Unknown error")
                 _errorMessage.value = e.message ?: "Failed to load Pokémon list"
+                println("❌ Error loading Pokémon: ${e.message}")
+                e.printStackTrace()
             } finally {
                 _isLoading.value = false
             }
@@ -109,75 +109,57 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     }
     
     /**
-     * Download all detailed Pokémon data
-     */
-    fun downloadAllPokemonDetails() {
-        viewModelScope.launch {
-            _isDownloading.value = true
-            _errorMessage.value = null
-            
-            try {
-                val result = repository.downloadAllPokemonDetails { current, total ->
-                    _downloadProgress.value = Pair(current, total)
-                }
-                
-                result.fold(
-                    onSuccess = {
-                        _errorMessage.value = null
-                        _downloadProgress.value = Pair(0, 0)
-                    },
-                    onFailure = { exception ->
-                        _errorMessage.value = exception.message ?: "Failed to download detailed data"
-                    }
-                )
-            } catch (e: Exception) {
-                _errorMessage.value = e.message ?: "Failed to download detailed data"
-            } finally {
-                _isDownloading.value = false
-            }
-        }
-    }
-    
-    /**
-     * Force refresh Pokémon list from API
+     * Force refresh Pokémon list from offline data
      */
     fun refreshPokemonList() {
+        loadPokemonList()
+    }
+    
+    /**
+     * Load a specific Pokémon by name
+     */
+    fun loadPokemon(name: String) {
         viewModelScope.launch {
-            _isLoading.value = true
-            _uiState.value = PokemonUiState.Loading
-            
             try {
-                val result = repository.refreshPokemonList()
+                val result = repository.getPokemon(name)
                 result.fold(
-                    onSuccess = { response ->
-                        _pokemonList.value = response.results
-                        _filteredPokemonList.value = response.results
-                        _uiState.value = PokemonUiState.Success(response.results)
-                        _errorMessage.value = null
-                        
-                        // Also refresh detailed data
-                        downloadAllPokemonDetails()
+                    onSuccess = { pokemon ->
+                        _selectedPokemon.value = pokemon
+                        _currentScreen.value = PokemonScreen.Detail
                     },
                     onFailure = { exception ->
-                        _uiState.value = PokemonUiState.Error(exception.message ?: "Unknown error")
-                        _errorMessage.value = exception.message ?: "Failed to refresh Pokémon list"
+                        _errorMessage.value = "Pokémon not found: $name"
                     }
                 )
             } catch (e: Exception) {
-                _uiState.value = PokemonUiState.Error(e.message ?: "Unknown error")
-                _errorMessage.value = e.message ?: "Failed to refresh Pokémon list"
-            } finally {
-                _isLoading.value = false
+                _errorMessage.value = "Failed to load Pokémon: ${e.message}"
             }
         }
     }
     
     /**
-     * Update search query and filter results
+     * Update search query and filter Pokémon list
      */
     fun updateSearchQuery(query: String) {
         _searchQuery.value = query
-        applyFilters()
+        filterPokemonList()
+    }
+    
+    /**
+     * Filter Pokémon list based on search query
+     */
+    private fun filterPokemonList() {
+        val query = _searchQuery.value.lowercase()
+        val allPokemon = _pokemonList.value
+        
+        if (query.isEmpty()) {
+            _filteredPokemonList.value = allPokemon
+        } else {
+            val filtered = allPokemon.filter { pokemon ->
+                pokemon.name.lowercase().contains(query)
+            }
+            _filteredPokemonList.value = filtered
+        }
     }
     
     /**
@@ -259,50 +241,19 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     }
     
     /**
-     * Load detailed information about a specific Pokémon
+     * Save the index of the clicked Pokémon for scroll position restoration
      */
-    fun loadPokemon(name: String) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            _errorMessage.value = null
-            
-            try {
-                val result = repository.getPokemon(name)
-                result.fold(
-                    onSuccess = { pokemon ->
-                        _selectedPokemon.value = pokemon
-                        _currentScreen.value = PokemonScreen.Detail
-                        _errorMessage.value = null
-                    },
-                    onFailure = { exception ->
-                        _errorMessage.value = exception.message ?: "Failed to load Pokémon"
-                    }
-                )
-            } catch (e: Exception) {
-                _errorMessage.value = e.message ?: "Failed to load Pokémon"
-            } finally {
-                _isLoading.value = false
-            }
-        }
+    fun saveClickedPokemonIndex(pokemonName: String) {
+        val index = _pokemonList.value.indexOfFirst { it.name == pokemonName }
+        _lastViewedPokemonIndex.value = index
     }
     
     /**
-     * Navigate back to the list
+     * Navigate back to the list view
      */
     fun navigateToList() {
         _currentScreen.value = PokemonScreen.List
         _selectedPokemon.value = null
-        // Note: scroll position is preserved, so we don't reset it here
-    }
-    
-    /**
-     * Save the index of the Pokémon that was clicked for viewing
-     */
-    fun saveClickedPokemonIndex(pokemonName: String) {
-        val index = _filteredPokemonList.value.indexOfFirst { it.name == pokemonName }
-        if (index >= 0) {
-            _lastViewedPokemonIndex.value = index
-        }
     }
     
     /**
@@ -323,28 +274,21 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
      * Check if local data is available
      */
     fun isLocalDataAvailable(): Boolean {
-        return repository.isLocalDataAvailable()
+        return _isOfflineDataAvailable.value
     }
     
     /**
-     * Check if detailed Pokémon data is available locally
+     * Check if detailed data is available
      */
     fun isDetailedDataAvailable(): Boolean {
-        return repository.isDetailedDataAvailable()
+        return _isOfflineDataAvailable.value
     }
     
     /**
-     * Get formatted last update time
+     * Get last update time (for offline data, this is always current)
      */
     fun getLastUpdateTime(): String {
-        return repository.getLastUpdateTime()
-    }
-    
-    /**
-     * Get download progress
-     */
-    fun getDownloadProgress(): Pair<Int, Int> {
-        return repository.getDownloadProgress()
+        return "Now (Offline)"
     }
 }
 
@@ -353,7 +297,7 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
  */
 sealed class PokemonUiState {
     object Loading : PokemonUiState()
-    data class Success(val pokemonList: List<PokemonListItem>) : PokemonUiState()
+    data class Success(val pokemonList: List<Pokemon>) : PokemonUiState()
     data class Error(val message: String?) : PokemonUiState()
 }
 

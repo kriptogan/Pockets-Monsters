@@ -13,3 +13,15 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Image assets (can be regenerated from scripts)
+app/src/main/assets/sprites/
+app/src/main/assets/front_images/
+
+# Large data files and backups (can be regenerated from scripts)
+app/src/main/assets/pokemon_data.json
+app/src/main/assets/pokemons_backup*.json
+app/src/main/assets/sprite_urls.json
+
+# Development scripts (can be regenerated)
+scripts/
