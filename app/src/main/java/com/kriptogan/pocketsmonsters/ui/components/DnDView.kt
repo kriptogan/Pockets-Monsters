@@ -3,6 +3,8 @@ package com.kriptogan.pocketsmonsters.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,11 +13,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kriptogan.pocketsmonsters.data.converter.DnDView
+import com.kriptogan.pocketsmonsters.data.party.PartyManager
 
 @Composable
 fun DnDView(
@@ -30,6 +34,21 @@ fun DnDView(
             Text("No D&D data available")
         }
         return
+    }
+
+    val context = LocalContext.current
+    val partyManager = remember { PartyManager(context) }
+    
+    var showPartyFullAlert by remember { mutableStateOf(false) }
+    var showAlreadyInPartyAlert by remember { mutableStateOf(false) }
+    var showSuccessAlert by remember { mutableStateOf(false) }
+    var isInParty by remember { mutableStateOf(partyManager.isInParty(dndView.pokemon.id)) }
+    var isPartyFull by remember { mutableStateOf(partyManager.isPartyFull()) }
+    
+    // Refresh party status when Pokemon changes
+    LaunchedEffect(dndView.pokemon.id) {
+        isInParty = partyManager.isInParty(dndView.pokemon.id)
+        isPartyFull = partyManager.isPartyFull()
     }
 
     Column(
@@ -294,8 +313,158 @@ fun DnDView(
                 }
             }
             
-
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Add to Party Button
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Party Management",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    when {
+                        isInParty -> {
+                            // Pokemon is already in party
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = null,
+                                modifier = Modifier.size(48.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Already in Party!",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = "This Pokemon is already part of your team",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        isPartyFull -> {
+                            // Party is full
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = null,
+                                modifier = Modifier.size(48.dp),
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Party Full!",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                            Text(
+                                text = "Release a monster to make room",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        else -> {
+                            // Can add to party
+                            Button(
+                                onClick = {
+                                    val result = partyManager.addToParty(dndView.pokemon)
+                                    result.fold(
+                                        onSuccess = {
+                                            isInParty = true
+                                            isPartyFull = partyManager.isPartyFull()
+                                            showSuccessAlert = true
+                                        },
+                                        onFailure = { exception ->
+                                            when (exception.message) {
+                                                "Party is full" -> showPartyFullAlert = true
+                                                "Pokemon already in party" -> showAlreadyInPartyAlert = true
+                                                else -> showPartyFullAlert = true
+                                            }
+                                        }
+                                    )
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary
+                                )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text("Add to Party")
+                            }
+                            
+                            Spacer(modifier = Modifier.height(8.dp))
+                            
+                            Text(
+                                text = "Add this Pokemon to your party (${partyManager.getPartySize()}/6)",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            }
         }
+    }
+    
+    // Alerts
+    if (showPartyFullAlert) {
+        AlertDialog(
+            onDismissRequest = { showPartyFullAlert = false },
+            title = { Text("Party Full") },
+            text = { Text("You have reached maximum capacity. Release a monster to make room.") },
+            confirmButton = {
+                TextButton(onClick = { showPartyFullAlert = false }) {
+                    Text("OK")
+                }
+            }
+        )
+    }
+    
+    if (showAlreadyInPartyAlert) {
+        AlertDialog(
+            onDismissRequest = { showAlreadyInPartyAlert = false },
+            title = { Text("Already in Party") },
+            text = { Text("This Pokemon is already part of your team!") },
+            confirmButton = {
+                TextButton(onClick = { showAlreadyInPartyAlert = false }) {
+                    Text("OK")
+                }
+            }
+        )
+    }
+    
+    if (showSuccessAlert) {
+        AlertDialog(
+            onDismissRequest = { showSuccessAlert = false },
+            title = { Text("Added to Party!") },
+            text = { Text("${dndView.pokemon.name.replaceFirstChar { it.uppercase() }} has been successfully added to your party!") },
+            confirmButton = {
+                TextButton(onClick = { showSuccessAlert = false }) {
+                    Text("OK")
+                }
+            }
+        )
     }
 }
 
