@@ -57,6 +57,8 @@ fun MainScreen(
     val pokemonList by viewModel.filteredPokemonList.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val lastViewedPokemonIndex by viewModel.lastViewedPokemonIndex.collectAsState()
+    val downloadProgress by viewModel.downloadProgress.collectAsState()
+    val isDownloading by viewModel.isDownloading.collectAsState()
     
     Scaffold(
         modifier = modifier,
@@ -77,60 +79,63 @@ fun MainScreen(
     ) { innerPadding ->
         when (currentTab) {
             "pokedex" -> {
-                                     PokedexScreen(
-                         uiState = uiState,
-                         pokemonList = pokemonList,
-                         searchQuery = searchQuery,
-                         lastViewedPokemonIndex = lastViewedPokemonIndex,
-                         selectedPokemon = selectedPokemon,
-                         isLocalDataAvailable = viewModel.isLocalDataAvailable(),
-                         lastUpdateTime = viewModel.getLastUpdateTime(),
-                         onPokemonClick = { pokemonName ->
-                             viewModel.saveClickedPokemonIndex(pokemonName)
-                             viewModel.loadPokemon(pokemonName)
-                         },
-                         onSearchQueryChange = { query ->
-                             viewModel.updateSearchQuery(query)
-                         },
-                         onRefreshClick = {
-                             viewModel.refreshPokemonList()
-                         },
-                         onBackClick = {
-                             viewModel.navigateToList()
-                         },
-                         modifier = Modifier.padding(innerPadding)
-                     )
+                PokedexScreen(
+                    uiState = uiState,
+                    pokemonList = pokemonList,
+                    searchQuery = searchQuery,
+                    lastViewedPokemonIndex = lastViewedPokemonIndex,
+                    selectedPokemon = selectedPokemon,
+                    isLocalDataAvailable = viewModel.isLocalDataAvailable(),
+                    lastUpdateTime = viewModel.getLastUpdateTime(),
+                    isDetailedDataAvailable = viewModel.isDetailedDataAvailable(),
+                    downloadProgress = downloadProgress,
+                    isDownloading = isDownloading,
+                    onPokemonClick = { pokemonName ->
+                        viewModel.saveClickedPokemonIndex(pokemonName)
+                        viewModel.loadPokemon(pokemonName)
+                    },
+                    onSearchQueryChange = { query ->
+                        viewModel.updateSearchQuery(query)
+                    },
+                    onRefreshClick = {
+                        viewModel.refreshPokemonList()
+                    },
+                    onBackClick = {
+                        viewModel.navigateToList()
+                    },
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
-                             "utilities" -> {
-                     when (currentUtilityScreen) {
-                         "weaknesses" -> {
-                             WeaknessesScreen(
-                                 onBackClick = { currentUtilityScreen = null },
-                                 modifier = Modifier.padding(innerPadding)
-                             )
-                         }
-                         "natures" -> {
-                             NaturesScreen(
-                                 onBackClick = { currentUtilityScreen = null },
-                                 modifier = Modifier.padding(innerPadding)
-                             )
-                         }
-                         "energy_slots" -> {
-                             EnergySlotsScreen(
-                                 onBackClick = { currentUtilityScreen = null },
-                                 modifier = Modifier.padding(innerPadding)
-                             )
-                         }
-                         else -> {
-                             UtilitiesScreen(
-                                 onWeaknessesClick = { currentUtilityScreen = "weaknesses" },
-                                 onNaturesClick = { currentUtilityScreen = "natures" },
-                                 onEnergySlotsClick = { currentUtilityScreen = "energy_slots" },
-                                 modifier = Modifier.padding(innerPadding)
-                             )
-                         }
-                     }
-                 }
+            "utilities" -> {
+                when (currentUtilityScreen) {
+                    "weaknesses" -> {
+                        WeaknessesScreen(
+                            onBackClick = { currentUtilityScreen = null },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
+                    "natures" -> {
+                        NaturesScreen(
+                            onBackClick = { currentUtilityScreen = null },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
+                    "energy_slots" -> {
+                        EnergySlotsScreen(
+                            onBackClick = { currentUtilityScreen = null },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
+                    else -> {
+                        UtilitiesScreen(
+                            onWeaknessesClick = { currentUtilityScreen = "weaknesses" },
+                            onNaturesClick = { currentUtilityScreen = "natures" },
+                            onEnergySlotsClick = { currentUtilityScreen = "energy_slots" },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
+                }
+            }
             "my_party" -> {
                 MyPartyScreen(
                     modifier = Modifier.padding(innerPadding)

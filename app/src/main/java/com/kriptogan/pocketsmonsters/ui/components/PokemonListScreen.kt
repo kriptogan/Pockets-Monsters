@@ -22,6 +22,9 @@ fun PokemonListScreen(
     lastViewedPokemonIndex: Int,
     isLocalDataAvailable: Boolean,
     lastUpdateTime: String,
+    isDetailedDataAvailable: Boolean,
+    downloadProgress: Pair<Int, Int>,
+    isDownloading: Boolean,
     onPokemonClick: (String) -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onRefreshClick: () -> Unit
@@ -73,13 +76,62 @@ fun PokemonListScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+                
+                // Detailed data status
+                if (isLocalDataAvailable) {
+                    Text(
+                        text = if (isDetailedDataAvailable) "✓ Detailed data available" else "⏳ Downloading detailed data...",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = if (isDetailedDataAvailable) 
+                            MaterialTheme.colorScheme.primary 
+                        else 
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
             
             Button(
                 onClick = onRefreshClick,
-                enabled = uiState !is PokemonUiState.Loading
+                enabled = uiState !is PokemonUiState.Loading && !isDownloading
             ) {
                 Text("Refresh")
+            }
+        }
+        
+        // Download Progress Bar
+        if (isDownloading && downloadProgress.second > 0) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Downloading detailed Pokémon data...",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    LinearProgressIndicator(
+                        progress = downloadProgress.first.toFloat() / downloadProgress.second.toFloat(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Text(
+                        text = "${downloadProgress.first} / ${downloadProgress.second} Pokémon",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
         

@@ -17,6 +17,9 @@ fun PokedexScreen(
     selectedPokemon: Pokemon?,
     isLocalDataAvailable: Boolean,
     lastUpdateTime: String,
+    isDetailedDataAvailable: Boolean,
+    downloadProgress: Pair<Int, Int>,
+    isDownloading: Boolean,
     onPokemonClick: (String) -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onRefreshClick: () -> Unit,
@@ -32,16 +35,19 @@ fun PokedexScreen(
         )
     } else {
         // Show Pokémon list screen
-                     PokemonListScreen(
-                 uiState = uiState,
-                 pokemonList = pokemonList,
-                 searchQuery = searchQuery,
-                 lastViewedPokemonIndex = lastViewedPokemonIndex,
-                 isLocalDataAvailable = isLocalDataAvailable,
-                 lastUpdateTime = lastUpdateTime,
-                 onPokemonClick = onPokemonClick,
-                 onSearchQueryChange = onSearchQueryChange,
-                 onRefreshClick = onRefreshClick
-             )
+        PokemonListScreen(
+            uiState = uiState,
+            pokemonList = pokemonList,
+            searchQuery = searchQuery,
+            lastViewedPokemonIndex = lastViewedPokemonIndex,
+            isLocalDataAvailable = isLocalDataAvailable,
+            lastUpdateTime = lastUpdateTime,
+            isDetailedDataAvailable = isDetailedDataAvailable,
+            downloadProgress = downloadProgress,
+            isDownloading = isDownloading,
+            onPokemonClick = onPokemonClick,
+            onSearchQueryChange = onSearchQueryChange,
+            onRefreshClick = onRefreshClick
+        )
     }
 }

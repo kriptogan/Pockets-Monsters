@@ -53,8 +53,23 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     // Cache for Pokémon details to avoid repeated API calls
     private val _pokemonDetailsCache = MutableStateFlow<Map<String, Pokemon>>(emptyMap())
     
+    // Download progress state
+    private val _downloadProgress = MutableStateFlow<Pair<Int, Int>>(Pair(0, 0))
+    val downloadProgress: StateFlow<Pair<Int, Int>> = _downloadProgress.asStateFlow()
+    
+    private val _isDownloading = MutableStateFlow(false)
+    val isDownloading: StateFlow<Boolean> = _isDownloading.asStateFlow()
+    
     init {
         loadPokemonList()
+        checkDetailedDataAvailability()
+    }
+    
+    /**
+     * Check if detailed Pokémon data is available locally
+     */
+    private fun checkDetailedDataAvailability() {
+        _downloadProgress.value = repository.getDownloadProgress()
     }
     
     /**
@@ -73,6 +88,11 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
                         _filteredPokemonList.value = response.results
                         _uiState.value = PokemonUiState.Success(response.results)
                         _errorMessage.value = null
+                        
+                        // Check if we should download detailed data
+                        if (!repository.isDetailedDataAvailable()) {
+                            downloadAllPokemonDetails()
+                        }
                     },
                     onFailure = { exception ->
                         _uiState.value = PokemonUiState.Error(exception.message ?: "Unknown error")
@@ -84,6 +104,36 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
                 _errorMessage.value = e.message ?: "Failed to load Pokémon list"
             } finally {
                 _isLoading.value = false
+            }
+        }
+    }
+    
+    /**
+     * Download all detailed Pokémon data
+     */
+    fun downloadAllPokemonDetails() {
+        viewModelScope.launch {
+            _isDownloading.value = true
+            _errorMessage.value = null
+            
+            try {
+                val result = repository.downloadAllPokemonDetails { current, total ->
+                    _downloadProgress.value = Pair(current, total)
+                }
+                
+                result.fold(
+                    onSuccess = {
+                        _errorMessage.value = null
+                        _downloadProgress.value = Pair(0, 0)
+                    },
+                    onFailure = { exception ->
+                        _errorMessage.value = exception.message ?: "Failed to download detailed data"
+                    }
+                )
+            } catch (e: Exception) {
+                _errorMessage.value = e.message ?: "Failed to download detailed data"
+            } finally {
+                _isDownloading.value = false
             }
         }
     }
@@ -104,6 +154,9 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
                         _filteredPokemonList.value = response.results
                         _uiState.value = PokemonUiState.Success(response.results)
                         _errorMessage.value = null
+                        
+                        // Also refresh detailed data
+                        downloadAllPokemonDetails()
                     },
                     onFailure = { exception ->
                         _uiState.value = PokemonUiState.Error(exception.message ?: "Unknown error")
@@ -266,8 +319,6 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
         _errorMessage.value = null
     }
     
-
-    
     /**
      * Check if local data is available
      */
@@ -276,10 +327,24 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     }
     
     /**
+     * Check if detailed Pokémon data is available locally
+     */
+    fun isDetailedDataAvailable(): Boolean {
+        return repository.isDetailedDataAvailable()
+    }
+    
+    /**
      * Get formatted last update time
      */
     fun getLastUpdateTime(): String {
         return repository.getLastUpdateTime()
+    }
+    
+    /**
+     * Get download progress
+     */
+    fun getDownloadProgress(): Pair<Int, Int> {
+        return repository.getDownloadProgress()
     }
 }
 
