@@ -161,7 +161,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 2,
+      "evolutionName": "ivysaur",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 2,
@@ -325,7 +332,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 3,
+      "evolutionName": "venusaur",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 3,
@@ -637,7 +651,14 @@
         "level_learned_at": 40,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 5,
+      "evolutionName": "charmeleon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 5,
@@ -775,7 +796,14 @@
         "level_learned_at": 54,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 6,
+      "evolutionName": "charizard",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 6,
@@ -1087,7 +1115,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 8,
+      "evolutionName": "wartortle",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 8,
@@ -1240,7 +1275,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 9,
+      "evolutionName": "blastoise",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 9,
@@ -1491,7 +1533,14 @@
         "level_learned_at": 9,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 7,
+      "evolutionId": 11,
+      "evolutionName": "metapod",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 11,
@@ -1567,7 +1616,14 @@
         "level_learned_at": 0,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 10,
+      "evolutionId": 12,
+      "evolutionName": "butterfree",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 12,
@@ -1840,7 +1896,14 @@
         "level_learned_at": 9,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 7,
+      "evolutionId": 14,
+      "evolutionName": "kakuna",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 14,
@@ -1922,7 +1985,14 @@
         "level_learned_at": 0,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 10,
+      "evolutionId": 15,
+      "evolutionName": "beedrill",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 15,
@@ -2247,7 +2317,14 @@
         "level_learned_at": 53,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 17,
+      "evolutionName": "pidgeotto",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 17,
@@ -2408,7 +2485,14 @@
         "level_learned_at": 62,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 18,
+      "evolutionName": "pidgeot",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 18,
@@ -2719,7 +2803,14 @@
         "level_learned_at": 34,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 20,
+      "evolutionName": "raticate",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 20,
@@ -3023,7 +3114,14 @@
         "level_learned_at": 36,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 22,
+      "evolutionName": "fearow",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 22,
@@ -3347,7 +3445,14 @@
         "level_learned_at": 49,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 22,
+      "evolutionId": 24,
+      "evolutionName": "arbok",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 24,
@@ -3725,7 +3830,16 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 26,
+      "evolutionName": "raichu",
+      "method": "item",
+      "conditions": {
+        "item": "thunder-stone"
+      }
+    }
   },
   {
     "id": 26,
@@ -4081,7 +4195,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 22,
+      "evolutionId": 28,
+      "evolutionName": "sandslash",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 28,
@@ -4404,7 +4525,14 @@
         "level_learned_at": 55,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 30,
+      "evolutionName": "nidorina",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 30,
@@ -4554,7 +4682,16 @@
         "level_learned_at": 71,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 31,
+      "evolutionName": "nidoqueen",
+      "method": "item",
+      "conditions": {
+        "item": "moon-stone"
+      }
+    }
   },
   {
     "id": 31,
@@ -4870,7 +5007,14 @@
         "level_learned_at": 55,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 33,
+      "evolutionName": "nidorino",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 33,
@@ -5020,7 +5164,16 @@
         "level_learned_at": 71,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 34,
+      "evolutionName": "nidoking",
+      "method": "item",
+      "conditions": {
+        "item": "moon-stone"
+      }
+    }
   },
   {
     "id": 34,
@@ -5416,7 +5569,16 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 36,
+      "evolutionName": "clefable",
+      "method": "item",
+      "conditions": {
+        "item": "moon-stone"
+      }
+    }
   },
   {
     "id": 36,
@@ -5819,7 +5981,16 @@
         "level_learned_at": 52,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 38,
+      "evolutionName": "ninetales",
+      "method": "item",
+      "conditions": {
+        "item": "fire-stone"
+      }
+    }
   },
   {
     "id": 38,
@@ -6188,7 +6359,16 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 40,
+      "evolutionName": "wigglytuff",
+      "method": "item",
+      "conditions": {
+        "item": "moon-stone"
+      }
+    }
   },
   {
     "id": 40,
@@ -6548,7 +6728,14 @@
         "level_learned_at": 45,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 22,
+      "evolutionId": 42,
+      "evolutionName": "golbat",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 42,
@@ -6717,7 +6904,16 @@
         "level_learned_at": 55,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 169,
+      "evolutionName": "crobat",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 43,
@@ -6871,7 +7067,14 @@
         "level_learned_at": 40,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 21,
+      "evolutionId": 44,
+      "evolutionName": "gloom",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 44,
@@ -7025,7 +7228,16 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 45,
+      "evolutionName": "vileplume",
+      "method": "item",
+      "conditions": {
+        "item": "leaf-stone"
+      }
+    }
   },
   {
     "id": 45,
@@ -7350,7 +7562,14 @@
         "level_learned_at": 49,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 24,
+      "evolutionId": 47,
+      "evolutionName": "parasect",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 47,
@@ -7682,7 +7901,14 @@
         "level_learned_at": 47,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 31,
+      "evolutionId": 49,
+      "evolutionName": "venomoth",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 49,
@@ -8018,7 +8244,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 26,
+      "evolutionId": 51,
+      "evolutionName": "dugtrio",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 51,
@@ -8333,7 +8566,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 28,
+      "evolutionId": 53,
+      "evolutionName": "persian",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 53,
@@ -8663,7 +8903,14 @@
         "level_learned_at": 43,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 33,
+      "evolutionId": 55,
+      "evolutionName": "golduck",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 55,
@@ -9018,7 +9265,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 28,
+      "evolutionId": 57,
+      "evolutionName": "primeape",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 57,
@@ -9208,7 +9462,14 @@
         "level_learned_at": 57,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 979,
+      "evolutionName": "annihilape",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 58,
@@ -9373,7 +9634,16 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 59,
+      "evolutionName": "arcanine",
+      "method": "item",
+      "conditions": {
+        "item": "fire-stone"
+      }
+    }
   },
   {
     "id": 59,
@@ -9688,7 +9958,14 @@
         "level_learned_at": 54,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 61,
+      "evolutionName": "poliwhirl",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 61,
@@ -9828,7 +10105,16 @@
         "level_learned_at": 66,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 62,
+      "evolutionName": "poliwrath",
+      "method": "item",
+      "conditions": {
+        "item": "water-stone"
+      }
+    }
   },
   {
     "id": 62,
@@ -10084,7 +10370,14 @@
         "level_learned_at": 1,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 64,
+      "evolutionName": "kadabra",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 64,
@@ -10249,7 +10542,14 @@
         "level_learned_at": 45,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 65,
+      "evolutionName": "alakazam",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 65,
@@ -10604,7 +10904,14 @@
         "level_learned_at": 48,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 28,
+      "evolutionId": 67,
+      "evolutionName": "machoke",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 67,
@@ -10794,7 +11101,14 @@
         "level_learned_at": 60,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 68,
+      "evolutionName": "machamp",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 68,
@@ -11148,7 +11462,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 21,
+      "evolutionId": 70,
+      "evolutionName": "weepinbell",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 71,
@@ -11493,7 +11814,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 73,
+      "evolutionName": "tentacruel",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 73,
@@ -11850,7 +12178,14 @@
         "level_learned_at": 42,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 75,
+      "evolutionName": "graveler",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 75,
@@ -12036,7 +12371,14 @@
         "level_learned_at": 54,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 76,
+      "evolutionName": "golem",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 76,
@@ -12392,7 +12734,14 @@
         "level_learned_at": 47,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 78,
+      "evolutionName": "rapidash",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 78,
@@ -12753,7 +13102,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 37,
+      "evolutionId": 80,
+      "evolutionName": "slowbro",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 80,
@@ -13110,7 +13466,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 82,
+      "evolutionName": "magneton",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 82,
@@ -13296,7 +13659,16 @@
         "level_learned_at": 64,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 462,
+      "evolutionName": "magnezone",
+      "method": "location",
+      "conditions": {
+        "location": "mt-coronet"
+      }
+    }
   },
   {
     "id": 83,
@@ -13462,7 +13834,14 @@
         "level_learned_at": 65,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 865,
+      "evolutionName": "sirfetchd",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 84,
@@ -13633,7 +14012,14 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 31,
+      "evolutionId": 85,
+      "evolutionName": "dodrio",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 85,
@@ -13989,7 +14375,14 @@
         "level_learned_at": 53,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 87,
+      "evolutionName": "dewgong",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 87,
@@ -14355,7 +14748,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 89,
+      "evolutionName": "muk",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 89,
@@ -14690,7 +15090,16 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 91,
+      "evolutionName": "cloyster",
+      "method": "item",
+      "conditions": {
+        "item": "water-stone"
+      }
+    }
   },
   {
     "id": 91,
@@ -15033,7 +15442,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 93,
+      "evolutionName": "haunter",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 93,
@@ -15200,7 +15616,14 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 94,
+      "evolutionName": "gengar",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 94,
@@ -15573,7 +15996,16 @@
         "level_learned_at": 56,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 208,
+      "evolutionName": "steelix",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "metal-coat"
+      }
+    }
   },
   {
     "id": 96,
@@ -15733,7 +16165,14 @@
         "level_learned_at": 49,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 26,
+      "evolutionId": 97,
+      "evolutionName": "hypno",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 97,
@@ -16053,7 +16492,14 @@
         "level_learned_at": 48,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 28,
+      "evolutionId": 99,
+      "evolutionName": "kingler",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 99,
@@ -16388,7 +16834,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 101,
+      "evolutionName": "electrode",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 101,
@@ -16712,7 +17165,16 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 103,
+      "evolutionName": "exeggutor",
+      "method": "item",
+      "conditions": {
+        "item": "leaf-stone"
+      }
+    }
   },
   {
     "id": 103,
@@ -17041,7 +17503,14 @@
         "level_learned_at": 48,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 28,
+      "evolutionId": 105,
+      "evolutionName": "marowak",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 105,
@@ -17746,7 +18215,16 @@
         "level_learned_at": 60,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 463,
+      "evolutionName": "lickilicky",
+      "method": "move",
+      "conditions": {
+        "move": "rollout"
+      }
+    }
   },
   {
     "id": 109,
@@ -17906,7 +18384,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 110,
+      "evolutionName": "weezing",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 110,
@@ -18267,7 +18752,14 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 42,
+      "evolutionId": 112,
+      "evolutionName": "rhydon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 112,
@@ -18463,7 +18955,16 @@
         "level_learned_at": 68,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 464,
+      "evolutionName": "rhyperior",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "protector"
+      }
+    }
   },
   {
     "id": 113,
@@ -18678,7 +19179,16 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 242,
+      "evolutionName": "blissey",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 114,
@@ -18858,7 +19368,16 @@
         "level_learned_at": 56,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 465,
+      "evolutionName": "tangrowth",
+      "method": "move",
+      "conditions": {
+        "move": "ancient-power"
+      }
+    }
   },
   {
     "id": 115,
@@ -19173,7 +19692,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 117,
+      "evolutionName": "seadra",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 117,
@@ -19328,7 +19854,16 @@
         "level_learned_at": 65,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 230,
+      "evolutionName": "kingdra",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "dragon-scale"
+      }
+    }
   },
   {
     "id": 118,
@@ -19473,7 +20008,14 @@
         "level_learned_at": 50,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 33,
+      "evolutionId": 119,
+      "evolutionName": "seaking",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 119,
@@ -19783,7 +20325,16 @@
         "level_learned_at": 56,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 121,
+      "evolutionName": "starmie",
+      "method": "item",
+      "conditions": {
+        "item": "water-stone"
+      }
+    }
   },
   {
     "id": 121,
@@ -20170,7 +20721,14 @@
         "level_learned_at": 52,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 42,
+      "evolutionId": 866,
+      "evolutionName": "mr-rime",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 123,
@@ -20346,7 +20904,16 @@
         "level_learned_at": 44,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 212,
+      "evolutionName": "scizor",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "metal-coat"
+      }
+    }
   },
   {
     "id": 124,
@@ -20670,7 +21237,16 @@
         "level_learned_at": 64,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 466,
+      "evolutionName": "electivire",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "electirizer"
+      }
+    }
   },
   {
     "id": 126,
@@ -20833,7 +21409,16 @@
         "level_learned_at": 64,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 467,
+      "evolutionName": "magmortar",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "magmarizer"
+      }
+    }
   },
   {
     "id": 127,
@@ -21246,7 +21831,14 @@
         "level_learned_at": 25,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 130,
+      "evolutionName": "gyarados",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 130,
@@ -21859,7 +22451,16 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 134,
+      "evolutionName": "vaporeon",
+      "method": "item",
+      "conditions": {
+        "item": "water-stone"
+      }
+    }
   },
   {
     "id": 134,
@@ -22678,7 +23279,16 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 233,
+      "evolutionName": "porygon2",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "up-grade"
+      }
+    }
   },
   {
     "id": 138,
@@ -22839,7 +23449,14 @@
         "level_learned_at": 60,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 139,
+      "evolutionName": "omastar",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 139,
@@ -23166,7 +23783,14 @@
         "level_learned_at": 60,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 141,
+      "evolutionName": "kabutops",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 141,
@@ -24398,7 +25022,14 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 148,
+      "evolutionName": "dragonair",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 148,
@@ -24546,7 +25177,14 @@
         "level_learned_at": 74,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 55,
+      "evolutionId": 149,
+      "evolutionName": "dragonite",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 149,
@@ -25182,7 +25820,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 153,
+      "evolutionName": "bayleef",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 153,
@@ -25340,7 +25985,14 @@
         "level_learned_at": 54,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 154,
+      "evolutionName": "meganium",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 154,
@@ -25671,7 +26323,14 @@
         "level_learned_at": 64,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 14,
+      "evolutionId": 156,
+      "evolutionName": "quilava",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 156,
@@ -25834,7 +26493,14 @@
         "level_learned_at": 75,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 157,
+      "evolutionName": "typhlosion",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 157,
@@ -26160,7 +26826,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 159,
+      "evolutionName": "croconaw",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 159,
@@ -26318,7 +26991,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 160,
+      "evolutionName": "feraligatr",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 160,
@@ -26641,7 +27321,14 @@
         "level_learned_at": 47,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 15,
+      "evolutionId": 162,
+      "evolutionName": "furret",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 162,
@@ -26982,7 +27669,14 @@
         "level_learned_at": 39,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 164,
+      "evolutionName": "noctowl",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 164,
@@ -27314,7 +28008,14 @@
         "level_learned_at": 40,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 166,
+      "evolutionName": "ledian",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 166,
@@ -27651,7 +28352,14 @@
         "level_learned_at": 51,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 22,
+      "evolutionId": 168,
+      "evolutionName": "ariados",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 168,
@@ -28187,7 +28895,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 27,
+      "evolutionId": 171,
+      "evolutionName": "lanturn",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 171,
@@ -28511,7 +29226,16 @@
         "level_learned_at": 47,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 25,
+      "evolutionName": "pikachu",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 220
+      }
+    }
   },
   {
     "id": 173,
@@ -28676,7 +29400,16 @@
         "level_learned_at": 47,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 35,
+      "evolutionName": "clefairy",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 174,
@@ -28807,7 +29540,16 @@
         "level_learned_at": 20,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 39,
+      "evolutionName": "jigglypuff",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 175,
@@ -29002,7 +29744,16 @@
         "level_learned_at": 52,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 176,
+      "evolutionName": "togetic",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 176,
@@ -29213,7 +29964,16 @@
         "level_learned_at": 52,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 468,
+      "evolutionName": "togekiss",
+      "method": "item",
+      "conditions": {
+        "item": "shiny-stone"
+      }
+    }
   },
   {
     "id": 177,
@@ -29364,7 +30124,14 @@
         "level_learned_at": 45,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 178,
+      "evolutionName": "xatu",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 178,
@@ -29683,7 +30450,14 @@
         "level_learned_at": 46,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 15,
+      "evolutionId": 180,
+      "evolutionName": "flaaffy",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 180,
@@ -29841,7 +30615,14 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 181,
+      "evolutionName": "ampharos",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 181,
@@ -30363,7 +31144,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 184,
+      "evolutionName": "azumarill",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 184,
@@ -31090,7 +31878,14 @@
         "level_learned_at": 40,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 188,
+      "evolutionName": "skiploom",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 188,
@@ -31281,7 +32076,14 @@
         "level_learned_at": 48,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 27,
+      "evolutionId": 189,
+      "evolutionName": "jumpluff",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 189,
@@ -31647,7 +32449,16 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 424,
+      "evolutionName": "ambipom",
+      "method": "move",
+      "conditions": {
+        "move": "double-hit"
+      }
+    }
   },
   {
     "id": 191,
@@ -31807,7 +32618,16 @@
         "level_learned_at": 39,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 192,
+      "evolutionName": "sunflora",
+      "method": "item",
+      "conditions": {
+        "item": "sun-stone"
+      }
+    }
   },
   {
     "id": 192,
@@ -32183,7 +33003,16 @@
         "level_learned_at": 57,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 469,
+      "evolutionName": "yanmega",
+      "method": "move",
+      "conditions": {
+        "move": "ancient-power"
+      }
+    }
   },
   {
     "id": 194,
@@ -32339,7 +33168,14 @@
         "level_learned_at": 40,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 195,
+      "evolutionName": "quagsire",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 195,
@@ -33112,7 +33948,16 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 430,
+      "evolutionName": "honchkrow",
+      "method": "item",
+      "conditions": {
+        "item": "dusk-stone"
+      }
+    }
   },
   {
     "id": 199,
@@ -33459,7 +34304,16 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 429,
+      "evolutionName": "mismagius",
+      "method": "item",
+      "conditions": {
+        "item": "dusk-stone"
+      }
+    }
   },
   {
     "id": 201,
@@ -33829,7 +34683,16 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 981,
+      "evolutionName": "farigiraf",
+      "method": "move",
+      "conditions": {
+        "move": "twin-beam"
+      }
+    }
   },
   {
     "id": 204,
@@ -33982,7 +34845,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 31,
+      "evolutionId": 205,
+      "evolutionName": "forretress",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 205,
@@ -34336,7 +35206,16 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 982,
+      "evolutionName": "dudunsparce",
+      "method": "move",
+      "conditions": {
+        "move": "hyper-drill"
+      }
+    }
   },
   {
     "id": 207,
@@ -34527,7 +35406,16 @@
         "level_learned_at": 55,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 472,
+      "evolutionName": "gliscor",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "razor-fang"
+      }
+    }
   },
   {
     "id": 209,
@@ -34697,7 +35585,14 @@
         "level_learned_at": 49,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 23,
+      "evolutionId": 210,
+      "evolutionName": "granbull",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 210,
@@ -35058,7 +35953,16 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 904,
+      "evolutionName": "overqwil",
+      "method": "move",
+      "conditions": {
+        "move": "barb-barrage"
+      }
+    }
   },
   {
     "id": 212,
@@ -35782,7 +36686,16 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 461,
+      "evolutionName": "weavile",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "razor-claw"
+      }
+    }
   },
   {
     "id": 216,
@@ -35967,7 +36880,14 @@
         "level_learned_at": 43,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 217,
+      "evolutionName": "ursaring",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 217,
@@ -36167,7 +37087,16 @@
         "level_learned_at": 64,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 901,
+      "evolutionName": "ursaluna",
+      "method": "item",
+      "conditions": {
+        "item": "peat-block"
+      }
+    }
   },
   {
     "id": 218,
@@ -36327,7 +37256,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 219,
+      "evolutionName": "magcargo",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 219,
@@ -36674,7 +37610,14 @@
         "level_learned_at": 52,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 33,
+      "evolutionId": 221,
+      "evolutionName": "piloswine",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 221,
@@ -36860,7 +37803,16 @@
         "level_learned_at": 65,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 473,
+      "evolutionName": "mamoswine",
+      "method": "move",
+      "conditions": {
+        "move": "ancient-power"
+      }
+    }
   },
   {
     "id": 222,
@@ -37016,7 +37968,14 @@
         "level_learned_at": 55,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 864,
+      "evolutionName": "cursola",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 223,
@@ -37181,7 +38140,14 @@
         "level_learned_at": 43,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 224,
+      "evolutionName": "octillery",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 224,
@@ -38015,7 +38981,14 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 24,
+      "evolutionId": 229,
+      "evolutionName": "houndoom",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 229,
@@ -38520,7 +39493,14 @@
         "level_learned_at": 42,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 232,
+      "evolutionName": "donphan",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 232,
@@ -38883,7 +39863,16 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 474,
+      "evolutionName": "porygon-z",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "dubious-disc"
+      }
+    }
   },
   {
     "id": 234,
@@ -39058,7 +40047,16 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 899,
+      "evolutionName": "wyrdeer",
+      "method": "move",
+      "conditions": {
+        "move": "psyshield-bash"
+      }
+    }
   },
   {
     "id": 235,
@@ -39253,7 +40251,14 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 106,
+      "evolutionName": "hitmonlee",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 237,
@@ -39594,7 +40599,14 @@
         "level_learned_at": 48,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 124,
+      "evolutionName": "jynx",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 239,
@@ -39747,7 +40759,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 125,
+      "evolutionName": "electabuzz",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 240,
@@ -39905,7 +40924,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 126,
+      "evolutionName": "magmar",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 241,
@@ -40953,7 +41979,14 @@
         "level_learned_at": 42,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 247,
+      "evolutionName": "pupitar",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 247,
@@ -41120,7 +42153,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 55,
+      "evolutionId": 248,
+      "evolutionName": "tyranitar",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 248,
@@ -41927,7 +42967,14 @@
         "level_learned_at": 39,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 253,
+      "evolutionName": "grovyle",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 253,
@@ -42100,7 +43147,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 254,
+      "evolutionName": "sceptile",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 254,
@@ -42431,7 +43485,14 @@
         "level_learned_at": 39,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 256,
+      "evolutionName": "combusken",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 256,
@@ -42605,7 +43666,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 257,
+      "evolutionName": "blaziken",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 257,
@@ -42947,7 +44015,14 @@
         "level_learned_at": 39,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 259,
+      "evolutionName": "marshtomp",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 259,
@@ -43121,7 +44196,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 260,
+      "evolutionName": "swampert",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 260,
@@ -43470,7 +44552,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 262,
+      "evolutionName": "mightyena",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 262,
@@ -43820,7 +44909,14 @@
         "level_learned_at": 36,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 264,
+      "evolutionName": "linoone",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 264,
@@ -43995,7 +45091,14 @@
         "level_learned_at": 48,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 862,
+      "evolutionName": "obstagoon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 265,
@@ -44093,7 +45196,14 @@
         "level_learned_at": 15,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 7,
+      "evolutionId": 266,
+      "evolutionName": "silcoon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 266,
@@ -44184,7 +45294,14 @@
         "level_learned_at": 6,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 10,
+      "evolutionId": 267,
+      "evolutionName": "beautifly",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 267,
@@ -44469,7 +45586,14 @@
         "level_learned_at": 6,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 10,
+      "evolutionId": 269,
+      "evolutionName": "dustox",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 269,
@@ -44819,7 +45943,14 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 14,
+      "evolutionId": 271,
+      "evolutionName": "lombre",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 271,
@@ -45005,7 +46136,16 @@
         "level_learned_at": 64,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 272,
+      "evolutionName": "ludicolo",
+      "method": "item",
+      "conditions": {
+        "item": "water-stone"
+      }
+    }
   },
   {
     "id": 272,
@@ -45341,7 +46481,14 @@
         "level_learned_at": 33,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 14,
+      "evolutionId": 274,
+      "evolutionName": "nuzleaf",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 274,
@@ -45532,7 +46679,16 @@
         "level_learned_at": 57,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 275,
+      "evolutionName": "shiftry",
+      "method": "item",
+      "conditions": {
+        "item": "leaf-stone"
+      }
+    }
   },
   {
     "id": 275,
@@ -45887,7 +47043,14 @@
         "level_learned_at": 45,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 22,
+      "evolutionId": 277,
+      "evolutionName": "swellow",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 277,
@@ -46187,7 +47350,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 279,
+      "evolutionName": "pelipper",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 279,
@@ -46539,7 +47709,14 @@
         "level_learned_at": 39,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 281,
+      "evolutionName": "kirlia",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 281,
@@ -46705,7 +47882,14 @@
         "level_learned_at": 53,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 282,
+      "evolutionName": "gardevoir",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 282,
@@ -47050,7 +48234,14 @@
         "level_learned_at": 38,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 22,
+      "evolutionId": 284,
+      "evolutionName": "masquerain",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 284,
@@ -47389,7 +48580,14 @@
         "level_learned_at": 40,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 23,
+      "evolutionId": 286,
+      "evolutionName": "breloom",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 286,
@@ -47721,7 +48919,14 @@
         "level_learned_at": 38,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 288,
+      "evolutionName": "vigoroth",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 288,
@@ -47887,7 +49092,14 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 289,
+      "evolutionName": "slaking",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 289,
@@ -48212,7 +49424,14 @@
         "level_learned_at": 40,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 291,
+      "evolutionName": "ninjask",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 291,
@@ -48696,7 +49915,14 @@
         "level_learned_at": 45,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 294,
+      "evolutionName": "loudred",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 294,
@@ -48839,7 +50065,14 @@
         "level_learned_at": 57,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 295,
+      "evolutionName": "exploud",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 295,
@@ -49187,7 +50420,14 @@
         "level_learned_at": 46,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 24,
+      "evolutionId": 297,
+      "evolutionName": "hariyama",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 297,
@@ -49503,7 +50743,16 @@
         "level_learned_at": 15,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 183,
+      "evolutionName": "marill",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 299,
@@ -49673,7 +50922,16 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 476,
+      "evolutionName": "probopass",
+      "method": "location",
+      "conditions": {
+        "location": "mt-coronet"
+      }
+    }
   },
   {
     "id": 300,
@@ -49843,7 +51101,16 @@
         "level_learned_at": 46,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 301,
+      "evolutionName": "delcatty",
+      "method": "item",
+      "conditions": {
+        "item": "moon-stone"
+      }
+    }
   },
   {
     "id": 301,
@@ -50541,7 +51808,14 @@
         "level_learned_at": 60,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 305,
+      "evolutionName": "lairon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 305,
@@ -50717,7 +51991,14 @@
         "level_learned_at": 76,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 42,
+      "evolutionId": 306,
+      "evolutionName": "aggron",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 306,
@@ -51072,7 +52353,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 37,
+      "evolutionId": 308,
+      "evolutionName": "medicham",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 308,
@@ -51421,7 +52709,14 @@
         "level_learned_at": 44,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 26,
+      "evolutionId": 310,
+      "evolutionName": "manectric",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 310,
@@ -52478,7 +53773,16 @@
         "level_learned_at": 55,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 407,
+      "evolutionName": "roserade",
+      "method": "item",
+      "conditions": {
+        "item": "shiny-stone"
+      }
+    }
   },
   {
     "id": 316,
@@ -52643,7 +53947,14 @@
         "level_learned_at": 49,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 26,
+      "evolutionId": 317,
+      "evolutionName": "swalot",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 317,
@@ -52967,7 +54278,14 @@
         "level_learned_at": 44,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 319,
+      "evolutionName": "sharpedo",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 319,
@@ -53291,7 +54609,14 @@
         "level_learned_at": 48,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 321,
+      "evolutionName": "wailord",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 321,
@@ -53637,7 +54962,14 @@
         "level_learned_at": 47,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 33,
+      "evolutionId": 323,
+      "evolutionName": "camerupt",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 323,
@@ -54158,7 +55490,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 326,
+      "evolutionName": "grumpig",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 326,
@@ -54628,7 +55967,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 329,
+      "evolutionName": "vibrava",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 329,
@@ -54815,7 +56161,14 @@
         "level_learned_at": 62,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 45,
+      "evolutionId": 330,
+      "evolutionName": "flygon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 330,
@@ -55195,7 +56548,14 @@
         "level_learned_at": 54,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 332,
+      "evolutionName": "cacturne",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 332,
@@ -55533,7 +56893,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 334,
+      "evolutionName": "altaria",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 334,
@@ -56528,7 +57895,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 340,
+      "evolutionName": "whiscash",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 340,
@@ -56864,7 +58238,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 342,
+      "evolutionName": "crawdaunt",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 342,
@@ -57197,7 +58578,14 @@
         "level_learned_at": 42,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 344,
+      "evolutionName": "claydol",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 344,
@@ -57528,7 +58916,14 @@
         "level_learned_at": 44,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 346,
+      "evolutionName": "cradily",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 346,
@@ -57841,7 +59236,14 @@
         "level_learned_at": 44,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 348,
+      "evolutionName": "armaldo",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 348,
@@ -58090,7 +59492,14 @@
         "level_learned_at": 25,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 350,
+      "evolutionName": "milotic",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 350,
@@ -58744,7 +60153,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 37,
+      "evolutionId": 354,
+      "evolutionName": "banette",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 354,
@@ -59067,7 +60483,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 37,
+      "evolutionId": 356,
+      "evolutionName": "dusclops",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 356,
@@ -59260,7 +60683,16 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 477,
+      "evolutionName": "dusknoir",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "reaper-cloth"
+      }
+    }
   },
   {
     "id": 357,
@@ -59890,7 +61322,14 @@
         "level_learned_at": 1,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 15,
+      "evolutionId": 202,
+      "evolutionName": "wobbuffet",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 361,
@@ -60060,7 +61499,14 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 42,
+      "evolutionId": 362,
+      "evolutionName": "glalie",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 362,
@@ -60426,7 +61872,14 @@
         "level_learned_at": 52,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 364,
+      "evolutionName": "sealeo",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 364,
@@ -60612,7 +62065,14 @@
         "level_learned_at": 64,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 44,
+      "evolutionId": 365,
+      "evolutionName": "walrein",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 365,
@@ -60906,7 +62366,16 @@
         "level_learned_at": 50,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 367,
+      "evolutionName": "huntail",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "deep-sea-tooth"
+      }
+    }
   },
   {
     "id": 367,
@@ -61709,7 +63178,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 372,
+      "evolutionName": "shelgon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 372,
@@ -61857,7 +63333,14 @@
         "level_learned_at": 67,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 50,
+      "evolutionId": 373,
+      "evolutionName": "salamence",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 373,
@@ -62120,7 +63603,14 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 375,
+      "evolutionName": "metang",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 375,
@@ -62279,7 +63769,14 @@
         "level_learned_at": 74,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 45,
+      "evolutionId": 376,
+      "evolutionName": "metagross",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 376,
@@ -64131,7 +65628,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 388,
+      "evolutionName": "grotle",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 388,
@@ -64299,7 +65803,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 389,
+      "evolutionName": "torterra",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 389,
@@ -64651,7 +66162,14 @@
         "level_learned_at": 47,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 14,
+      "evolutionId": 391,
+      "evolutionName": "monferno",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 391,
@@ -64840,7 +66358,14 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 392,
+      "evolutionName": "infernape",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 392,
@@ -65222,7 +66747,14 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 394,
+      "evolutionName": "prinplup",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 394,
@@ -65405,7 +66937,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 395,
+      "evolutionName": "empoleon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 395,
@@ -65783,7 +67322,14 @@
         "level_learned_at": 47,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 14,
+      "evolutionId": 397,
+      "evolutionName": "staravia",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 397,
@@ -65952,7 +67498,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 398,
+      "evolutionName": "staraptor",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 398,
@@ -66296,7 +67849,14 @@
         "level_learned_at": 49,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 15,
+      "evolutionId": 400,
+      "evolutionName": "bibarel",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 400,
@@ -66600,7 +68160,14 @@
         "level_learned_at": 16,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 10,
+      "evolutionId": 402,
+      "evolutionName": "kricketune",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 402,
@@ -66948,7 +68515,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 15,
+      "evolutionId": 404,
+      "evolutionName": "luxio",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 404,
@@ -67118,7 +68692,14 @@
         "level_learned_at": 68,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 405,
+      "evolutionName": "luxray",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 405,
@@ -67434,7 +69015,16 @@
         "level_learned_at": 52,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 315,
+      "evolutionName": "roselia",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 407,
@@ -67818,7 +69408,14 @@
         "level_learned_at": 46,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 409,
+      "evolutionName": "rampardos",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 409,
@@ -68165,7 +69762,14 @@
         "level_learned_at": 47,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 411,
+      "evolutionName": "bastiodon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 411,
@@ -68437,7 +70041,14 @@
         "level_learned_at": 20,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 413,
+      "evolutionName": "wormadam",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 413,
@@ -68889,7 +70500,14 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 21,
+      "evolutionId": 416,
+      "evolutionName": "vespiquen",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 416,
@@ -69436,7 +71054,14 @@
         "level_learned_at": 49,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 26,
+      "evolutionId": 419,
+      "evolutionName": "floatzel",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 419,
@@ -69775,7 +71400,14 @@
         "level_learned_at": 47,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 421,
+      "evolutionName": "cherrim",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 421,
@@ -70101,7 +71733,14 @@
         "level_learned_at": 47,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 423,
+      "evolutionName": "gastrodon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 423,
@@ -70453,7 +72092,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 28,
+      "evolutionId": 426,
+      "evolutionName": "drifblim",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 426,
@@ -70839,7 +72485,16 @@
         "level_learned_at": 52,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 428,
+      "evolutionName": "lopunny",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 428,
@@ -71611,7 +73266,14 @@
         "level_learned_at": 48,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 432,
+      "evolutionName": "purugly",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 432,
@@ -71937,7 +73599,16 @@
         "level_learned_at": 43,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 358,
+      "evolutionName": "chimecho",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 220
+      }
+    }
   },
   {
     "id": 434,
@@ -72128,7 +73799,14 @@
         "level_learned_at": 43,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 435,
+      "evolutionName": "skuntank",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 435,
@@ -72490,7 +74168,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 33,
+      "evolutionId": 437,
+      "evolutionName": "bronzong",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 437,
@@ -72851,7 +74536,16 @@
         "level_learned_at": 47,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 185,
+      "evolutionName": "sudowoodo",
+      "method": "move",
+      "conditions": {
+        "move": "mimic"
+      }
+    }
   },
   {
     "id": 440,
@@ -73011,7 +74705,16 @@
         "level_learned_at": 43,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 113,
+      "evolutionName": "chansey",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "oval-stone"
+      }
+    }
   },
   {
     "id": 441,
@@ -73535,7 +75238,14 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 24,
+      "evolutionId": 444,
+      "evolutionName": "gabite",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 444,
@@ -73704,7 +75414,14 @@
         "level_learned_at": 74,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 48,
+      "evolutionId": 445,
+      "evolutionName": "garchomp",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 445,
@@ -74078,7 +75795,16 @@
         "level_learned_at": 57,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 143,
+      "evolutionName": "snorlax",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 447,
@@ -74283,7 +76009,16 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 448,
+      "evolutionName": "lucario",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 448,
@@ -74712,7 +76447,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 450,
+      "evolutionName": "hippowdon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 450,
@@ -75076,7 +76818,14 @@
         "level_learned_at": 45,
         "version_group": "brilliant-diamond-and-shining-pearl"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 452,
+      "evolutionName": "drapion",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 452,
@@ -75463,7 +77212,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 37,
+      "evolutionId": 454,
+      "evolutionName": "toxicroak",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 454,
@@ -75995,7 +77751,14 @@
         "level_learned_at": 54,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 31,
+      "evolutionId": 457,
+      "evolutionName": "lumineon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 457,
@@ -76356,7 +78119,16 @@
         "level_learned_at": 47,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 226,
+      "evolutionName": "mantine",
+      "method": "party",
+      "conditions": {
+        "party_pokemon": "remoraid"
+      }
+    }
   },
   {
     "id": 459,
@@ -76510,7 +78282,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 460,
+      "evolutionName": "abomasnow",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 460,
@@ -82780,7 +84559,14 @@
         "level_learned_at": 40,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 17,
+      "evolutionId": 496,
+      "evolutionName": "servine",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 496,
@@ -82928,7 +84714,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 497,
+      "evolutionName": "serperior",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 497,
@@ -83229,7 +85022,14 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 17,
+      "evolutionId": 499,
+      "evolutionName": "pignite",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 499,
@@ -83393,7 +85193,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 500,
+      "evolutionName": "emboar",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 500,
@@ -83710,7 +85517,14 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 17,
+      "evolutionId": 502,
+      "evolutionName": "dewott",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 502,
@@ -83868,7 +85682,14 @@
         "level_learned_at": 53,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 503,
+      "evolutionName": "samurott",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 503,
@@ -84115,7 +85936,14 @@
         "slot": 3
       }
     ],
-    "level_up_moves": []
+    "level_up_moves": [],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 505,
+      "evolutionName": "watchog",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 505,
@@ -84354,7 +86182,14 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 507,
+      "evolutionName": "herdier",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 507,
@@ -84509,7 +86344,14 @@
         "level_learned_at": 66,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 508,
+      "evolutionName": "stoutland",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 508,
@@ -84824,7 +86666,14 @@
         "level_learned_at": 40,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 510,
+      "evolutionName": "liepard",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 510,
@@ -85046,7 +86895,16 @@
         "slot": 3
       }
     ],
-    "level_up_moves": []
+    "level_up_moves": [],
+    "evolution": {
+      "level": null,
+      "evolutionId": 512,
+      "evolutionName": "simisage",
+      "method": "item",
+      "conditions": {
+        "item": "leaf-stone"
+      }
+    }
   },
   {
     "id": 512,
@@ -85200,7 +87058,16 @@
         "slot": 3
       }
     ],
-    "level_up_moves": []
+    "level_up_moves": [],
+    "evolution": {
+      "level": null,
+      "evolutionId": 514,
+      "evolutionName": "simisear",
+      "method": "item",
+      "conditions": {
+        "item": "fire-stone"
+      }
+    }
   },
   {
     "id": 514,
@@ -85354,7 +87221,16 @@
         "slot": 3
       }
     ],
-    "level_up_moves": []
+    "level_up_moves": [],
+    "evolution": {
+      "level": null,
+      "evolutionId": 516,
+      "evolutionName": "simipour",
+      "method": "item",
+      "conditions": {
+        "item": "water-stone"
+      }
+    }
   },
   {
     "id": 516,
@@ -85591,7 +87467,16 @@
         "level_learned_at": 52,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 518,
+      "evolutionName": "musharna",
+      "method": "item",
+      "conditions": {
+        "item": "moon-stone"
+      }
+    }
   },
   {
     "id": 518,
@@ -85912,7 +87797,14 @@
         "level_learned_at": 44,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 21,
+      "evolutionId": 520,
+      "evolutionName": "tranquill",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 520,
@@ -86068,7 +87960,14 @@
         "level_learned_at": 56,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 521,
+      "evolutionName": "unfezant",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 521,
@@ -86369,7 +88268,14 @@
         "level_learned_at": 40,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 27,
+      "evolutionId": 523,
+      "evolutionName": "zebstrika",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 523,
@@ -86664,7 +88570,14 @@
         "level_learned_at": 44,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 525,
+      "evolutionName": "boldore",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 525,
@@ -86819,7 +88732,14 @@
         "level_learned_at": 54,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 526,
+      "evolutionName": "gigalith",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 526,
@@ -87130,7 +89050,16 @@
         "level_learned_at": 55,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 528,
+      "evolutionName": "swoobat",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 528,
@@ -87441,7 +89370,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 31,
+      "evolutionId": 530,
+      "evolutionName": "excadrill",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 530,
@@ -87932,7 +89868,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 533,
+      "evolutionName": "gurdurr",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 533,
@@ -88087,7 +90030,14 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 534,
+      "evolutionName": "conkeldurr",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 534,
@@ -88397,7 +90347,14 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 536,
+      "evolutionName": "palpitoad",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 536,
@@ -88558,7 +90515,14 @@
         "level_learned_at": 60,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 537,
+      "evolutionName": "seismitoad",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 537,
@@ -89165,7 +91129,14 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 541,
+      "evolutionName": "swadloon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 541,
@@ -89306,7 +91277,16 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 542,
+      "evolutionName": "leavanny",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 220
+      }
+    }
   },
   {
     "id": 542,
@@ -89618,7 +91598,14 @@
         "level_learned_at": 44,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 22,
+      "evolutionId": 544,
+      "evolutionName": "whirlipede",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 544,
@@ -89779,7 +91766,14 @@
         "level_learned_at": 56,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 545,
+      "evolutionName": "scolipede",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 545,
@@ -90126,7 +92120,16 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 547,
+      "evolutionName": "whimsicott",
+      "method": "item",
+      "conditions": {
+        "item": "sun-stone"
+      }
+    }
   },
   {
     "id": 547,
@@ -90512,7 +92515,16 @@
         "level_learned_at": 42,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 549,
+      "evolutionName": "lilligant",
+      "method": "item",
+      "conditions": {
+        "item": "sun-stone"
+      }
+    }
   },
   {
     "id": 549,
@@ -90872,7 +92884,14 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 902,
+      "evolutionName": "basculegion",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 551,
@@ -91038,7 +93057,14 @@
         "level_learned_at": 39,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 29,
+      "evolutionId": 552,
+      "evolutionName": "krokorok",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 552,
@@ -91204,7 +93230,14 @@
         "level_learned_at": 47,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 553,
+      "evolutionName": "krookodile",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 553,
@@ -91523,7 +93556,14 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 555,
+      "evolutionName": "darmanitan",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 555,
@@ -92022,7 +94062,14 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 558,
+      "evolutionName": "crustle",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 558,
@@ -92354,7 +94401,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 39,
+      "evolutionId": 560,
+      "evolutionName": "scrafty",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 560,
@@ -92842,7 +94896,14 @@
         "level_learned_at": 52,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 563,
+      "evolutionName": "cofagrigus",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 563,
@@ -93179,7 +95240,14 @@
         "level_learned_at": 45,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 37,
+      "evolutionId": 565,
+      "evolutionName": "carracosta",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 565,
@@ -93517,7 +95585,14 @@
         "level_learned_at": 45,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 37,
+      "evolutionId": 567,
+      "evolutionName": "archeops",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 567,
@@ -93849,7 +95924,14 @@
         "level_learned_at": 42,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 569,
+      "evolutionName": "garbodor",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 569,
@@ -94170,7 +96252,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 571,
+      "evolutionName": "zoroark",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 571,
@@ -94476,7 +96565,16 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 573,
+      "evolutionName": "cinccino",
+      "method": "item",
+      "conditions": {
+        "item": "shiny-stone"
+      }
+    }
   },
   {
     "id": 573,
@@ -94796,7 +96894,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 575,
+      "evolutionName": "gothorita",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 575,
@@ -94951,7 +97056,14 @@
         "level_learned_at": 58,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 41,
+      "evolutionId": 576,
+      "evolutionName": "gothitelle",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 576,
@@ -95266,7 +97378,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 578,
+      "evolutionName": "duosion",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 578,
@@ -95426,7 +97545,14 @@
         "level_learned_at": 58,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 41,
+      "evolutionId": 579,
+      "evolutionName": "reuniclus",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 579,
@@ -95752,7 +97878,14 @@
         "level_learned_at": 46,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 581,
+      "evolutionName": "swanna",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 581,
@@ -96068,7 +98201,14 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 583,
+      "evolutionName": "vanillish",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 583,
@@ -96223,7 +98363,14 @@
         "level_learned_at": 56,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 47,
+      "evolutionId": 584,
+      "evolutionName": "vanilluxe",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 584,
@@ -96544,7 +98691,14 @@
         "level_learned_at": 42,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 586,
+      "evolutionName": "sawsbuck",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 586,
@@ -97009,7 +99163,16 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 589,
+      "evolutionName": "escavalier",
+      "method": "trade",
+      "conditions": {
+        "trade_pokemon": "shelmet"
+      }
+    }
   },
   {
     "id": 589,
@@ -97359,7 +99522,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 39,
+      "evolutionId": 591,
+      "evolutionName": "amoonguss",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 591,
@@ -97674,7 +99844,14 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 593,
+      "evolutionName": "jellicent",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 593,
@@ -98161,7 +100338,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 596,
+      "evolutionName": "galvantula",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 596,
@@ -98464,7 +100648,14 @@
         "level_learned_at": 50,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 598,
+      "evolutionName": "ferrothorn",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 598,
@@ -98768,7 +100959,14 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 600,
+      "evolutionName": "klang",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 600,
@@ -98923,7 +101121,14 @@
         "level_learned_at": 54,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 49,
+      "evolutionId": 601,
+      "evolutionName": "klinklang",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 601,
@@ -99184,7 +101389,14 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 39,
+      "evolutionId": 603,
+      "evolutionName": "eelektrik",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 603,
@@ -99330,7 +101542,16 @@
         "level_learned_at": 74,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 604,
+      "evolutionName": "eelektross",
+      "method": "item",
+      "conditions": {
+        "item": "thunder-stone"
+      }
+    }
   },
   {
     "id": 604,
@@ -99601,7 +101822,14 @@
         "level_learned_at": 60,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 42,
+      "evolutionId": 606,
+      "evolutionName": "beheeyem",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 606,
@@ -99927,7 +102155,14 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 41,
+      "evolutionId": 608,
+      "evolutionName": "lampent",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 608,
@@ -100098,7 +102333,16 @@
         "level_learned_at": 64,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 609,
+      "evolutionName": "chandelure",
+      "method": "item",
+      "conditions": {
+        "item": "dusk-stone"
+      }
+    }
   },
   {
     "id": 609,
@@ -100454,7 +102698,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 611,
+      "evolutionName": "fraxure",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 611,
@@ -100639,7 +102890,14 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 48,
+      "evolutionId": 612,
+      "evolutionName": "haxorus",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 612,
@@ -100994,7 +103252,14 @@
         "level_learned_at": 42,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 37,
+      "evolutionId": 614,
+      "evolutionName": "beartic",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 614,
@@ -101510,7 +103775,16 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 617,
+      "evolutionName": "accelgor",
+      "method": "trade",
+      "conditions": {
+        "trade_pokemon": "karrablast"
+      }
+    }
   },
   {
     "id": 617,
@@ -102026,7 +104300,14 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 50,
+      "evolutionId": 620,
+      "evolutionName": "mienshao",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 620,
@@ -102507,7 +104788,14 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 43,
+      "evolutionId": 623,
+      "evolutionName": "golurk",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 623,
@@ -102859,7 +105147,14 @@
         "level_learned_at": 65,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 52,
+      "evolutionId": 625,
+      "evolutionName": "bisharp",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 625,
@@ -103035,7 +105330,14 @@
         "level_learned_at": 71,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 983,
+      "evolutionName": "kingambit",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 626,
@@ -103366,7 +105668,14 @@
         "level_learned_at": 72,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 54,
+      "evolutionId": 628,
+      "evolutionName": "braviary",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 628,
@@ -103698,7 +106007,14 @@
         "level_learned_at": 72,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 54,
+      "evolutionId": 630,
+      "evolutionName": "mandibuzz",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 630,
@@ -104372,7 +106688,14 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 50,
+      "evolutionId": 634,
+      "evolutionName": "zweilous",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 634,
@@ -104539,7 +106862,14 @@
         "level_learned_at": 66,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 64,
+      "evolutionId": 635,
+      "evolutionName": "hydreigon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 635,
@@ -104865,7 +107195,14 @@
         "level_learned_at": 66,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 59,
+      "evolutionId": 637,
+      "evolutionName": "volcarona",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 637,
@@ -107131,7 +109468,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 651,
+      "evolutionName": "quilladin",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 651,
@@ -107274,7 +109618,14 @@
         "level_learned_at": 53,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 652,
+      "evolutionName": "chesnaught",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 652,
@@ -107596,7 +109947,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 654,
+      "evolutionName": "braixen",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 654,
@@ -107749,7 +110107,14 @@
         "level_learned_at": 59,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 655,
+      "evolutionName": "delphox",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 655,
@@ -108081,7 +110446,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 657,
+      "evolutionName": "frogadier",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 657,
@@ -108229,7 +110601,14 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 658,
+      "evolutionName": "greninja",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 658,
@@ -108563,7 +110942,14 @@
         "level_learned_at": 39,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 660,
+      "evolutionName": "diggersby",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 661,
@@ -108707,7 +111093,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 17,
+      "evolutionId": 662,
+      "evolutionName": "fletchinder",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 662,
@@ -108861,7 +111254,14 @@
         "level_learned_at": 64,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 663,
+      "evolutionName": "talonflame",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 663,
@@ -109130,7 +111530,14 @@
         "level_learned_at": 15,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 9,
+      "evolutionId": 665,
+      "evolutionName": "spewpa",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 665,
@@ -109218,7 +111625,14 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 12,
+      "evolutionId": 666,
+      "evolutionName": "vivillon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 666,
@@ -109540,7 +111954,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 668,
+      "evolutionName": "pyroar",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 668,
@@ -109859,7 +112280,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 19,
+      "evolutionId": 670,
+      "evolutionName": "floette",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 670,
@@ -110007,7 +112435,16 @@
         "level_learned_at": 58,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 671,
+      "evolutionName": "florges",
+      "method": "item",
+      "conditions": {
+        "item": "shiny-stone"
+      }
+    }
   },
   {
     "id": 671,
@@ -110298,7 +112735,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 673,
+      "evolutionName": "gogoat",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 673,
@@ -110616,7 +113060,14 @@
         "level_learned_at": 44,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 675,
+      "evolutionName": "pangoro",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 675,
@@ -110922,7 +113373,14 @@
         "level_learned_at": 33,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 678,
+      "evolutionName": "meowstic",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 678,
@@ -111249,7 +113707,14 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 680,
+      "evolutionName": "doublade",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 680,
@@ -111396,7 +113861,16 @@
         "level_learned_at": 56,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 681,
+      "evolutionName": "aegislash",
+      "method": "item",
+      "conditions": {
+        "item": "dusk-stone"
+      }
+    }
   },
   {
     "id": 681,
@@ -111701,7 +114175,16 @@
         "level_learned_at": 39,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 683,
+      "evolutionName": "aromatisse",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "sachet"
+      }
+    }
   },
   {
     "id": 683,
@@ -112022,7 +114505,16 @@
         "level_learned_at": 39,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 685,
+      "evolutionName": "slurpuff",
+      "method": "held-item",
+      "conditions": {
+        "held_item": "whipped-dream"
+      }
+    }
   },
   {
     "id": 685,
@@ -112346,7 +114838,14 @@
         "level_learned_at": 39,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 687,
+      "evolutionName": "malamar",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 687,
@@ -112673,7 +115172,14 @@
         "level_learned_at": 44,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 39,
+      "evolutionId": 689,
+      "evolutionName": "barbaracle",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 689,
@@ -112995,7 +115501,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 48,
+      "evolutionId": 691,
+      "evolutionName": "dragalge",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 691,
@@ -113292,7 +115805,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 37,
+      "evolutionId": 693,
+      "evolutionName": "clawitzer",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 693,
@@ -113599,7 +116119,16 @@
         "level_learned_at": 44,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 695,
+      "evolutionName": "heliolisk",
+      "method": "item",
+      "conditions": {
+        "item": "sun-stone"
+      }
+    }
   },
   {
     "id": 695,
@@ -113919,7 +116448,14 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 39,
+      "evolutionId": 697,
+      "evolutionName": "tyrantrum",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 697,
@@ -114247,7 +116783,14 @@
         "level_learned_at": 56,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 39,
+      "evolutionId": 699,
+      "evolutionName": "aurorus",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 699,
@@ -115290,7 +117833,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 705,
+      "evolutionName": "sliggoo",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 705,
@@ -115445,7 +117995,14 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 50,
+      "evolutionId": 706,
+      "evolutionName": "goodra",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 706,
@@ -115945,7 +118502,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 709,
+      "evolutionName": "trevenant",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 709,
@@ -116272,7 +118836,14 @@
         "level_learned_at": 44,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 711,
+      "evolutionName": "gourgeist",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 711,
@@ -116613,7 +119184,14 @@
         "level_learned_at": 42,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 37,
+      "evolutionId": 713,
+      "evolutionName": "avalugg",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 713,
@@ -116964,7 +119542,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 48,
+      "evolutionId": 715,
+      "evolutionName": "noivern",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 715,
@@ -118320,7 +120905,14 @@
         "level_learned_at": 43,
         "version_group": "legends-arceus"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 17,
+      "evolutionId": 723,
+      "evolutionName": "dartrix",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 723,
@@ -118504,7 +121096,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 724,
+      "evolutionName": "decidueye",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 724,
@@ -118831,7 +121430,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 17,
+      "evolutionId": 726,
+      "evolutionName": "torracat",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 726,
@@ -118979,7 +121585,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 727,
+      "evolutionName": "incineroar",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 727,
@@ -119301,7 +121914,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 17,
+      "evolutionId": 729,
+      "evolutionName": "brionne",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 729,
@@ -119449,7 +122069,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 730,
+      "evolutionName": "primarina",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 730,
@@ -119764,7 +122391,14 @@
         "level_learned_at": 37,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 14,
+      "evolutionId": 732,
+      "evolutionName": "trumbeak",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 732,
@@ -119920,7 +122554,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 28,
+      "evolutionId": 733,
+      "evolutionName": "toucannon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 733,
@@ -120241,7 +122882,14 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 735,
+      "evolutionName": "gumshoos",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 735,
@@ -120517,7 +123165,14 @@
         "level_learned_at": 40,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 737,
+      "evolutionName": "charjabug",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 737,
@@ -120659,7 +123314,14 @@
         "level_learned_at": 64,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 738,
+      "evolutionName": "vikavolt",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 738,
@@ -120976,7 +123638,16 @@
         "level_learned_at": 49,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 740,
+      "evolutionName": "crabominable",
+      "method": "location",
+      "conditions": {
+        "location": "mount-lanakila"
+      }
+    }
   },
   {
     "id": 740,
@@ -121435,7 +124106,14 @@
         "level_learned_at": 54,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 743,
+      "evolutionName": "ribombee",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 743,
@@ -121746,7 +124424,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 745,
+      "evolutionName": "lycanroc",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 745,
@@ -122077,7 +124762,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 748,
+      "evolutionName": "toxapex",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 749,
@@ -122227,7 +124919,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 750,
+      "evolutionName": "mudsdale",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 750,
@@ -122531,7 +125230,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 22,
+      "evolutionId": 752,
+      "evolutionName": "araquanid",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 752,
@@ -122828,7 +125534,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 754,
+      "evolutionName": "lurantis",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 754,
@@ -123142,7 +125855,14 @@
         "level_learned_at": 44,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 24,
+      "evolutionId": 756,
+      "evolutionName": "shiinotic",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 756,
@@ -123452,7 +126172,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 33,
+      "evolutionId": 758,
+      "evolutionName": "salazzle",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 758,
@@ -123802,7 +126529,14 @@
         "level_learned_at": 48,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 27,
+      "evolutionId": 760,
+      "evolutionName": "bewear",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 761,
@@ -123937,7 +126671,14 @@
         "level_learned_at": 36,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 762,
+      "evolutionName": "steenee",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 762,
@@ -124082,7 +126823,16 @@
         "level_learned_at": 46,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 763,
+      "evolutionName": "tsareena",
+      "method": "move",
+      "conditions": {
+        "move": "stomp"
+      }
+    }
   },
   {
     "id": 763,
@@ -124833,7 +127583,14 @@
         "level_learned_at": 1,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 768,
+      "evolutionName": "golisopod",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 768,
@@ -125144,7 +127901,14 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 42,
+      "evolutionId": 770,
+      "evolutionName": "palossand",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 770,
@@ -125582,7 +128346,16 @@
         "level_learned_at": 55,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 773,
+      "evolutionName": "silvally",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 773,
@@ -127140,7 +129913,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 783,
+      "evolutionName": "hakamo-o",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 783,
@@ -127306,7 +130086,14 @@
         "level_learned_at": 56,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 45,
+      "evolutionId": 784,
+      "evolutionName": "kommo-o",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 784,
@@ -128254,7 +131041,14 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 43,
+      "evolutionId": 790,
+      "evolutionName": "cosmoem",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 790,
@@ -128335,7 +131129,14 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 53,
+      "evolutionId": 791,
+      "evolutionName": "solgaleo",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 791,
@@ -130408,7 +133209,16 @@
         "level_learned_at": 63,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 804,
+      "evolutionName": "naganadel",
+      "method": "move",
+      "conditions": {
+        "move": "dragon-pulse"
+      }
+    }
   },
   {
     "id": 804,
@@ -131430,7 +134240,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 811,
+      "evolutionName": "thwackey",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 811,
@@ -131568,7 +134385,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 812,
+      "evolutionName": "rillaboom",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 812,
@@ -131859,7 +134683,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 814,
+      "evolutionName": "raboot",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 814,
@@ -131992,7 +134823,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 815,
+      "evolutionName": "cinderace",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 815,
@@ -132273,7 +135111,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 817,
+      "evolutionName": "drizzile",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 817,
@@ -132406,7 +135251,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 818,
+      "evolutionName": "inteleon",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 818,
@@ -132697,7 +135549,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 24,
+      "evolutionId": 820,
+      "evolutionName": "greedent",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 820,
@@ -132985,7 +135844,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 822,
+      "evolutionName": "corvisquire",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 822,
@@ -133125,7 +135991,14 @@
         "level_learned_at": 46,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 823,
+      "evolutionName": "corviknight",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 823,
@@ -133381,7 +136254,14 @@
         "level_learned_at": 1,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 10,
+      "evolutionId": 825,
+      "evolutionName": "dottler",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 825,
@@ -133492,7 +136372,14 @@
         "level_learned_at": 1,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 826,
+      "evolutionName": "orbeetle",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 826,
@@ -133803,7 +136690,14 @@
         "level_learned_at": 36,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 828,
+      "evolutionName": "thievul",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 828,
@@ -134093,7 +136987,14 @@
         "level_learned_at": 36,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 20,
+      "evolutionId": 830,
+      "evolutionName": "eldegoss",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 830,
@@ -134388,7 +137289,14 @@
         "level_learned_at": 40,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 24,
+      "evolutionId": 832,
+      "evolutionName": "dubwool",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 832,
@@ -134668,7 +137576,14 @@
         "level_learned_at": 49,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 22,
+      "evolutionId": 834,
+      "evolutionName": "drednaw",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 834,
@@ -134962,7 +137877,14 @@
         "level_learned_at": 45,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 836,
+      "evolutionName": "boltund",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 836,
@@ -135240,7 +138162,14 @@
         "level_learned_at": 40,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 838,
+      "evolutionName": "carkol",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 838,
@@ -135396,7 +138325,14 @@
         "level_learned_at": 55,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 839,
+      "evolutionName": "coalossal",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 839,
@@ -135658,7 +138594,16 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 841,
+      "evolutionName": "flapple",
+      "method": "item",
+      "conditions": {
+        "item": "tart-apple"
+      }
+    }
   },
   {
     "id": 841,
@@ -136155,7 +139100,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 844,
+      "evolutionName": "sandaconda",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 844,
@@ -136438,7 +139390,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 26,
+      "evolutionId": 847,
+      "evolutionName": "barraskewda",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 847,
@@ -136697,7 +139656,14 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 849,
+      "evolutionName": "toxtricity",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 849,
@@ -137069,7 +140035,14 @@
         "level_learned_at": 55,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 28,
+      "evolutionId": 851,
+      "evolutionName": "centiskorch",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 851,
@@ -137363,7 +140336,16 @@
         "level_learned_at": 45,
         "version_group": "sword-shield"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 853,
+      "evolutionName": "grapploct",
+      "method": "move",
+      "conditions": {
+        "move": "taunt"
+      }
+    }
   },
   {
     "id": 853,
@@ -137654,7 +140636,16 @@
         "level_learned_at": 60,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 855,
+      "evolutionName": "polteageist",
+      "method": "item",
+      "conditions": {
+        "item": "cracked-pot"
+      }
+    }
   },
   {
     "id": 855,
@@ -137957,7 +140948,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 857,
+      "evolutionName": "hattrem",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 857,
@@ -138107,7 +141105,14 @@
         "level_learned_at": 51,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 42,
+      "evolutionId": 858,
+      "evolutionName": "hatterene",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 858,
@@ -138429,7 +141434,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 32,
+      "evolutionId": 860,
+      "evolutionName": "morgrem",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 860,
@@ -138590,7 +141602,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 42,
+      "evolutionId": 861,
+      "evolutionName": "grimmsnarl",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 861,
@@ -139999,7 +143018,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 869,
+      "evolutionName": "alcremie",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 869,
@@ -140537,7 +143563,16 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 873,
+      "evolutionName": "frosmoth",
+      "method": "happiness",
+      "conditions": {
+        "happiness": 160
+      }
+    }
   },
   {
     "id": 873,
@@ -141439,7 +144474,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 34,
+      "evolutionId": 879,
+      "evolutionName": "copperajah",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 879,
@@ -142483,7 +145525,14 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 50,
+      "evolutionId": 886,
+      "evolutionName": "drakloak",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 886,
@@ -142659,7 +145708,14 @@
         "level_learned_at": 72,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 60,
+      "evolutionId": 887,
+      "evolutionName": "dragapult",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 887,
@@ -143435,7 +146491,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 892,
+      "evolutionName": "urshifu",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 892,
@@ -145958,7 +149021,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 907,
+      "evolutionName": "floragato",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 907,
@@ -146106,7 +149176,14 @@
         "level_learned_at": 46,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 908,
+      "evolutionName": "meowscarada",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 908,
@@ -146418,7 +149495,14 @@
         "level_learned_at": 36,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 910,
+      "evolutionName": "crocalor",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 910,
@@ -146566,7 +149650,14 @@
         "level_learned_at": 47,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 911,
+      "evolutionName": "skeledirge",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 911,
@@ -146878,7 +149969,14 @@
         "level_learned_at": 35,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 16,
+      "evolutionId": 913,
+      "evolutionName": "quaxwell",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 913,
@@ -147031,7 +150129,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 36,
+      "evolutionId": 914,
+      "evolutionName": "quaquaval",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 914,
@@ -147360,7 +150465,14 @@
         "level_learned_at": 35,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 916,
+      "evolutionName": "oinkologne",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 916,
@@ -147668,7 +150780,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 15,
+      "evolutionId": 918,
+      "evolutionName": "spidops",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 918,
@@ -147964,7 +151083,14 @@
         "level_learned_at": 41,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 24,
+      "evolutionId": 920,
+      "evolutionName": "lokix",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 920,
@@ -148303,7 +151429,14 @@
         "level_learned_at": 44,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 18,
+      "evolutionId": 922,
+      "evolutionName": "pawmo",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 922,
@@ -148474,7 +151607,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 923,
+      "evolutionName": "pawmot",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 923,
@@ -148815,7 +151955,14 @@
         "level_learned_at": 46,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 925,
+      "evolutionName": "maushold",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 925,
@@ -149133,7 +152280,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 26,
+      "evolutionId": 927,
+      "evolutionName": "dachsbun",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 927,
@@ -149435,7 +152589,14 @@
         "level_learned_at": 38,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 929,
+      "evolutionName": "dolliv",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 929,
@@ -149584,7 +152745,14 @@
         "level_learned_at": 42,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 930,
+      "evolutionName": "arboliva",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 930,
@@ -150079,7 +153247,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 24,
+      "evolutionId": 933,
+      "evolutionName": "naclstack",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 933,
@@ -150239,7 +153414,14 @@
         "level_learned_at": 51,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 934,
+      "evolutionName": "garganacl",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 934,
@@ -150547,7 +153729,16 @@
         "level_learned_at": 32,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 936,
+      "evolutionName": "armarouge",
+      "method": "item",
+      "conditions": {
+        "item": "auspicious-armor"
+      }
+    }
   },
   {
     "id": 936,
@@ -151035,7 +154226,16 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 939,
+      "evolutionName": "bellibolt",
+      "method": "item",
+      "conditions": {
+        "item": "thunder-stone"
+      }
+    }
   },
   {
     "id": 939,
@@ -151341,7 +154541,14 @@
         "level_learned_at": 43,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 25,
+      "evolutionId": 941,
+      "evolutionName": "kilowattrel",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 941,
@@ -151662,7 +154869,14 @@
         "level_learned_at": 49,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 943,
+      "evolutionName": "mabosstiff",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 943,
@@ -151998,7 +155212,14 @@
         "level_learned_at": 45,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 28,
+      "evolutionId": 945,
+      "evolutionName": "grafaiai",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 945,
@@ -152323,7 +155544,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 947,
+      "evolutionName": "brambleghast",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 947,
@@ -152651,7 +155879,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 949,
+      "evolutionName": "toedscruel",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 949,
@@ -153125,7 +156360,16 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 952,
+      "evolutionName": "scovillain",
+      "method": "item",
+      "conditions": {
+        "item": "fire-stone"
+      }
+    }
   },
   {
     "id": 952,
@@ -153429,7 +156673,14 @@
         "level_learned_at": 35,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 954,
+      "evolutionName": "rabsca",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 954,
@@ -153733,7 +156984,14 @@
         "level_learned_at": 34,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 956,
+      "evolutionName": "espathra",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 956,
@@ -154069,7 +157327,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 24,
+      "evolutionId": 958,
+      "evolutionName": "tinkatuff",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 958,
@@ -154240,7 +157505,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 959,
+      "evolutionName": "tinkaton",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 959,
@@ -154561,7 +157833,14 @@
         "level_learned_at": 40,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 26,
+      "evolutionId": 961,
+      "evolutionName": "wugtrio",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 961,
@@ -155025,7 +158304,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 38,
+      "evolutionId": 964,
+      "evolutionName": "palafin",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 964,
@@ -155347,7 +158633,14 @@
         "level_learned_at": 50,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 40,
+      "evolutionId": 966,
+      "evolutionName": "revavroom",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 966,
@@ -155972,7 +159265,14 @@
         "level_learned_at": 46,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 970,
+      "evolutionName": "glimmora",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 970,
@@ -156294,7 +159594,14 @@
         "level_learned_at": 52,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 30,
+      "evolutionId": 972,
+      "evolutionName": "houndstone",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 972,
@@ -156778,7 +160085,16 @@
         "level_learned_at": 53,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 975,
+      "evolutionName": "cetitan",
+      "method": "item",
+      "conditions": {
+        "item": "ice-stone"
+      }
+    }
   },
   {
     "id": 975,
@@ -160313,7 +163629,14 @@
         "level_learned_at": 48,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 35,
+      "evolutionId": 997,
+      "evolutionName": "arctibax",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 997,
@@ -160457,7 +163780,14 @@
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": 54,
+      "evolutionId": 998,
+      "evolutionName": "baxcalibur",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 998,
@@ -160707,7 +164037,14 @@
         "level_learned_at": 1,
         "version_group": "scarlet-violet"
       }
-    ]
+    ],
+    "evolution": {
+      "level": null,
+      "evolutionId": 1000,
+      "evolutionName": "gholdengo",
+      "method": "level-up",
+      "conditions": {}
+    }
   },
   {
     "id": 1000,
