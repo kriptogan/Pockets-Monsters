@@ -272,7 +272,8 @@ fun PartyPokemonDetailScreen(
                             
                             if (statName == "HP") {
                                 // HP shows the adjusted base HP value (divided by 3) as per new rules
-                                val adjustedBaseHP = kotlin.math.floor(partyPokemon.basePokemon.stats.find { it.stat.name == "hp" }?.baseStat?.toDouble() ?: 0.0 / 3.0).toInt()
+                                val baseHP = partyPokemon.basePokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0
+                                val adjustedBaseHP = kotlin.math.floor(baseHP / 3.0).toInt()
                                 Text(
                                     text = adjustedBaseHP.toString(),
                                     style = MaterialTheme.typography.bodyMedium,

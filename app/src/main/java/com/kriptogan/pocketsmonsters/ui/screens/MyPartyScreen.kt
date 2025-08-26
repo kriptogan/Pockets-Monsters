@@ -157,11 +157,19 @@ private fun PartyPokemonCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .height(200.dp)
             .clickable { onPokemonClick() },
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        border = BorderStroke(
+            width = 2.dp,
+            color = MaterialTheme.colorScheme.outline
+        )
     ) {
-        Box {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
             // Remove button (top-right corner)
             IconButton(
                 onClick = onRemoveClick,
@@ -182,7 +190,6 @@ private fun PartyPokemonCard(
             }
             
             Column(
-                modifier = Modifier.padding(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Pokemon Image
