@@ -109,47 +109,75 @@ private fun EnergySlotsTable() {
                     text = "Level",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(0.8f),
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "1st",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(0.6f),
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "2nd",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(0.6f),
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "3rd",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(0.6f),
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "4th",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(0.6f),
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "5th",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(0.6f),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "6th",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(0.6f),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "7th",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(0.6f),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "8th",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(0.6f),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "9th",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(0.6f),
                     textAlign = TextAlign.Center
                 )
             }
             
-            // Table Rows
+            // Table Rows - Complete Wizard progression
             val levels = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
             val spellSlots = listOf(
                 listOf(2, 0, 0, 0, 0, 0, 0, 0, 0), // Level 1
@@ -169,9 +197,9 @@ private fun EnergySlotsTable() {
                 listOf(4, 3, 3, 3, 2, 1, 1, 1, 0), // Level 15
                 listOf(4, 3, 3, 3, 2, 1, 1, 1, 0), // Level 16
                 listOf(4, 3, 3, 3, 2, 1, 1, 1, 1), // Level 17
-                listOf(4, 3, 3, 3, 2, 1, 1, 1, 1), // Level 18
-                listOf(4, 3, 3, 3, 2, 1, 1, 1, 1), // Level 19
-                listOf(4, 3, 3, 3, 2, 1, 1, 1, 1)  // Level 20
+                listOf(4, 3, 3, 3, 3, 1, 1, 1, 1), // Level 18
+                listOf(4, 3, 3, 3, 3, 2, 1, 1, 1), // Level 19
+                listOf(4, 3, 3, 3, 3, 2, 2, 1, 1)  // Level 20
             )
             
             levels.forEachIndexed { index, level ->
@@ -189,14 +217,14 @@ private fun EnergySlotsTable() {
                         text = level.toString(),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(0.8f),
                         textAlign = TextAlign.Center
                     )
-                    slots.take(5).forEach { slot ->
+                    slots.forEach { slot ->
                         Text(
                             text = if (slot > 0) slot.toString() else "-",
                             style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.weight(0.6f),
                             textAlign = TextAlign.Center,
                             color = if (slot > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -245,6 +273,14 @@ private fun HowItWorksSection() {
             )
             Text(
                 text = "• Ultimate moves require 3+ energy slots",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = "• Legendary moves require 4+ energy slots",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = "• Mythic moves require 5+ energy slots",
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
