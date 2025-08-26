@@ -20,6 +20,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kriptogan.pocketsmonsters.data.converter.DnDView
 import com.kriptogan.pocketsmonsters.data.party.PartyManager
+import kotlin.math.floor
 
 @Composable
 fun DnDView(
@@ -206,13 +207,13 @@ fun DnDView(
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     // Display each stat with original and converted values
-                    // HP should show original value only (not converted)
+                    // HP should show adjusted value (divided by 3) as per new rules
                     StatRow(
                         statName = "HP",
                         originalValue = dndView.pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0,
-                        convertedValue = dndView.pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0, // Use original HP
+                        convertedValue = floor((dndView.pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0) / 3.0).toInt(), // Adjusted HP = floor(Base HP ÷ 3)
                         modifier = null, // No modifier for HP
-                        showOriginalInBrackets = false // Don't show [original] for HP since it's the same
+                        showOriginalInBrackets = true // Show original value in brackets
                     )
                     
                     StatRow(

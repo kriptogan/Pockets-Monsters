@@ -129,9 +129,10 @@ class PartyManager(context: Context) {
         // Convert to D&D stats
         val dndView = dndConverter.convertPokemonToDnD(pokemon)
         
-        // Calculate HP based on current level (level 1)
+        // Calculate HP based on current level (level 1) using new rules
         val baseHP = pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0
-        val maxHP = baseHP // For level 1, HP equals base HP
+        val adjustedBaseHP = kotlin.math.floor(baseHP / 3.0).toInt() // New rule: floor(Base HP ÷ 3)
+        val maxHP = adjustedBaseHP // For level 1, HP equals adjusted base HP
         
         // Generate size and weight variations (5% variation)
         val sizeVariation = Random.nextDouble(-0.05, 0.06) // -5% to +5%
@@ -151,7 +152,7 @@ class PartyManager(context: Context) {
             name = pokemon.name,
             basePokemon = pokemon,
             currentLevel = 1,
-            currentHP = maxHP,
+            currentHP = adjustedBaseHP, // Use adjusted base HP
             maxHP = maxHP,
             actualSize = actualSize,
             actualWeight = actualWeight,

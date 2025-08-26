@@ -1,23 +1,30 @@
-🐾 Pokémon → D&D Conversion Rules (Option A System)
+🐾 Pokémon → D&D Conversion Rules (Option A System, Updated with Move Tiers)
 1️⃣ Level Conversion
-• 1 D&D level = 5 Pokémon levels
-• D&D Level = ceil(Pokémon Level ÷ 5)
- 
+
+1 D&D level = 5 Pokémon levels
+
+D&D Level = ceil(Pokémon Level ÷ 5)
+
 2️⃣ Pokémon Stats Conversion
 Stats
 
-Each Pokémon stat (Attack, Defense, Sp. Atk, Sp. Def, Speed) is converted into a D&D modifier:
-
+Each Pokémon stat (Attack, Defense, Sp. Atk, Sp. Def, Speed) is converted into a D&D ability score:
 (Pokémon Base Stat ÷ 10) + 5, rounded down.
 
+Modifiers follow standard D&D rules:
+Modifier = floor((Stat − 10) ÷ 2)
 
-Example: Pikachu Attack 55 → (55 ÷ 10) + 5 = 10.
+HP
 
-HP stays as it is from Pokémon stats.
+Adjusted Base HP = floor(Pokémon Base HP ÷ 3)
 
-Hit Dice System:
+At Level 1, Pokémon HP = Adjusted Base HP.
 
-Pokémon gain extra HP per D&D level using a Hit Die based on their Base HP stat:
+Each additional D&D level adds Hit Die value (average or rolled).
+
+Hit Dice
+
+Based on original (unscaled) Base HP:
 
 HP ≤ 50 → d6
 
@@ -27,110 +34,203 @@ HP ≤ 50 → d6
 
 151+ → d12
 
-Note: All converted stats (Attack, Defense, Sp. Atk, Sp. Def, Speed) use standard D&D rules to calculate modifiers for rolls, AC, and saves:
+Per level (average):
 
-Modifier = floor((Stat - 10)÷2) 
+d6 → +4 HP
 
-Example: Speed 16 → Modifier +3 → used for AC, Initiative, and Speed-based saves.
+d8 → +5 HP
+
+d10 → +6 HP
+
+d12 → +7 HP
+
 3️⃣ Proficiency Bonus
-• Follows standard D&D progression (added to moves/saves if proficient):
+
+Follows standard D&D progression.
+
+Added to moves/saves if proficient.
 
 Natures
 
-Pokémon Nature determines stat influence:
+One stat gains Proficiency bonus.
 
-One stat gains Proficiency Bonus.
-
-One stat suffers Deficiency, a permanent -2 to the final value.
-
-
-Example: Adamant Nature → Attack Proficiency, Sp. Atk Deficiency.
+One stat suffers Deficiency (−2 permanent penalty).
 
 4️⃣ Evolution
-• Pokémon evolve at the equivalent D&D level: 
-• D&D Level = floor(Evolution Pokémon Level ÷ 5)
-• Apply evolution stats at that level: recompute using Option A formula
-• At evolution, base HP is replaced by the new evolution’s base HP, then add Hit Dice for levels already gained
-• Moves and abilities from evolution are immediately available
+
+Pokémon evolve at the equivalent D&D level:
+
+D&D Level = floor(Pokémon Evolution Level ÷ 5)
+
+At evolution:
+
+Replace base stats with evolved form’s stats (recompute using formula).
+
+HP resets to evolved form’s Adjusted HP, then add Hit Dice gained so far.
+
+Moves and abilities from evolution are gained immediately.
+
 5️⃣ Moves
-• Pokémon know use all moves they have learned. After long rest prepare 4 moves that require energy slots. all other moves can be used at will.
-• Moves learned by leveling follow the level conversion table: 
-• Pokémon Learn Level → divide by 5 (round down) → D&D Level
-• Moves are categorized:
- free moves = 0 Energy Slots 
-Basic Moves = 1+ Energy Slot 
-Power Moves = 2+ Energy Slots
-Ultimate Moves = 3+ Energy Slots
 
-• Energy Slots: Pokémon are treated as full casters (Wizard/Cleric progression)
-• 
-6️⃣ Combat Rolls
+Pokémon know all moves they’ve learned.
+
+After a Long Rest, prepare 4 “energy” moves.
+
+All other moves may be used freely at-will.
+
+Move Learning
+
+Pokémon Learn Level → divide by 5 (round down) = D&D Level.
+
+Move Categories
+
+Free Moves = 0 Energy Slots (basic, low-power).
+
+Basic Moves = 1+ Energy Slot.
+
+Power Moves = 2+ Energy Slots.
+
+Ultimate Moves = 3+ Energy Slots.
+
+Energy Slots
+
+Pokémon are treated as Full Casters (Wizard/Cleric progression).
+
+6️⃣ Move Tiers (0–5 System)
+
+Moves are ranked into 6 tiers based on Power, PP, and effect.
+This determines their D&D Energy Slot level (like spell levels).
+
+🔹 Level 0 — Basic Moves
+
+Power: 0–40
+
+PP: High (30–40+)
+
+Learned early (Lv 1–5 in Pokémon).
+
+No Energy Slot cost (like cantrips).
+
+Examples: Tackle, Scratch, Growl, Leer, Harden.
+
+🔹 Level 1 — Standard Moves
+
+Power: 41–60
+
+PP: 20–30
+
+Reliable “bread and butter” moves.
+
+Examples: Ember, Vine Whip, Quick Attack, Wing Attack.
+
+🔹 Level 2 — Strong Moves
+
+Power: 61–80
+
+PP: 15–25
+
+Mid-tier staple attacks or strong buffs.
+
+Examples: Body Slam, Thunder Punch, Confusion, Ice Punch.
+
+🔹 Level 3 — Power Moves
+
+Power: 81–100
+
+PP: 10–15
+
+Big damage or strong utility.
+
+Examples: Flamethrower, Earthquake, Surf, Psychic.
+
+🔹 Level 4 — Ultimate Moves
+
+Power: 101–130
+
+PP: 5–10
+
+Rare, late-game finishers.
+
+Examples: Fire Blast, Hydro Pump, Close Combat, Blizzard.
+
+🔹 Level 5 — Legendary / Nuke Moves
+
+Power: 131+ or unique, fight-defining effects.
+
+PP: 1–5
+
+Reserved for signature/legendary attacks.
+
+Examples: Hyper Beam, Giga Impact, Draco Meteor, Fissure.
+
+Status Moves
+
+Weak/common status (Growl, Tail Whip, Sand Attack) → Level 0.
+
+Strong buffs/debuffs (Swords Dance, Agility, Toxic, Recover) → Level 2–3.
+
+Game-changing effects (Spore, Perish Song, Destiny Bond) → Level 4–5.
+
+7️⃣ Combat Rolls
+
 Attack Rolls
-• Physical: d20 + ATK + Proficiency vs Target AC
-• Special: d20 + Sp.Atk + Proficiency vs Target AC
+
+Physical: d20 + ATK + Proficiency vs Target AC
+
+Special: d20 + Sp.Atk + Proficiency vs Target AC
+
 Damage
-• Physical Damage = Base Move Power + ATK modifier – Target DEF modifier (min 1)
-• Special Damage = Base Move Power + Sp.Atk modifier– Target Sp.Def modifier (min 1)
+
+Physical = Move Tier Power + ATK mod − Target DEF mod (min 1)
+
+Special = Move Tier Power + Sp.Atk mod − Target Sp.Def mod (min 1)
+
+(Optional scaling: Divide Pokémon Move Power by 10 for D&D balance. Ex: Flamethrower 90 → 9.)
+
 Saving Throws
-• Physical effect DC → d20 + DEF modifier + Prof
-• Special effect DC → d20 + Sp.Def modifier + Prof
-• Reflex / Area / Quick effects → d20 + Speed  modifier + Prof
+
+Physical effect → d20 + DEF mod + Prof
+
+Special effect → d20 + Sp.Def mod + Prof
+
+Reflex/Area/Quick → d20 + Speed mod + Prof
+
 Initiative
-• Roll d20 + Speed modifier
+
+d20 + Speed mod
+
 AC / Dodge
-• Base AC = 10 + Speed modifier (cap at +5)
 
-7️⃣ Type Bonuses, Resistances, and Weaknesses
-STAB (Same Type Attack Bonus):
+10 + Speed mod (cap at +5)
 
-If a Pokémon uses a move that matches one of its types, add the Pokémon’s Proficiency Bonus to the damage.
+8️⃣ Type System
 
-Example: Charizard (Fire/Flying) uses Flamethrower → add Proficiency to damage.
+STAB (Same-Type Attack Bonus):
 
+If a move matches one of the Pokémon’s types → add Proficiency bonus to damage.
 
-Resistances and Weaknesses:
+Resistances & Weaknesses:
 
-If the target is resistant to the move type → damage × 0.5 (round down).
+Resistance: damage × 0.5 (round down)
 
-If the target is weak to the move type → damage × 2.
+Weakness: damage × 2
 
-Notes:
+9️⃣ Movement
 
-Proficiency added for STAB is only once per attack.
-
-Resistance/Weakness multipliers are applied after all modifiers.
-
-8️⃣ Movement
-Movement Speed (ft/round)
-
-Purpose: Determines how far a Pokémon can move in one round.
-
-Does not affect: Initiative, AC, or Speed saving throws (those use Speed stat as usual).
-
-
-Step 1 — Base Score
-
+Step 1 — Base Score:
 D_Speed = floor(Pokémon_Speed ÷ 10 + 5)
 
-Step 2 — Weight Modifier (kg)
+Step 2 — Weight Modifier (kg):
 
 Weight (kg)	Modifier
-
-0 – 9.9	+1
-10 – 49.9	0
-50 – 149.9	−1
-150 – 299.9	−2
+0–9.9	+1
+10–49.9	0
+50–149.9	−1
+150–299.9	−2
 300+	−3
 
+Step 3 — Adjusted Movement Score:
+Adj_Movement = max(1, D_Speed + WeightMod)
 
-Step 3 — Adjusted Movement Score
-
-Adj_Movement_Score = max(1, D_Speed + WeightMod)
-
-Step 4 — Convert to Feet
-
-Movement (ft) = round_to_nearest_5(Adj_Movement_Score × 2.5)
-
-Step 5 — Apply
-
-Use Movement (ft) for walking, dashing, and any movement-based effects.
+Step 4 — Convert to Feet:
+Movement = round_to_nearest_5(Adj_Movement × 2.5)

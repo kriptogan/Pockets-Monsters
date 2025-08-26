@@ -67,8 +67,15 @@ class DnDConverter {
                 "hp" -> "HP"
                 else -> stat.stat.name.replaceFirstChar { it.uppercase() }
             }
-            val convertedValue = floor((stat.baseStat / 10.0) + 5).toInt()
-            Log.d(TAG, "${stat.stat.name}: ${stat.baseStat} → $convertedValue (formula: floor((${stat.baseStat} ÷ 10) + 5) = floor(${stat.baseStat / 10.0 + 5}) = $convertedValue)")
+            val convertedValue = when(stat.stat.name) {
+                "hp" -> floor(stat.baseStat / 3.0).toInt() // New HP rule: floor(Base HP ÷ 3)
+                else -> floor((stat.baseStat / 10.0) + 5).toInt() // Other stats: (Base Stat ÷ 10) + 5
+            }
+            val formula = when(stat.stat.name) {
+                "hp" -> "floor(${stat.baseStat} ÷ 3) = floor(${stat.baseStat / 3.0}) = $convertedValue"
+                else -> "floor((${stat.baseStat} ÷ 10) + 5) = floor(${stat.baseStat / 10.0 + 5}) = $convertedValue"
+            }
+            Log.d(TAG, "${stat.stat.name}: ${stat.baseStat} → $convertedValue (formula: $formula)")
             statName to convertedValue
         }
     }
