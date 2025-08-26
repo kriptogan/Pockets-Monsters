@@ -19,6 +19,6 @@ V 17. לא לאפשר רוטציה
 V 18. שמירה מקומית
 V 19. רשימת התקפות לפי רמות
 V 20. הוספה לקבוצה
-21. Update energy slots to include 6th-9th stages
+V 21. Update energy slots to include 6th-9th stages
 22. improve party details design.
 23. allow level up
