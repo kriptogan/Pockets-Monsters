@@ -24,7 +24,15 @@ fun PokedexContainer(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Red) // Back to bright red background that we know works
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFFB8E6FF), // Lighter crystal blue at top (like in the image)
+                        Color(0xFF87CEEB), // Medium crystal blue in middle
+                        Color(0xFF5F9EA0)  // Slightly deeper blue at bottom for subtle gradient
+                    )
+                )
+            )
     ) {
         // Top Pokedex section
         PokedexTop(
