@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -21,7 +22,9 @@ fun PokedexContainer(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.Red) // Back to bright red background that we know works
     ) {
         // Top Pokedex section
         PokedexTop(
@@ -37,14 +40,11 @@ fun PokedexContainer(
                 .zIndex(2f)
         )
         
-        // Content area with crystal blue background - properly positioned between borders
+        // Content area - positioned between borders
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 108.dp, bottom = 108.dp) // Match border heights
-                .background(
-                    color = Color(0xFF87CEEB), // Crystal blue background
-                )
                 .zIndex(1f)
         ) {
             content()

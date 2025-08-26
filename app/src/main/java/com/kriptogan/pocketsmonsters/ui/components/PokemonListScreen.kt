@@ -77,7 +77,7 @@ fun PokemonListScreen(
                             text = "No Pokémon found",
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Center,
-                            color = Color(0xFF333333) // Dark text for readability
+                            color = Color(0xFF1A1A1A) // Dark text for better readability on gradient
                         )
                     }
                 } else {

@@ -5,15 +5,16 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kriptogan.pocketsmonsters.ui.components.PokedexContainer
 import com.kriptogan.pocketsmonsters.ui.navigation.BottomNavigation
@@ -73,79 +74,81 @@ fun MainScreen(
     val searchQuery by viewModel.searchQuery.collectAsState()
     val lastViewedPokemonIndex by viewModel.lastViewedPokemonIndex.collectAsState()
     
-    Scaffold(
-        modifier = modifier,
-        bottomBar = {
-            BottomNavigation(
-                currentRoute = currentTab,
-                onNavigate = { route ->
-                    currentTab = route
-                    // Reset to list view when switching tabs
-                    if (route != "pokedex") {
-                        viewModel.navigateToList()
-                    }
-                    // Reset utility screen when switching tabs
-                    currentUtilityScreen = null
+    // Temporarily removed Scaffold to test background
+    Column(modifier = modifier) {
+        // Content area
+        Box(modifier = Modifier.fillMaxSize()) {
+            when (currentTab) {
+                "pokedex" -> {
+                    PokedexScreen(
+                        uiState = uiState,
+                        pokemonList = pokemonList,
+                        searchQuery = searchQuery,
+                        lastViewedPokemonIndex = lastViewedPokemonIndex,
+                        selectedPokemon = selectedPokemon,
+                        onPokemonClick = { pokemonName ->
+                            viewModel.saveClickedPokemonIndex(pokemonName)
+                            viewModel.loadPokemon(pokemonName)
+                        },
+                        onSearchQueryChange = { query ->
+                            viewModel.updateSearchQuery(query)
+                        },
+                        onBackClick = {
+                            viewModel.navigateToList()
+                        },
+                        modifier = Modifier
+                    )
                 }
-            )
-        }
-    ) { innerPadding ->
-        when (currentTab) {
-            "pokedex" -> {
-                PokedexScreen(
-                    uiState = uiState,
-                    pokemonList = pokemonList,
-                    searchQuery = searchQuery,
-                    lastViewedPokemonIndex = lastViewedPokemonIndex,
-                    selectedPokemon = selectedPokemon,
-                    onPokemonClick = { pokemonName ->
-                        viewModel.saveClickedPokemonIndex(pokemonName)
-                        viewModel.loadPokemon(pokemonName)
-                    },
-                    onSearchQueryChange = { query ->
-                        viewModel.updateSearchQuery(query)
-                    },
-                    onBackClick = {
-                        viewModel.navigateToList()
-                    },
-                    modifier = Modifier.padding(innerPadding)
-                )
-            }
-            "utilities" -> {
-                when (currentUtilityScreen) {
-                    "weaknesses" -> {
-                        WeaknessesScreen(
-                            onBackClick = { currentUtilityScreen = null },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    }
-                    "natures" -> {
-                        NaturesScreen(
-                            onBackClick = { currentUtilityScreen = null },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    }
-                    "energy_slots" -> {
-                        EnergySlotsScreen(
-                            onBackClick = { currentUtilityScreen = null },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    }
-                    else -> {
-                        UtilitiesScreen(
-                            onWeaknessesClick = { currentUtilityScreen = "weaknesses" },
-                            onNaturesClick = { currentUtilityScreen = "natures" },
-                            onEnergySlotsClick = { currentUtilityScreen = "energy_slots" },
-                            modifier = Modifier.padding(innerPadding)
-                        )
+                "utilities" -> {
+                    when (currentUtilityScreen) {
+                        "weaknesses" -> {
+                            WeaknessesScreen(
+                                onBackClick = { currentUtilityScreen = null },
+                                modifier = Modifier
+                            )
+                        }
+                        "natures" -> {
+                            NaturesScreen(
+                                onBackClick = { currentUtilityScreen = null },
+                                modifier = Modifier
+                            )
+                        }
+                        "energy_slots" -> {
+                            EnergySlotsScreen(
+                                onBackClick = { currentUtilityScreen = null },
+                                modifier = Modifier
+                            )
+                        }
+                        else -> {
+                            UtilitiesScreen(
+                                onWeaknessesClick = { currentUtilityScreen = "weaknesses" },
+                                onNaturesClick = { currentUtilityScreen = "natures" },
+                                onEnergySlotsClick = { currentUtilityScreen = "energy_slots" },
+                                modifier = Modifier
+                            )
+                        }
                     }
                 }
-            }
-            "my_party" -> {
-                MyPartyScreen(
-                    modifier = Modifier.padding(innerPadding)
-                )
+                "my_party" -> {
+                    MyPartyScreen(
+                        modifier = Modifier
+                    )
+                }
             }
         }
+        
+        // Bottom navigation
+        BottomNavigation(
+            currentRoute = currentTab,
+            onNavigate = { route ->
+                currentTab = route
+                // Reset to list view when switching tabs
+                if (route != "pokedex") {
+                    viewModel.navigateToList()
+                }
+                // Reset utility screen when switching tabs
+                currentUtilityScreen = null
+            }
+        )
     }
 }
