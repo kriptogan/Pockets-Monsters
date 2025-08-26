@@ -133,11 +133,11 @@ class PartyManager(context: Context) {
         val baseHP = pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0
         val maxHP = baseHP // For level 1, HP equals base HP
         
-        // Generate size and weight variations (+-5)
-        val sizeVariation = Random.nextInt(-5, 6)
-        val weightVariation = Random.nextInt(-5, 6)
-        val actualSize = maxOf(1, pokemon.height + sizeVariation)
-        val actualWeight = maxOf(1, pokemon.weight + weightVariation)
+        // Generate size and weight variations (5% variation)
+        val sizeVariation = Random.nextDouble(-0.05, 0.06) // -5% to +5%
+        val weightVariation = Random.nextDouble(-0.05, 0.06) // -5% to +5%
+        val actualSize = maxOf(1, (pokemon.height * (1 + sizeVariation)).toInt())
+        val actualWeight = maxOf(1, (pokemon.weight * (1 + weightVariation)).toInt())
         
         // Get available moves for level 1
         val availableMoves = pokemon.levelUpMoves.filter { it.levelLearnedAt <= 1 }
