@@ -161,6 +161,16 @@ fun PartyPokemonDetailScreen(
                         
                         Spacer(modifier = Modifier.height(16.dp))
                         
+                        // Level Display
+                        Text(
+                            text = "Level ${partyPokemon.currentLevel}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
                         // HP Management
                         Text(
                             text = "HP: $currentHP/${partyPokemon.maxHP}",
@@ -221,6 +231,199 @@ fun PartyPokemonDetailScreen(
                                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                             }
+                        }
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // D&D Stats Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "D&D Stats",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    // Display D&D stats
+                    partyPokemon.currentDnDStats.forEach { (statName, statValue) ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = statName,
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.weight(1f)
+                            )
+                            
+                            if (statName == "HP") {
+                                // HP shows the actual current HP value (no modifier)
+                                Text(
+                                    text = partyPokemon.currentHP.toString(),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            } else {
+                                // Other stats show value and calculated modifier
+                                val modifier = calculateDnDModifier(statValue)
+                                Text(
+                                    text = "$statValue (${formatModifier(modifier)})",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Type Information Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Type Information",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    // Weaknesses
+                    if (partyPokemon.weaknesses.isNotEmpty()) {
+                        Text(
+                            text = "Weaknesses:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                        Text(
+                            text = partyPokemon.weaknesses.joinToString(", ") { it.replaceFirstChar { it.uppercase() } },
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+                    
+                    // Resistances
+                    if (partyPokemon.resistances.isNotEmpty()) {
+                        Text(
+                            text = "Resistances:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = partyPokemon.resistances.joinToString(", ") { it.replaceFirstChar { it.uppercase() } },
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Physical Characteristics Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Physical Characteristics",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Size",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = "${partyPokemon.actualSize / 10.0}m",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Weight",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = "${partyPokemon.actualWeight / 10.0}kg",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Base Size",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = "${partyPokemon.basePokemon.height / 10.0}m",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Base Weight",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = "${partyPokemon.basePokemon.weight / 10.0}kg",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }
@@ -443,6 +646,62 @@ fun PartyPokemonDetailScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
             
+            // Metadata Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Party Information",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Added to Party",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = formatDate(partyPokemon.addedToPartyAt),
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                        
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Pokemon ID",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = "#${partyPokemon.id.toString().padStart(3, '0')}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
             // Save Changes Button
             Button(
                 onClick = {
@@ -496,4 +755,31 @@ fun PartyPokemonDetailScreen(
             }
         )
     }
+}
+
+/**
+ * Format timestamp to readable date
+ */
+private fun formatDate(timestamp: Long): String {
+    val date = java.util.Date(timestamp)
+    val formatter = java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault())
+    return formatter.format(date)
+}
+
+/**
+ * Format modifier (e.g., +1, -2)
+ */
+private fun formatModifier(modifier: Int): String {
+    return if (modifier > 0) {
+        "+$modifier"
+    } else {
+        modifier.toString()
+    }
+}
+
+/**
+ * Calculate D&D modifier using the standard formula: floor((stat - 10) / 2)
+ */
+private fun calculateDnDModifier(statValue: Int): Int {
+    return kotlin.math.floor((statValue - 10) / 2.0).toInt()
 }

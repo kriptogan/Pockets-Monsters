@@ -29,6 +29,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kriptogan.pocketsmonsters.data.models.PartyPokemon
 import com.kriptogan.pocketsmonsters.data.party.PartyManager
+import com.kriptogan.pocketsmonsters.ui.components.PartyPokemonDetailScreen
 
 @Composable
 fun MyPartyScreen(
@@ -40,10 +41,20 @@ fun MyPartyScreen(
     
     var party by remember { mutableStateOf(partyManager.getParty()) }
     var showAddPokemonDialog by remember { mutableStateOf(false) }
+    var selectedPokemon by remember { mutableStateOf<PartyPokemon?>(null) }
     
     LaunchedEffect(Unit) {
         // Refresh party data when screen is shown
         party = partyManager.getParty()
+    }
+    
+    // If a Pokemon is selected, show its detail screen
+    if (selectedPokemon != null) {
+        PartyPokemonDetailScreen(
+            partyPokemon = selectedPokemon,
+            onBackClick = { selectedPokemon = null }
+        )
+        return
     }
     
     Column(
@@ -84,7 +95,7 @@ fun MyPartyScreen(
             items(party) { partyPokemon ->
                 PartyPokemonCard(
                     partyPokemon = partyPokemon,
-                    onPokemonClick = { onPokemonClick(partyPokemon) },
+                    onPokemonClick = { selectedPokemon = partyPokemon },
                     onRemoveClick = {
                         partyManager.removeFromParty(partyPokemon.id)
                         party = partyManager.getParty()
