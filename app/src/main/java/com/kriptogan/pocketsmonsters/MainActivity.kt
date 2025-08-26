@@ -1,6 +1,7 @@
 package com.kriptogan.pocketsmonsters
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kriptogan.pocketsmonsters.ui.components.PokedexContainer
 import com.kriptogan.pocketsmonsters.ui.navigation.BottomNavigation
 import com.kriptogan.pocketsmonsters.ui.screens.PokedexScreen
 import com.kriptogan.pocketsmonsters.ui.screens.UtilitiesScreen
@@ -28,20 +30,33 @@ import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Hide status bar completely
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        
         enableEdgeToEdge()
         setContent {
             PocketsMonstersTheme {
                 // Force LTR layout even in RTL systems like Hebrew
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        MainScreen(
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    }
+                    MainApp()
                 }
             }
         }
     }
+}
+
+@Composable
+fun MainApp() {
+    PokedexContainer(
+        modifier = Modifier.fillMaxSize(),
+        content = {
+            MainScreen()
+        }
+    )
 }
 
 @Composable
