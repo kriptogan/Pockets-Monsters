@@ -20,7 +20,7 @@ fun PokedexBottom(
         contentDescription = "Bottom Pokedex Border",
         modifier = modifier
             .fillMaxWidth()
-            .height(80.dp), // Fixed height for consistent scaling
+            .height(108.dp), // Increased height by 35% (80dp + 35% = 108dp)
         contentScale = ContentScale.FillBounds
     )
 }

@@ -37,10 +37,11 @@ fun PokedexContainer(
                 .zIndex(2f)
         )
         
-        // Content area with crystal blue background - full screen
+        // Content area with crystal blue background - properly positioned between borders
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(top = 108.dp, bottom = 108.dp) // Match border heights
                 .background(
                     color = Color(0xFF87CEEB), // Crystal blue background
                 )

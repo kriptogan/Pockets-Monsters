@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonUiState
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun PokemonListScreen(
@@ -37,7 +38,7 @@ fun PokemonListScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Search Bar
+        // Search Bar - positioned at top of content area
         OutlinedTextField(
             value = searchQuery,
             onValueChange = onSearchQueryChange,
@@ -45,7 +46,13 @@ fun PokemonListScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
-            singleLine = true
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFFD32F2F), // Pokedex red
+                unfocusedBorderColor = Color(0xFF666666), // Dark gray
+                focusedLabelColor = Color(0xFFD32F2F), // Pokedex red
+                unfocusedLabelColor = Color(0xFF666666) // Dark gray
+            )
         )
         
         when (uiState) {
@@ -54,7 +61,9 @@ fun PokemonListScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = Color(0xFFD32F2F) // Pokedex red
+                    )
                 }
             }
             
@@ -67,13 +76,15 @@ fun PokemonListScreen(
                         Text(
                             text = "No Pokémon found",
                             style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            color = Color(0xFF333333) // Dark text for readability
                         )
                     }
                 } else {
                     LazyColumn(
                         state = listState,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(bottom = 16.dp) // Bottom padding for last item
                     ) {
                         items(pokemonList) { pokemon ->
                             PokemonCard(
@@ -102,7 +113,10 @@ fun PokemonListScreen(
                         )
                         
                         Button(
-                            onClick = { /* TODO: Implement retry functionality */ }
+                            onClick = { /* TODO: Implement retry functionality */ },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFD32F2F) // Pokedex red
+                            )
                         ) {
                             Text("Retry")
                         }
