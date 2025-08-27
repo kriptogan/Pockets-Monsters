@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.ui.components.PokemonDetailScreen
-import com.kriptogan.pocketsmonsters.ui.components.PokemonListScreen
+import com.kriptogan.pocketsmonsters.ui.components.PokemonGridScreen
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonUiState
 
 @Composable
@@ -27,8 +27,8 @@ fun PokedexScreen(
             modifier = modifier
         )
     } else {
-        // Show Pokémon list screen
-        PokemonListScreen(
+        // Show Pokémon grid screen
+        PokemonGridScreen(
             uiState = uiState,
             pokemonList = pokemonList,
             searchQuery = searchQuery,
