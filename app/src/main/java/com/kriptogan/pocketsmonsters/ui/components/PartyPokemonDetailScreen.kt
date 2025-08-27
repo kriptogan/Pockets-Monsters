@@ -168,14 +168,25 @@ fun PartyPokemonDetailScreen(
                             .padding(bottom = 8.dp)
                     ) {
                         partyPokemon.basePokemon.types.forEach { type ->
-                            Text(
-                                text = type.type.name.replaceFirstChar { it.uppercase() },
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Medium,
-                                color = Color(0xFF1A1A1A),
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(vertical = 2.dp)
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .padding(vertical = 2.dp)
+                                    .width(80.dp)
+                                    .height(24.dp)
+                                    .background(
+                                        color = getTypeColor(type.type.name),
+                                        shape = RoundedCornerShape(16.dp)
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = type.type.name.replaceFirstChar { it.uppercase() },
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     }
                 }
@@ -200,22 +211,22 @@ fun PartyPokemonDetailScreen(
                             .padding(12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = "TYPE",
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF666666),
-                            modifier = Modifier.padding(bottom = 4.dp)
-                        )
-                        
-                        Text(
-                            text = partyPokemon.basePokemon.types.joinToString(", ") { it.type.name.replaceFirstChar { it.uppercase() } },
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF1A1A1A),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
+                                                                                                  Text(
+                              text = "AC",
+                              style = MaterialTheme.typography.bodySmall,
+                              fontWeight = FontWeight.Bold,
+                              color = Color(0xFF666666),
+                              modifier = Modifier.padding(bottom = 4.dp)
+                          )
+                          
+                          Text(
+                              text = "${dndView.ac}",
+                              style = MaterialTheme.typography.titleLarge,
+                              fontWeight = FontWeight.Medium,
+                              color = Color(0xFF1A1A1A),
+                              textAlign = TextAlign.Center,
+                              modifier = Modifier.padding(bottom = 16.dp)
+                          )
                         
                         Text(
                             text = "Initiative",
@@ -286,17 +297,17 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         
-                        // 2. HP value (clickable to edit max HP)
-                        Text(
-                            text = "${maxHP}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF1A1A1A),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(bottom = 16.dp)
-                                .clickable { showMaxHPDialog = true }
-                        )
+                                                 // 2. HP value (clickable to edit max HP)
+                         Text(
+                             text = "${maxHP}",
+                             style = MaterialTheme.typography.titleLarge,
+                             fontWeight = FontWeight.Medium,
+                             color = Color(0xFF1A1A1A),
+                             textAlign = TextAlign.Center,
+                             modifier = Modifier
+                                 .padding(bottom = 16.dp)
+                                 .clickable { showMaxHPDialog = true }
+                         )
                         
                         // 3. Current HP label
                         Text(
@@ -472,14 +483,8 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.weight(1f)
                         )
                         
-                        // AC (Red) - using DnD converter like Pokemon list view
-                        StatGridItem(
-                            label = "AC",
-                            value = "${dndView.ac}",
-                            statModifier = "", // AC does not have a modifier in D&D
-                            color = Color(0xFFD32F2F),
-                            modifier = Modifier.weight(1f)
-                        )
+                                                 // Empty space where AC was (removed to avoid duplication)
+                         Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             }
@@ -988,5 +993,32 @@ private fun StatGridItem(
                 )
             }
         }
+    }
+}
+
+/**
+ * Get the official Pokemon type color
+ */
+private fun getTypeColor(typeName: String): Color {
+    return when (typeName.lowercase()) {
+        "normal" -> Color(0xFFA8A878)
+        "fire" -> Color(0xFFF08030)
+        "water" -> Color(0xFF6890F0)
+        "electric" -> Color(0xFFF8D030)
+        "grass" -> Color(0xFF78C850)
+        "ice" -> Color(0xFF98D8D8)
+        "fighting" -> Color(0xFFC03028)
+        "poison" -> Color(0xFFA040A0)
+        "ground" -> Color(0xFFE0C068)
+        "flying" -> Color(0xFFA890F0)
+        "psychic" -> Color(0xFFF85888)
+        "bug" -> Color(0xFFA8B820)
+        "rock" -> Color(0xFFB8A038)
+        "ghost" -> Color(0xFF705898)
+        "dragon" -> Color(0xFF7038F8)
+        "dark" -> Color(0xFF705848)
+        "steel" -> Color(0xFFB8B8D0)
+        "fairy" -> Color(0xFFEE99AC)
+        else -> Color(0xFFA8A878) // Default to normal
     }
 }
