@@ -19,6 +19,8 @@ import com.kriptogan.pocketsmonsters.R
 @Composable
 fun PokedexContainer(
     content: @Composable () -> Unit,
+    currentRoute: String = "pokedex",
+    onNavigate: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -48,11 +50,21 @@ fun PokedexContainer(
                 .zIndex(2f)
         )
         
-        // Content area - positioned between borders
+        // Custom bottom navigation - positioned adjacent to the bottom Pokedex border
+        CustomBottomNavigation(
+            currentRoute = currentRoute,
+            onNavigate = onNavigate,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 108.dp) // Position exactly at the bottom border (no gap)
+                .zIndex(3f) // Above the Pokedex borders
+        )
+        
+        // Content area - positioned between borders and above navigation bar
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 108.dp, bottom = 108.dp) // Match border heights
+                .padding(top = 108.dp, bottom = 180.dp) // Top border + bottom border + navigation bar height
                 .zIndex(1f)
         ) {
             content()
