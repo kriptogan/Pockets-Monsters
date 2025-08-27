@@ -201,7 +201,11 @@ class PartyManager(context: Context) {
             // Experience properties with default values
             currentExp = 0,
             expToLevelUp = 300,
-            proficiency = 2
+            proficiency = 2,
+            
+            // D&D derived stats (calculated from currentDnDStats and actualWeight)
+            armorClass = 10,
+            movementSpeed = 30
         )
     }
     
