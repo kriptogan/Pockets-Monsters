@@ -2,6 +2,7 @@ package com.kriptogan.pocketsmonsters.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,8 +19,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.activity.compose.BackHandler
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -60,15 +63,18 @@ fun PartyPokemonDetailScreen(
     var currentConditions by remember { mutableStateOf(partyPokemon.conditions.toMutableList()) }
     var showMoveSelectionDialog by remember { mutableStateOf(false) }
     var showConditionDialog by remember { mutableStateOf(false) }
+    var showMaxHPDialog by remember { mutableStateOf(false) }
     
-    // Local state for current HP to make UI reactive
+    // Local state for current HP and max HP to make UI reactive
     var currentHP by remember { mutableStateOf(partyPokemon.currentHP) }
+    var maxHP by remember { mutableStateOf(partyPokemon.maxHP) }
     
     // Sync local HP state with PartyManager data when screen becomes active
     LaunchedEffect(Unit) {
         val updatedParty = partyManager.getParty().find { it.id == partyPokemon.id }
         updatedParty?.let { 
             currentHP = it.currentHP
+            maxHP = it.maxHP
         }
     }
     
@@ -77,6 +83,7 @@ fun PartyPokemonDetailScreen(
         val updatedParty = partyManager.getParty().find { it.id == partyPokemon.id }
         updatedParty?.let { 
             currentHP = it.currentHP
+            maxHP = it.maxHP
         }
     }
     
@@ -260,14 +267,16 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         
-                        // 2. HP value
+                        // 2. HP value (clickable to edit max HP)
                         Text(
-                            text = "${partyPokemon.maxHP}",
+                            text = "${maxHP}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF1A1A1A),
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(bottom = 16.dp)
+                            modifier = Modifier
+                                .padding(bottom = 16.dp)
+                                .clickable { showMaxHPDialog = true }
                         )
                         
                         // 3. Current HP label
@@ -319,29 +328,29 @@ fun PartyPokemonDetailScreen(
                                 textAlign = TextAlign.Center
                             )
                             
-                            // Up arrow (increase HP)
-                            IconButton(
-                                onClick = {
-                                    if (currentHP < partyPokemon.maxHP) {
-                                        val newHP = currentHP + 1
-                                        val result = partyManager.updatePartyPokemonHP(partyPokemon.id, newHP)
-                                        if (result.isSuccess) {
-                                            // Update local state to refresh UI immediately
-                                            // Note: In a real app, this would trigger a ViewModel refresh
-                                            // For now, we'll rely on the parent to refresh the data
-                                            currentHP = newHP
-                                        }
-                                    }
-                                },
-                                modifier = Modifier.size(32.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.KeyboardArrowUp,
-                                    contentDescription = "Increase HP",
-                                    tint = if (currentHP < partyPokemon.maxHP) Color(0xFF4CAF50) else Color(0xFFCCCCCC),
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
+                                                         // Up arrow (increase HP)
+                             IconButton(
+                                 onClick = {
+                                     if (currentHP < maxHP) {
+                                         val newHP = currentHP + 1
+                                         val result = partyManager.updatePartyPokemonHP(partyPokemon.id, newHP)
+                                         if (result.isSuccess) {
+                                             // Update local state to refresh UI immediately
+                                             // Note: In a real app, this would trigger a ViewModel refresh
+                                             // For now, we'll rely on the parent to refresh the data
+                                             currentHP = newHP
+                                         }
+                                     }
+                                 },
+                                 modifier = Modifier.size(32.dp)
+                             ) {
+                                 Icon(
+                                     imageVector = Icons.Default.KeyboardArrowUp,
+                                     contentDescription = "Increase HP",
+                                     tint = if (currentHP < maxHP) Color(0xFF4CAF50) else Color(0xFFCCCCCC),
+                                     modifier = Modifier.size(20.dp)
+                                 )
+                             }
                         }
                         
                         // Reduced spacing to align with movement speed
@@ -814,6 +823,78 @@ fun PartyPokemonDetailScreen(
                 },
                 confirmButton = {
                     TextButton(onClick = { showConditionDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
+        
+        // Max HP Edit Dialog
+        if (showMaxHPDialog) {
+            var newMaxHP by remember { mutableStateOf(maxHP.toString()) }
+            var showError by remember { mutableStateOf(false) }
+            
+            AlertDialog(
+                onDismissRequest = { showMaxHPDialog = false },
+                title = { Text("Edit Max HP") },
+                text = { 
+                    Column {
+                        Text("Enter new max HP value:")
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
+                        OutlinedTextField(
+                            value = newMaxHP,
+                            onValueChange = { 
+                                newMaxHP = it
+                                showError = false
+                            },
+                            label = { Text("Max HP") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            singleLine = true,
+                            isError = showError
+                        )
+                        
+                        if (showError) {
+                            Text(
+                                text = "Please enter a valid positive number",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.error,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            val newMaxHPValue = newMaxHP.toIntOrNull()
+                            if (newMaxHPValue != null && newMaxHPValue > 0) {
+                                val oldMaxHP = maxHP
+                                maxHP = newMaxHPValue
+                                
+                                // Update current HP only if it equals the old max HP
+                                if (currentHP == oldMaxHP) {
+                                    currentHP = newMaxHPValue
+                                }
+                                
+                                // Save to PartyManager
+                                val updatedPokemon = partyPokemon.copy(
+                                    maxHP = newMaxHPValue,
+                                    currentHP = currentHP
+                                )
+                                partyManager.updatePartyPokemon(updatedPokemon)
+                                
+                                showMaxHPDialog = false
+                            } else {
+                                showError = true
+                            }
+                        }
+                    ) {
+                        Text("Save")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showMaxHPDialog = false }) {
                         Text("Cancel")
                     }
                 }
