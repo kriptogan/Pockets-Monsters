@@ -28,11 +28,13 @@ import com.kriptogan.pocketsmonsters.data.models.PartyPokemon
 import com.kriptogan.pocketsmonsters.ui.components.PartyPokemonDetailScreen
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PartyViewModel
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PartyScreen
+import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonViewModel
 
 @Composable
 fun MyPartyScreen(
     modifier: Modifier = Modifier,
-    onPokemonClick: (PartyPokemon) -> Unit = {}
+    onPokemonClick: (PartyPokemon) -> Unit = {},
+    mainViewModel: PokemonViewModel? = null // Main ViewModel to observe party state
 ) {
     val viewModel: PartyViewModel = viewModel()
     val party by viewModel.party.collectAsState()
@@ -40,7 +42,21 @@ fun MyPartyScreen(
     val currentScreen by viewModel.currentScreen.collectAsState()
     val lastViewedPartyPokemonIndex by viewModel.lastViewedPartyPokemonIndex.collectAsState()
     
+    // Observe party size changes from main ViewModel
+    val mainPartySize by mainViewModel?.partySize?.collectAsState() ?: remember { mutableStateOf(0) }
+    
     val gridState = rememberLazyGridState()
+    
+    // Refresh party state when callback is triggered
+    LaunchedEffect(Unit) {
+        // Initial load
+        viewModel.loadParty()
+    }
+    
+    // Listen for party updates from other screens
+    LaunchedEffect(mainPartySize) {
+        viewModel.loadParty()
+    }
     
     // Restore scroll position to the last viewed party Pokemon index
     LaunchedEffect(lastViewedPartyPokemonIndex) {

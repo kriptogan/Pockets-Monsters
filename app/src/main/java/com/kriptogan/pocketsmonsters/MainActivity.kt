@@ -175,7 +175,8 @@ fun MainScreen(
             }
             "my_party" -> {
                 MyPartyScreen(
-                    modifier = Modifier
+                    modifier = Modifier,
+                    mainViewModel = viewModel // Pass the main ViewModel to observe party state
                 )
             }
         }
