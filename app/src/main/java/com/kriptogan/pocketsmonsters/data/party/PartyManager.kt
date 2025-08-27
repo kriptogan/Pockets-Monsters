@@ -185,7 +185,7 @@ class PartyManager(context: Context) {
             id = pokemon.id,
             name = pokemon.name,
             basePokemon = pokemon,
-            currentLevel = 1,
+            level = 1, // Use the new level property
             currentHP = adjustedBaseHP, // Use adjusted base HP
             maxHP = maxHP,
             actualSize = actualSize,
@@ -197,7 +197,11 @@ class PartyManager(context: Context) {
             weaknesses = weaknesses,
             resistances = resistances,
             conditions = emptyList(),
-            nature = randomNature
+            nature = randomNature,
+            // Experience properties with default values
+            currentExp = 0,
+            expToLevelUp = 300,
+            proficiency = 2
         )
     }
     

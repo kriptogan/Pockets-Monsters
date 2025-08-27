@@ -232,12 +232,10 @@ private fun PartyPokemonGridCard(
             
             // Level
             Text(
-                text = "Lv.${partyPokemon.currentLevel}",
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF1A1A1A),
-                textAlign = TextAlign.Center,
-                fontSize = 14.sp
+                text = "Lv.${partyPokemon.level}",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
             )
             
             Spacer(modifier = Modifier.height(4.dp))

@@ -553,7 +553,7 @@ fun PartyPokemonDetailScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     Text(
-                        text = "Available Moves (Level ${partyPokemon.currentLevel})",
+                        text = "Available Moves (Level ${partyPokemon.level})",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )

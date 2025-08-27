@@ -25,8 +25,8 @@ V 22. improve party details design.
 24. bonuses and penalty to attributes management.
 25. Show level and exp
 26. Exp gain
-27. Try to place the types inside the image at the bottom, one above the other.
-* Move ac to the old card
+V 27. Try to place the types inside the image at the bottom, one above the other.
+V * Move ac to the old card
 
 28. Effects $ Conditions:
 User adds an effect or condition.
@@ -66,4 +66,6 @@ Etc.
 
 Support option to prepare moves with a cost, if not all 4 positions are taken.
 
-30. Instead of party information, show the nature and description of nature.
+V 30. Instead of party information, show the nature and description of nature.
+
+31. weaknesses and resistance
