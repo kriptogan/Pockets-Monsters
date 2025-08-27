@@ -211,22 +211,22 @@ fun PartyPokemonDetailScreen(
                             .padding(12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                                                                                                  Text(
-                              text = "AC",
-                              style = MaterialTheme.typography.bodySmall,
-                              fontWeight = FontWeight.Bold,
-                              color = Color(0xFF666666),
-                              modifier = Modifier.padding(bottom = 4.dp)
-                          )
-                          
-                          Text(
-                              text = "${dndView.ac}",
-                              style = MaterialTheme.typography.titleLarge,
-                              fontWeight = FontWeight.Medium,
-                              color = Color(0xFF1A1A1A),
-                              textAlign = TextAlign.Center,
-                              modifier = Modifier.padding(bottom = 16.dp)
-                          )
+                        Text(
+                            text = "AC",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF666666),
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                        
+                        Text(
+                            text = "${partyPokemon.calculateCurrentArmorClass()}",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF1A1A1A),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
                         
                         Text(
                             text = "Initiative",
@@ -239,7 +239,11 @@ fun PartyPokemonDetailScreen(
                         
                         // Initiative value
                         Text(
-                            text = "+${dndView.initiative}",
+                            text = when {
+                                dndView.initiative > 0 -> "+${dndView.initiative}"
+                                dndView.initiative < 0 -> "${dndView.initiative}"
+                                else -> "+0"
+                            },
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF1A1A1A),
@@ -403,6 +407,101 @@ fun PartyPokemonDetailScreen(
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF1A1A1A),
                             textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            // Nature Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Nature",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    // Nature name
+                    Text(
+                        text = partyPokemon.nature.name,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    // Nature description
+                    Text(
+                        text = partyPokemon.nature.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                    )
+                    
+                    // Show stat changes if nature affects stats
+                    if (partyPokemon.nature.increasedStat != null && partyPokemon.nature.decreasedStat != null) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Increased stat
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowUp,
+                                    contentDescription = "Increased",
+                                    tint = Color.Green,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = partyPokemon.nature.increasedStat,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.Green,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            
+                            // Decreased stat
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowDown,
+                                    contentDescription = "Decreased",
+                                    tint = Color.Red,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = partyPokemon.nature.decreasedStat,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.Red,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    } else {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = "Neutral nature - no stat changes",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -711,101 +810,6 @@ fun PartyPokemonDetailScreen(
                         Text(
                             text = "No conditions",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Nature Card
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Nature",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    // Nature name
-                    Text(
-                        text = partyPokemon.nature.name,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    
-                    Spacer(modifier = Modifier.height(8.dp))
-                    
-                    // Nature description
-                    Text(
-                        text = partyPokemon.nature.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
-                    )
-                    
-                    // Show stat changes if nature affects stats
-                    if (partyPokemon.nature.increasedStat != null && partyPokemon.nature.decreasedStat != null) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Increased stat
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(
-                                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowUp,
-                                    contentDescription = "Increased",
-                                    tint = Color.Green,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = partyPokemon.nature.increasedStat,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.Green,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                            
-                            // Decreased stat
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(
-                                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowDown,
-                                    contentDescription = "Decreased",
-                                    tint = Color.Red,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = partyPokemon.nature.decreasedStat,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.Red,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    } else {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = "Neutral nature - no stat changes",
-                            style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }

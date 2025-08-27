@@ -2,8 +2,6 @@ package com.kriptogan.pocketsmonsters.data.models
 
 import com.google.gson.annotations.SerializedName
 import kotlin.math.floor
-import kotlin.math.maxOf
-import kotlin.math.minOf
 import kotlin.math.round
 
 /**
@@ -231,8 +229,8 @@ data class PartyPokemon(
             else -> -3                 // ≥ 300 kg: -3
         }
         
-        // Step 3: Adjusted Score
-        val adjustedScore = maxOf(1, baseScore + weightModifier)
+        // Step 3: Adjusted Score (using kotlin.math.max instead of maxOf)
+        val adjustedScore = kotlin.math.max(1, baseScore + weightModifier)
         
         // Step 4: Convert to Feet
         val rawMovementInFeet = adjustedScore * 2.5
