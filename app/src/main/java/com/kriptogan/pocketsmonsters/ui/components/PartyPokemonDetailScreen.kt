@@ -457,9 +457,11 @@ fun PartyPokemonDetailScreen(
                                 modifier = Modifier.size(20.dp)
                             )
                             Text(
-                                text = partyPokemon.nature.increasedStat ?: "None",
+                                text = if (partyPokemon.nature.increasedStat != null) 
+                                    "${partyPokemon.nature.increasedStat} (+${partyPokemon.proficiency})" 
+                                else "None",
                                 style = MaterialTheme.typography.titleMedium,
-                                color = if (partyPokemon.nature.increasedStat != null) Color.Red else Color(0xFF666666),
+                                color = Color.Red,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -484,9 +486,11 @@ fun PartyPokemonDetailScreen(
                                 modifier = Modifier.size(20.dp)
                             )
                             Text(
-                                text = partyPokemon.nature.decreasedStat ?: "None",
+                                text = if (partyPokemon.nature.decreasedStat != null) 
+                                    "${partyPokemon.nature.decreasedStat} (-2)" 
+                                else "None",
                                 style = MaterialTheme.typography.titleMedium,
-                                color = if (partyPokemon.nature.decreasedStat != null) Color.Blue else Color(0xFF666666),
+                                color = Color.Blue,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -522,6 +526,8 @@ fun PartyPokemonDetailScreen(
                             value = "${dndView.convertedStats["Attack"] ?: 0}",
                             statModifier = "${dndView.modifiers["Attack"] ?: 0}",
                             color = Color(0xFFF44336),
+                            isProficient = partyPokemon.nature.increasedStat == "Attack",
+                            isDeficient = partyPokemon.nature.decreasedStat == "Attack",
                             modifier = Modifier.weight(1f)
                         )
                         
@@ -531,6 +537,8 @@ fun PartyPokemonDetailScreen(
                             value = "${dndView.convertedStats["Sp.Atk"] ?: 0}",
                             statModifier = "${dndView.modifiers["Sp.Atk"] ?: 0}",
                             color = Color(0xFF9C27B0),
+                            isProficient = partyPokemon.nature.increasedStat == "Sp. Atk",
+                            isDeficient = partyPokemon.nature.decreasedStat == "Sp. Atk",
                             modifier = Modifier.weight(1f)
                         )
                         
@@ -540,6 +548,8 @@ fun PartyPokemonDetailScreen(
                             value = "${dndView.convertedStats["Speed"] ?: 0}",
                             statModifier = "${dndView.modifiers["Speed"] ?: 0}",
                             color = Color(0xFF4CAF50),
+                            isProficient = partyPokemon.nature.increasedStat == "Speed",
+                            isDeficient = partyPokemon.nature.decreasedStat == "Speed",
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -557,6 +567,8 @@ fun PartyPokemonDetailScreen(
                             value = "${dndView.convertedStats["Defense"] ?: 0}",
                             statModifier = "${dndView.modifiers["Defense"] ?: 0}",
                             color = Color(0xFF795548),
+                            isProficient = partyPokemon.nature.increasedStat == "Defense",
+                            isDeficient = partyPokemon.nature.decreasedStat == "Defense",
                             modifier = Modifier.weight(1f)
                         )
                         
@@ -566,6 +578,8 @@ fun PartyPokemonDetailScreen(
                             value = "${dndView.convertedStats["Sp.Def"] ?: 0}",
                             statModifier = "${dndView.modifiers["Sp.Def"] ?: 0}",
                             color = Color(0xFF00BCD4),
+                            isProficient = partyPokemon.nature.increasedStat == "Sp. Def",
+                            isDeficient = partyPokemon.nature.decreasedStat == "Sp. Def",
                             modifier = Modifier.weight(1f)
                         )
                         
@@ -971,19 +985,53 @@ private fun StatGridItem(
     value: String,
     statModifier: String,
     color: Color,
+    isProficient: Boolean = false,
+    isDeficient: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF666666),
-            textAlign = TextAlign.Center
-        )
+        // Label with arrow indicator
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Show up arrow for proficient stats
+            if (isProficient) {
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowUp,
+                    contentDescription = "Proficient",
+                    tint = Color.Red,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+            }
+            
+            // Show down arrow for deficient stats
+            if (isDeficient) {
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowDown,
+                    contentDescription = "Deficient",
+                    tint = Color.Blue,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+            }
+            
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Bold,
+                color = when {
+                    isProficient -> Color.Red
+                    isDeficient -> Color.Blue
+                    else -> Color(0xFF666666)
+                },
+                textAlign = TextAlign.Center
+            )
+        }
         
         Spacer(modifier = Modifier.height(4.dp))
         
