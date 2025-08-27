@@ -9,6 +9,7 @@ import com.kriptogan.pocketsmonsters.data.converter.DnDConverter
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.data.models.PartyPokemon
 import com.kriptogan.pocketsmonsters.data.models.Condition
+import com.kriptogan.pocketsmonsters.data.models.Nature
 import kotlin.random.Random
 
 class PartyManager(context: Context) {
@@ -31,7 +32,15 @@ class PartyManager(context: Context) {
         val partyJson = sharedPreferences.getString(KEY_PARTY, "[]")
         return try {
             val type = object : TypeToken<List<PartyPokemon>>() {}.type
-            gson.fromJson(partyJson, type) ?: emptyList()
+            val party = gson.fromJson<List<PartyPokemon>>(partyJson, type) ?: emptyList()
+            
+            // Migrate existing Pokemon to have natures if they don't have one
+            val migratedParty = migratePartyNatures(party)
+            if (migratedParty != party) {
+                saveParty(migratedParty)
+            }
+            
+            migratedParty
         } catch (e: Exception) {
             Log.e(TAG, "Error loading party: ${e.message}")
             emptyList()
@@ -169,6 +178,9 @@ class PartyManager(context: Context) {
         val weaknesses = calculateWeaknesses(pokemon.types.map { it.type.name })
         val resistances = calculateResistances(pokemon.types.map { it.type.name })
         
+        // Assign a random nature
+        val randomNature = getRandomNature()
+        
         return PartyPokemon(
             id = pokemon.id,
             name = pokemon.name,
@@ -184,8 +196,44 @@ class PartyManager(context: Context) {
             currentDnDStats = dndView.convertedStats.toMutableMap(),
             weaknesses = weaknesses,
             resistances = resistances,
-            conditions = emptyList()
+            conditions = emptyList(),
+            nature = randomNature
         )
+    }
+    
+    /**
+     * Get a random nature for a Pokemon
+     */
+    private fun getRandomNature(): Nature {
+        val natures = listOf(
+            Nature("Hardy", null, null, "Neutral nature"),
+            Nature("Lonely", "Attack", "Defense", "Loves to eat"),
+            Nature("Brave", "Attack", "Speed", "Often dozes off"),
+            Nature("Adamant", "Attack", "Sp. Atk", "Sturdy body"),
+            Nature("Naughty", "Attack", "Sp. Def", "Likes to fight"),
+            Nature("Bold", "Defense", "Attack", "Proud of its power"),
+            Nature("Docile", null, null, "Sturdy body"),
+            Nature("Relaxed", "Defense", "Speed", "Likes to relax"),
+            Nature("Impish", "Defense", "Sp. Atk", "Proud of its power"),
+            Nature("Lax", "Defense", "Sp. Def", "Loves to eat"),
+            Nature("Timid", "Speed", "Attack", "Likes to run"),
+            Nature("Hasty", "Speed", "Defense", "Somewhat of a clown"),
+            Nature("Serious", null, null, "Strong willed"),
+            Nature("Jolly", "Speed", "Sp. Atk", "Good perseverance"),
+            Nature("Naive", "Speed", "Sp. Def", "Likes to thrash about"),
+            Nature("Modest", "Sp. Atk", "Attack", "Loves to eat"),
+            Nature("Mild", "Sp. Atk", "Defense", "Proud of its power"),
+            Nature("Quiet", "Sp. Atk", "Speed", "Sturdy body"),
+            Nature("Bashful", null, null, "Somewhat stubborn"),
+            Nature("Rash", "Sp. Atk", "Sp. Def", "Likes to run"),
+            Nature("Calm", "Sp. Def", "Attack", "Strong willed"),
+            Nature("Gentle", "Sp. Def", "Defense", "Loves to eat"),
+            Nature("Careful", "Sp. Def", "Sp. Atk", "Often lost in thought"),
+            Nature("Quirky", null, null, "Mischievous"),
+            Nature("Sassy", "Sp. Def", "Speed", "Somewhat vain")
+        )
+        
+        return natures.random()
     }
     
     /**
@@ -195,6 +243,28 @@ class PartyManager(context: Context) {
         val partyJson = gson.toJson(party)
         sharedPreferences.edit().putString(KEY_PARTY, partyJson).apply()
         Log.d(TAG, "Party saved. Size: ${party.size}")
+    }
+    
+    /**
+     * Migrate existing PartyPokemon objects to have natures
+     */
+    private fun migratePartyNatures(party: List<PartyPokemon>): List<PartyPokemon> {
+        val needsMigration = party.any { it.nature.name == "Hardy" && it.nature.description == "Neutral nature" }
+        
+        if (!needsMigration) {
+            return party
+        }
+        
+        Log.d(TAG, "Migrating existing party Pokemon to have random natures")
+        
+        return party.map { pokemon ->
+            if (pokemon.nature.name == "Hardy" && pokemon.nature.description == "Neutral nature") {
+                // This is likely a migrated Pokemon, assign a random nature
+                pokemon.copy(nature = getRandomNature())
+            } else {
+                pokemon
+            }
+        }
     }
     
     /**

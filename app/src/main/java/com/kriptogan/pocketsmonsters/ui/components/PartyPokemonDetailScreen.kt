@@ -719,7 +719,7 @@ fun PartyPokemonDetailScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
             
-            // Metadata Card
+            // Nature Card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -729,46 +729,85 @@ fun PartyPokemonDetailScreen(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
-                        text = "Party Information",
+                        text = "Nature",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Added to Party",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = formatDate(partyPokemon.addedToPartyAt),
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
+                    // Nature name
+                    Text(
+                        text = partyPokemon.nature.name,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    // Nature description
+                    Text(
+                        text = partyPokemon.nature.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                    )
+                    
+                    // Show stat changes if nature affects stats
+                    if (partyPokemon.nature.increasedStat != null && partyPokemon.nature.decreasedStat != null) {
+                        Spacer(modifier = Modifier.height(12.dp))
                         
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                text = "Pokemon ID",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = "#${partyPokemon.id.toString().padStart(3, '0')}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Medium
-                            )
+                            // Increased stat
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowUp,
+                                    contentDescription = "Increased",
+                                    tint = Color.Green,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = partyPokemon.nature.increasedStat,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.Green,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            
+                            // Decreased stat
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowDown,
+                                    contentDescription = "Decreased",
+                                    tint = Color.Red,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = partyPokemon.nature.decreasedStat,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.Red,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
+                    } else {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = "Neutral nature - no stat changes",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             }

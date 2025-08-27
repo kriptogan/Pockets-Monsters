@@ -34,6 +34,9 @@ data class PartyPokemon(
     // Status conditions
     val conditions: List<Condition> = emptyList(),
     
+    // Nature (randomly assigned when added to party)
+    val nature: Nature = Nature("Hardy", null, null, "Neutral nature"),
+    
     // Metadata
     val addedToPartyAt: Long = System.currentTimeMillis()
 )

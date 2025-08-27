@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.kriptogan.pocketsmonsters.data.models.Nature
 
 @Composable
 fun NaturesScreen(
@@ -241,10 +242,3 @@ private fun NatureLegend() {
         }
     }
 }
-
-data class Nature(
-    val name: String,
-    val increasedStat: String?,
-    val decreasedStat: String?,
-    val description: String
-)
