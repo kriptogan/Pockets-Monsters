@@ -26,40 +26,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
-import kotlin.random.Random
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kriptogan.pocketsmonsters.ui.viewmodel.DiceRollingViewModel
+import com.kriptogan.pocketsmonsters.ui.viewmodel.diceTypes
+import com.kriptogan.pocketsmonsters.ui.viewmodel.DiceType
+import com.kriptogan.pocketsmonsters.ui.viewmodel.RollResult
 
 @Composable
 fun DiceRollingScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var currentRoll by remember { mutableStateOf<Int?>(null) }
-    var isRolling by remember { mutableStateOf(false) }
-    var rollHistory by remember { mutableStateOf<List<RollResult>>(emptyList()) }
-    var currentDiceType by remember { mutableStateOf<DiceType?>(null) }
+    val viewModel: DiceRollingViewModel = viewModel()
+    val currentRoll by viewModel.currentRoll.collectAsState()
+    val isRolling by viewModel.isRolling.collectAsState()
+    val rollHistory by viewModel.rollHistory.collectAsState()
+    val currentDiceType by viewModel.currentDiceType.collectAsState()
     
     // Handle dice rolling animation
     LaunchedEffect(isRolling) {
-        if (isRolling && currentDiceType != null) {
-            // Simulate rolling animation
-            repeat(10) {
-                val randomResult = Random.nextInt(1, currentDiceType!!.sides + 1)
-                currentRoll = randomResult
-                delay(100)
-            }
-            
-            // Final result
-            val finalResult = Random.nextInt(1, currentDiceType!!.sides + 1)
-            currentRoll = finalResult
-            
-            // Add to roll history
-            rollHistory = listOf(
-                RollResult(currentDiceType!!.name, finalResult, System.currentTimeMillis())
-            ) + rollHistory.take(9) // Keep last 10 rolls
-            
-            // Reset rolling state
-            isRolling = false
+        if (isRolling) {
+            viewModel.performRoll()
+        }
+    }
+    
+    // Clear current roll when leaving screen
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.clearCurrentRoll()
         }
     }
     
@@ -114,10 +108,7 @@ fun DiceRollingScreen(
                         DiceButton(
                             diceType = diceType,
                             onClick = {
-                                if (!isRolling) {
-                                    isRolling = true
-                                    currentDiceType = diceType
-                                }
+                                viewModel.startRoll(diceType)
                             },
                             isRolling = isRolling
                         )
@@ -320,23 +311,3 @@ private fun formatTime(timestamp: Long): String {
         else -> "${diff / 86400000}d ago"
     }
 }
-
-data class RollResult(
-    val diceType: String,
-    val result: Int,
-    val timestamp: Long
-)
-
-data class DiceType(
-    val name: String,
-    val sides: Int
-)
-
-private val diceTypes = listOf(
-    DiceType("D4", 4),
-    DiceType("D6", 6),
-    DiceType("D8", 8),
-    DiceType("D10", 10),
-    DiceType("D12", 12),
-    DiceType("D20", 20)
-)
