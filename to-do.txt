@@ -20,5 +20,50 @@ V 18. שמירה מקומית
 V 19. רשימת התקפות לפי רמות
 V 20. הוספה לקבוצה
 V 21. Update energy slots to include 6th-9th stages
-22. improve party details design.
-23. allow level up
+V 22. improve party details design.
+23. Proficiency
+24. bonuses and penalty to attributes management.
+25. Show level and exp
+26. Exp gain
+27. Try to place the types inside the image at the bottom, one above the other.
+* Move ac to the old card
+
+28. Effects $ Conditions:
+User adds an effect or condition.
+Effect -> select property (movespeed, ac, attack, def, sp.atk, sp.def, speed), a manipulation value (-2,-1,+1,+2,etc.), and number of turns.
+Add the effect to the list.
+That property gains that effect for that much turns.
+Condition -> select a condition, add that condition name to the list.
+
+The list:
+
+Property/condition - value - turns left
+Attack - +2 - 6 rounds
+Poison - -- - 10 rounds
+
+Also, we need a button to pass a round. It will lower all rows by 1 round. If a row reached 0, clear the row.
+
+When adding to the lis or passing a round, recalculate effects
+
+28. A clickable level X next to the name, align right.
+
+Clicking it will open a dialog with the current exp, and exp for next level.
+Input to type exp value and a gain button. Support negative numbers, to a minimum level 1.
+
+When level up or down, update the available moves.
+
+If a prepared move is no longer available remove it from the preparation list.
+
+29. 8. Moves management.
+
+Show prepared moves (free cost and 4 move with an energy cost). Support remove action.
+
+Show available moves:
+Free cost moves.
+1 energy cost moves.
+2 energy cost moves.
+Etc.
+
+Support option to prepare moves with a cost, if not all 4 positions are taken.
+
+30. Instead of party information, show the nature and description of nature.

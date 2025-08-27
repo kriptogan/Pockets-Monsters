@@ -132,7 +132,7 @@ fun PartyPokemonDetailScreen(
                 .height(200.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-                // 2.1. Left Panel - Creature Image
+                // 2.1. Left Panel - Creature Image + Types
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -145,9 +145,9 @@ fun PartyPokemonDetailScreen(
                             width = 2.dp,
                             color = Color.White,
                             shape = RoundedCornerShape(16.dp)
-                        ),
-                    contentAlignment = Alignment.Center
+                        )
                 ) {
+                    // Pokemon image - perfectly centered in the entire area
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data("file:///android_asset/front_images/${partyPokemon.name}.png")
@@ -159,6 +159,25 @@ fun PartyPokemonDetailScreen(
                             .clip(RoundedCornerShape(8.dp)),
                         contentScale = ContentScale.Fit
                     )
+                    
+                    // Types positioned at the bottom, may overlap with image
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 8.dp)
+                    ) {
+                        partyPokemon.basePokemon.types.forEach { type ->
+                            Text(
+                                text = type.type.name.replaceFirstChar { it.uppercase() },
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = Color(0xFF1A1A1A),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(vertical = 2.dp)
+                            )
+                        }
+                    }
                 }
                 
                 // 2.2. Center Panel - Type + Combat Info (using actual DnD data)
