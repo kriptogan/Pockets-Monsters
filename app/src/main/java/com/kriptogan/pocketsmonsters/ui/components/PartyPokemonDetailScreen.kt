@@ -240,8 +240,8 @@ fun PartyPokemonDetailScreen(
                         // Initiative value
                         Text(
                             text = when {
-                                dndView.initiative > 0 -> "+${dndView.initiative}"
-                                dndView.initiative < 0 -> "${dndView.initiative}"
+                                partyPokemon.calculateCurrentInitiative() > 0 -> "+${partyPokemon.calculateCurrentInitiative()}"
+                                partyPokemon.calculateCurrentInitiative() < 0 -> "${partyPokemon.calculateCurrentInitiative()}"
                                 else -> "+0"
                             },
                             style = MaterialTheme.typography.titleLarge,
@@ -423,86 +423,73 @@ fun PartyPokemonDetailScreen(
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    Text(
-                        text = "Nature",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    // Nature name
-                    Text(
-                        text = partyPokemon.nature.name,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    
-                    Spacer(modifier = Modifier.height(8.dp))
-                    
-                    // Nature description
-                    Text(
-                        text = partyPokemon.nature.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
-                    )
-                    
-                    // Show stat changes if nature affects stats
-                    if (partyPokemon.nature.increasedStat != null && partyPokemon.nature.decreasedStat != null) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Increased stat
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(
-                                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowUp,
-                                    contentDescription = "Increased",
-                                    tint = Color.Green,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = partyPokemon.nature.increasedStat,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.Green,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                            
-                            // Decreased stat
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(
-                                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowDown,
-                                    contentDescription = "Decreased",
-                                    tint = Color.Red,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = partyPokemon.nature.decreasedStat,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.Red,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    } else {
-                        Spacer(modifier = Modifier.height(12.dp))
+                    // Nature display in horizontal format
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Nature name
                         Text(
-                            text = "Neutral nature - no stat changes",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            text = partyPokemon.nature.name,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
                         )
+                        
+                        // Separator
+                        Text(
+                            text = "|",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF666666)
+                        )
+                        
+                        // Buffed stat with up arrow (red)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowUp,
+                                contentDescription = "Increased",
+                                tint = Color.Red,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = partyPokemon.nature.increasedStat ?: "None",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = if (partyPokemon.nature.increasedStat != null) Color.Red else Color(0xFF666666),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        
+                        // Separator
+                        Text(
+                            text = "|",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF666666)
+                        )
+                        
+                        // Debuffed stat with down arrow (blue)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowDown,
+                                contentDescription = "Decreased",
+                                tint = Color.Blue,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = partyPokemon.nature.decreasedStat ?: "None",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = if (partyPokemon.nature.decreasedStat != null) Color.Blue else Color(0xFF666666),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }

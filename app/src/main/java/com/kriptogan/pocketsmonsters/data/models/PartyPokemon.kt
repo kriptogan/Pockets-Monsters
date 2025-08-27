@@ -210,6 +210,22 @@ data class PartyPokemon(
     }
     
     /**
+     * Calculate current initiative based on currentDnDStats and proficiency/deficiency
+     * Formula: speedModifier + proficiencyBonus where:
+     * - speedModifier = floor((speed - 10) / 2)
+     * - proficiencyBonus = +proficiency if Speed is proficient, -2 if Speed is deficient, 0 if neutral
+     */
+    fun calculateCurrentInitiative(): Int {
+        val speedStat = currentDnDStats["Speed"] ?: 10
+        val speedModifier = floor((speedStat - 10) / 2.0).toInt()
+        
+        // Check if Speed stat is proficient or deficient
+        val proficiencyBonus = getStatProficiencyBonus("Speed")
+        
+        return speedModifier + proficiencyBonus
+    }
+    
+    /**
      * Calculate current movement speed based on currentDnDStats and actualWeight
      * Uses the same complex formula from DnDConverter
      */
