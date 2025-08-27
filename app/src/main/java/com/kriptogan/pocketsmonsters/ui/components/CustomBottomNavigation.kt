@@ -25,7 +25,7 @@ fun CustomBottomNavigation(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = Color(0xFF87CEEB).copy(alpha = 0.5f), // Crystal blue with 50% opacity
+                color = Color(0xFF87CEEB).copy(alpha = 0.2f), // Crystal blue with 20% opacity
                 shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
             )
             .padding(16.dp),
