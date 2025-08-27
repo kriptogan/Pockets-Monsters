@@ -1,6 +1,7 @@
 package com.kriptogan.pocketsmonsters.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,349 +48,392 @@ fun PokemonDetailScreen(
         return
     }
 
-    var showDnDView by remember { mutableStateOf(true) }
     val dndConverter = remember { DnDConverter() }
     val dndView = remember(pokemon) { dndConverter.convertPokemonToDnD(pokemon) }
+    val partyManager = PartyManager(LocalContext.current)
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(top = 20.dp)
-    ) {
-        // Custom header with back button
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-        ) {
-            Column {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer
-                        )
-                    }
-                    
-                    Spacer(modifier = Modifier.width(16.dp))
-                    
-                    Text(
-                        text = pokemon.name.replaceFirstChar { it.uppercase() },
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-                
-                // View Toggle Buttons
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Button(
-                        onClick = { showDnDView = true },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = if (showDnDView) 
-                                MaterialTheme.colorScheme.primary 
-                            else 
-                                MaterialTheme.colorScheme.surface
-                        ),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            text = "D&D View",
-                            color = if (showDnDView) 
-                                MaterialTheme.colorScheme.onPrimary 
-                            else 
-                                androidx.compose.ui.graphics.Color.Black
-                        )
-                    }
-                    
-                    Spacer(modifier = Modifier.width(8.dp))
-                    
-                    Button(
-                        onClick = { showDnDView = false },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = if (!showDnDView) 
-                                MaterialTheme.colorScheme.primary 
-                            else 
-                                MaterialTheme.colorScheme.surface
-                        ),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            text = "Pokémon View",
-                            color = if (!showDnDView) 
-                                MaterialTheme.colorScheme.onPrimary 
-                            else 
-                                androidx.compose.ui.graphics.Color.Black
-                        )
-                    }
-                }
-            }
-        }
-
-        // Content based on selected view
-        if (showDnDView) {
-            DnDView(dndView = dndView)
-        } else {
-            PokemonView(pokemon = pokemon)
-        }
-    }
-}
-
-@Composable
-private fun PokemonView(
-    pokemon: Pokemon,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Row containing image and basic info
+        // 1. Simplified Header - Back button and Pokemon name only
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
+                .padding(bottom = 24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color(0xFFD32F2F)
+                )
+            }
+            
+            Spacer(modifier = Modifier.width(16.dp))
+            
+            Text(
+                text = pokemon.name.replaceFirstChar { it.uppercase() },
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1A1A1A)
+            )
+        }
+        
+        // 2. Top Section - 3 panels side by side
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Large Pokémon sprite with types
+            // 2.1. Left Panel - Creature Image
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .background(
+                        color = Color.Transparent,
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .border(
+                        width = 2.dp,
+                        color = Color.White,
+                        shape = RoundedCornerShape(16.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data("file:///android_asset/front_images/${pokemon.name}.png")
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "Official artwork of ${pokemon.name}",
+                    modifier = Modifier
+                        .size(160.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Fit
+                )
+            }
+            
+            // 2.2. Center Panel - Type + Combat Info
             Card(
                 modifier = Modifier
                     .weight(1f)
-                    .height(200.dp),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    .fillMaxHeight(),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                border = androidx.compose.foundation.BorderStroke(
+                    width = 1.dp,
+                    color = Color(0xFF4CAF50).copy(alpha = 0.3f)
+                ),
+                shape = RoundedCornerShape(8.dp)
             ) {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.secondaryContainer),
-                    contentAlignment = Alignment.Center
+                        .padding(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Use high-quality front images (official artwork) from assets
-                    val frontImagePath = "file:///android_asset/front_images/${pokemon.name}.png"
-                    
-                    // Debug logging
-                    LaunchedEffect(pokemon.name) {
-                        println("🖼️ DEBUG: Pokemon View loading front image: $frontImagePath")
-                    }
-                    
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(frontImagePath)
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = "Official artwork of ${pokemon.name}",
-                        modifier = Modifier
-                            .size(180.dp)
-                            .clip(RoundedCornerShape(8.dp)),
-                        contentScale = ContentScale.Fit
+                    // Type title and types
+                    Text(
+                        text = "TYPE",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF666666),
+                        modifier = Modifier.padding(bottom = 4.dp)
                     )
                     
-                    // Types positioned at bottom of image
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(bottom = 20.dp),
-                        contentAlignment = Alignment.BottomCenter
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            pokemon.types.forEach { typeSlot ->
-                                val typeColors = getTypeColors(typeSlot.type.name)
-                                Card(
-                                    modifier = Modifier.padding(4.dp),
-                                    colors = CardDefaults.cardColors(
-                                        containerColor = typeColors.background
-                                    ),
-                                    shape = RoundedCornerShape(16.dp)
-                                ) {
-                                    Text(
-                                        text = typeSlot.type.name.replaceFirstChar { it.uppercase() },
-                                        style = MaterialTheme.typography.bodySmall,
-                                        fontWeight = FontWeight.Bold,
-                                        color = typeColors.text,
-                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    Text(
+                        text = pokemon.types.joinToString(", ") { it.type.name.replaceFirstChar { char -> char.uppercase() } },
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF1A1A1A),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                    
+                    // Initiative label above value
+                    Text(
+                        text = "Initiative",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF666666),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                    
+                    // Initiative value (same size as type value)
+                    Text(
+                        text = when {
+                            dndView.initiative > 0 -> "+${dndView.initiative}"
+                            dndView.initiative < 0 -> "${dndView.initiative}"
+                            else -> "0"
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF1A1A1A),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                    
+                    // Movement label above value
+                    Text(
+                        text = "Movement",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF666666),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                    
+                    // Movement value (same size as type value)
+                    Text(
+                        text = "${dndView.movement}ft",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF1A1A1A),
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
-
-            // Basic Info Card
+            
+            // 2.3. Right Panel - HP + Hit Dice
             Card(
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                border = androidx.compose.foundation.BorderStroke(
+                    width = 1.dp,
+                    color = Color(0xFFE91E63).copy(alpha = 0.3f)
+                ),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // HP label above value
+                    Text(
+                        text = "HP",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF666666),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                    
+                    // HP value (same size as type value)
+                    Text(
+                        text = "${dndView.convertedStats["HP"] ?: 0}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF1A1A1A),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                    
+                    // Hit Dice label above value
+                    Text(
+                        text = "Hit Dice",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF666666),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                    
+                    // Hit Dice value (same size as type value)
+                    Text(
+                        text = dndView.hitDice,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF1A1A1A),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        // 3. Bottom Section - Stats Grid (2x3)
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
+            border = androidx.compose.foundation.BorderStroke(
+                width = 1.dp,
+                color = Color(0xFFF44336).copy(alpha = 0.3f)
+            ),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                // Row 1: Attack, Sp.Attack, Speed
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    // Attack (Red)
+                    StatGridItem(
+                        label = "ATTACK",
+                        value = "${dndView.convertedStats["Attack"] ?: 0}",
+                        statModifier = "${dndView.modifiers["Attack"] ?: 0}",
+                        color = Color(0xFFF44336),
+                        modifier = Modifier.weight(1f)
+                    )
+                    
+                    // Sp.Attack (Purple)
+                    StatGridItem(
+                        label = "SP.ATTACK",
+                        value = "${dndView.convertedStats["Sp.Atk"] ?: 0}",
+                        statModifier = "${dndView.modifiers["Sp.Atk"] ?: 0}",
+                        color = Color(0xFF9C27B0),
+                        modifier = Modifier.weight(1f)
+                    )
+                    
+                    // Speed (Green/Blue)
+                    StatGridItem(
+                        label = "SPEED",
+                        value = "${dndView.convertedStats["Speed"] ?: 0}",
+                        statModifier = "${dndView.modifiers["Speed"] ?: 0}",
+                        color = Color(0xFF4CAF50),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                // Row 2: Defense, Sp.Defense, AC
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    // Defense (Gray)
+                    StatGridItem(
+                        label = "DEFENSE",
+                        value = "${dndView.convertedStats["Defense"] ?: 0}",
+                        statModifier = "${dndView.modifiers["Defense"] ?: 0}",
+                        color = Color(0xFF795548),
+                        modifier = Modifier.weight(1f)
+                    )
+                    
+                    // Sp.Defense (Teal/Blue)
+                    StatGridItem(
+                        label = "SP.DEFENSE",
+                        value = "${dndView.convertedStats["Sp.Def"] ?: 0}",
+                        statModifier = "${dndView.modifiers["Sp.Def"] ?: 0}",
+                        color = Color(0xFF00BCD4),
+                        modifier = Modifier.weight(1f)
+                    )
+                    
+                    // AC (Red)
+                    StatGridItem(
+                        label = "AC",
+                        value = "${dndView.ac}",
+                        statModifier = "", // AC does not have a modifier in D&D
+                        color = Color(0xFFD32F2F),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        // 4. Moves by Level
+        Text(
+            text = "Moves by Level",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF1A1A1A),
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+        
+        // Display moves organized by level
+        dndView.movesByDnDLevel.entries.sortedBy { it.key }.forEach { (dndLevel, moves) ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFFF5F5F5)
+                )
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
-                        text = "Basic Information",
+                        text = "D&D Level $dndLevel",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFD32F2F)
                     )
                     
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        InfoItem(
-                            label = "ID",
-                            value = "#${pokemon.id.toString().padStart(3, '0')}"
-                        )
-                        InfoItem(
-                            label = "Height",
-                            value = "${pokemon.height / 10.0}m"
-                        )
-                        InfoItem(
-                            label = "Weight",
-                            value = "${pokemon.weight / 10.0}kg"
+                    moves.forEach { moveName ->
+                        Text(
+                            text = "• $moveName",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFF1A1A1A),
+                            modifier = Modifier.padding(start = 8.dp, bottom = 4.dp)
                         )
                     }
                 }
             }
         }
-
-        // Content
-        Column(
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        // 5. Add to Party Button
+        Button(
+            onClick = {
+                // TODO: Implement add to party functionality
+            },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .height(56.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFD32F2F)
+            ),
+            shape = RoundedCornerShape(12.dp)
         ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
+            )
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             
-            // Stats Card
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Base Stats",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    pokemon.stats.forEach { stat ->
-                        StatRow(
-                            statName = stat.stat.name.replaceFirstChar { it.uppercase() },
-                            statValue = stat.baseStat
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Experience Card
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Experience",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    InfoItem(
-                        label = "Base Experience",
-                        value = pokemon.baseExperience.toString()
-                    )
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Moves Card
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Learnable Moves",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    if (pokemon.levelUpMoves.isNotEmpty()) {
-                        pokemon.levelUpMoves.sortedBy { it.levelLearnedAt }.forEach { move ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "Level ${move.levelLearnedAt}",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text(
-                                    text = move.name.replaceFirstChar { it.uppercase() },
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-                        }
-                    } else {
-                        Text(
-                            text = "No level-up moves available",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
+            Text(
+                text = "Add to Party",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
 
 @Composable
-private fun InfoItem(
+private fun StatGridItem(
     label: String,
     value: String,
+    statModifier: String,
+    color: Color,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -399,86 +443,48 @@ private fun InfoItem(
         Text(
             text = label,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF666666),
+            textAlign = TextAlign.Center
         )
         
         Spacer(modifier = Modifier.height(4.dp))
         
-        Text(
-            text = value,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
-/**
- * Data class for type colors
- */
-data class TypeColors(
-    val background: Color,
-    val text: Color
-)
-
-/**
- * Get colors for Pokémon types
- */
-@Composable
-fun getTypeColors(typeName: String): TypeColors {
-    return when (typeName.lowercase()) {
-        "normal" -> TypeColors(Color(0.66f, 0.66f, 0.47f), Color.White)
-        "fire" -> TypeColors(Color(0.94f, 0.50f, 0.19f), Color.White)
-        "water" -> TypeColors(Color(0.41f, 0.56f, 0.94f), Color.White)
-        "electric" -> TypeColors(Color(0.97f, 0.82f, 0.19f), Color.Black)
-        "grass" -> TypeColors(Color(0.47f, 0.78f, 0.31f), Color.White)
-        "ice" -> TypeColors(Color(0.60f, 0.85f, 0.85f), Color.Black)
-        "fighting" -> TypeColors(Color(0.75f, 0.19f, 0.16f), Color.White)
-        "poison" -> TypeColors(Color(0.63f, 0.25f, 0.63f), Color.White)
-        "ground" -> TypeColors(Color(0.88f, 0.75f, 0.41f), Color.Black)
-        "flying" -> TypeColors(Color(0.66f, 0.56f, 0.94f), Color.White)
-        "psychic" -> TypeColors(Color(0.97f, 0.35f, 0.53f), Color.White)
-        "bug" -> TypeColors(Color(0.66f, 0.72f, 0.13f), Color.White)
-        "rock" -> TypeColors(Color(0.72f, 0.63f, 0.22f), Color.White)
-        "ghost" -> TypeColors(Color(0.44f, 0.35f, 0.60f), Color.White)
-        "dragon" -> TypeColors(Color(0.44f, 0.22f, 0.97f), Color.White)
-        "dark" -> TypeColors(Color(0.44f, 0.35f, 0.28f), Color.White)
-        "steel" -> TypeColors(Color(0.72f, 0.72f, 0.82f), Color.Black)
-        "fairy" -> TypeColors(Color(0.93f, 0.60f, 0.67f), Color.Black)
-        else -> TypeColors(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.onPrimaryContainer)
-    }
-}
-
-@Composable
-private fun StatRow(
-    statName: String,
-    statValue: Int,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = statName,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.weight(1f)
-        )
-        
-        Text(
-            text = statValue.toString(),
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold
-        )
-        
-        // Visual stat bar
-        LinearProgressIndicator(
-            progress = { statValue / 255f }, // Max stat value in Pokémon
-            modifier = Modifier
-                .width(100.dp)
-                .height(8.dp),
-            color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+        // Value and modifier on the same line
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            // Show modifier first, then value in parentheses
+            if (statModifier.isNotEmpty()) {
+                Text(
+                    text = when {
+                        statModifier.toIntOrNull() ?: 0 > 0 -> "+${statModifier}"
+                        statModifier.toIntOrNull() ?: 0 < 0 -> "${statModifier}"
+                        else -> "+0"
+                    },
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1A1A1A),
+                    textAlign = TextAlign.Center
+                )
+                
+                Text(
+                    text = "(${value})",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF999999),
+                    textAlign = TextAlign.Center
+                )
+            } else {
+                // If no modifier, just show the value
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1A1A1A),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
     }
 }

@@ -22,6 +22,42 @@ import com.kriptogan.pocketsmonsters.data.converter.DnDView
 import com.kriptogan.pocketsmonsters.data.party.PartyManager
 import kotlin.math.floor
 
+/**
+ * Data class for type colors
+ */
+data class TypeColors(
+    val background: Color,
+    val text: Color
+)
+
+/**
+ * Get colors for Pokémon types
+ */
+@Composable
+fun getTypeColors(typeName: String): TypeColors {
+    return when (typeName.lowercase()) {
+        "normal" -> TypeColors(Color(0.66f, 0.66f, 0.47f), Color.White)
+        "fire" -> TypeColors(Color(0.94f, 0.50f, 0.19f), Color.White)
+        "water" -> TypeColors(Color(0.41f, 0.56f, 0.94f), Color.White)
+        "electric" -> TypeColors(Color(0.97f, 0.82f, 0.19f), Color.Black)
+        "grass" -> TypeColors(Color(0.47f, 0.78f, 0.31f), Color.White)
+        "ice" -> TypeColors(Color(0.60f, 0.85f, 0.85f), Color.Black)
+        "fighting" -> TypeColors(Color(0.75f, 0.19f, 0.16f), Color.White)
+        "poison" -> TypeColors(Color(0.63f, 0.25f, 0.63f), Color.White)
+        "ground" -> TypeColors(Color(0.88f, 0.75f, 0.41f), Color.Black)
+        "flying" -> TypeColors(Color(0.66f, 0.56f, 0.94f), Color.White)
+        "psychic" -> TypeColors(Color(0.97f, 0.35f, 0.53f), Color.White)
+        "bug" -> TypeColors(Color(0.66f, 0.72f, 0.13f), Color.White)
+        "rock" -> TypeColors(Color(0.72f, 0.63f, 0.22f), Color.White)
+        "ghost" -> TypeColors(Color(0.44f, 0.35f, 0.60f), Color.White)
+        "dragon" -> TypeColors(Color(0.44f, 0.22f, 0.97f), Color.White)
+        "dark" -> TypeColors(Color(0.44f, 0.35f, 0.28f), Color.White)
+        "steel" -> TypeColors(Color(0.72f, 0.72f, 0.82f), Color.Black)
+        "fairy" -> TypeColors(Color(0.93f, 0.60f, 0.67f), Color.Black)
+        else -> TypeColors(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.onPrimaryContainer)
+    }
+}
+
 @Composable
 fun DnDView(
     dndView: DnDView?,
