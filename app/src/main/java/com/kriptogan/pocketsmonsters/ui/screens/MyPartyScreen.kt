@@ -62,6 +62,14 @@ fun MyPartyScreen(
         viewModel.loadParty()
     }
     
+    // Refresh party data when returning from details screen
+    LaunchedEffect(currentScreen) {
+        if (currentScreen == PartyScreen.List) {
+            // Refresh party data when returning to list view
+            viewModel.loadParty()
+        }
+    }
+    
     // Restore scroll position to the last viewed party Pokemon index
     LaunchedEffect(lastViewedPartyPokemonIndex) {
         if (lastViewedPartyPokemonIndex >= 0 && lastViewedPartyPokemonIndex < party.size) {
@@ -73,7 +81,11 @@ fun MyPartyScreen(
     if (currentScreen == PartyScreen.Detail && selectedPartyPokemon != null) {
         PartyPokemonDetailScreen(
             partyPokemon = selectedPartyPokemon!!,
-            onBackClick = { viewModel.navigateToList() }
+            onBackClick = { 
+                viewModel.navigateToList()
+                // Refresh party data to show updated HP values
+                viewModel.loadParty()
+            }
         )
         return
     }

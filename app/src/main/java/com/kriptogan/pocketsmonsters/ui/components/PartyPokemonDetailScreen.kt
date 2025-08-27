@@ -64,6 +64,22 @@ fun PartyPokemonDetailScreen(
     // Local state for current HP to make UI reactive
     var currentHP by remember { mutableStateOf(partyPokemon.currentHP) }
     
+    // Sync local HP state with PartyManager data when screen becomes active
+    LaunchedEffect(Unit) {
+        val updatedParty = partyManager.getParty().find { it.id == partyPokemon.id }
+        updatedParty?.let { 
+            currentHP = it.currentHP
+        }
+    }
+    
+    // Sync local HP state whenever partyPokemon changes (e.g., when returning from other screens)
+    LaunchedEffect(partyPokemon.id) {
+        val updatedParty = partyManager.getParty().find { it.id == partyPokemon.id }
+        updatedParty?.let { 
+            currentHP = it.currentHP
+        }
+    }
+    
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -328,6 +344,9 @@ fun PartyPokemonDetailScreen(
                             }
                         }
                         
+                        // Reduced spacing to align with movement speed
+                        Spacer(modifier = Modifier.height(12.dp))
+                        
                         // 5. Hit Dice label
                         Text(
                             text = "Hit Dice",
@@ -449,6 +468,58 @@ fun PartyPokemonDetailScreen(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
+                        text = "Current Move Set (${currentMoveSet.size}/4)",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    // Display current moves
+                    if (currentMoveSet.isNotEmpty()) {
+                        currentMoveSet.forEach { moveName ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = moveName.replaceFirstChar { it.uppercase() },
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                
+                                IconButton(
+                                    onClick = {
+                                        currentMoveSet.remove(moveName)
+                                        // Save the updated move set to local datastore
+                                        val updatedPokemon = partyPokemon.copy(currentMoveSet = currentMoveSet.toList())
+                                        partyManager.updatePartyPokemon(updatedPokemon)
+                                    },
+                                    modifier = Modifier.size(32.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Remove move",
+                                        tint = Color(0xFFD32F2F),
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = "No moves selected",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Text(
                         text = "Available Moves (Level ${partyPokemon.currentLevel})",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
@@ -478,18 +549,46 @@ fun PartyPokemonDetailScreen(
                                     )
                                 }
                                 
-                                if (!currentMoveSet.contains(move.name) && currentMoveSet.size < 4) {
-                                    IconButton(
-                                        onClick = {
-                                            currentMoveSet.add(move.name)
-                                        },
-                                        modifier = Modifier.size(32.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Add,
-                                            contentDescription = "Add move",
-                                            modifier = Modifier.size(16.dp)
-                                        )
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    if (currentMoveSet.contains(move.name)) {
+                                        // Show remove button for moves in current set
+                                        IconButton(
+                                            onClick = {
+                                                currentMoveSet.remove(move.name)
+                                                // Save the updated move set to local datastore
+                                                val updatedPokemon = partyPokemon.copy(currentMoveSet = currentMoveSet.toList())
+                                                partyManager.updatePartyPokemon(updatedPokemon)
+                                            },
+                                            modifier = Modifier.size(32.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Delete,
+                                                contentDescription = "Remove move",
+                                                tint = Color(0xFFD32F2F),
+                                                modifier = Modifier.size(16.dp)
+                                            )
+                                        }
+                                    } else if (currentMoveSet.size < 4) {
+                                        // Show add button for available moves
+                                        IconButton(
+                                            onClick = {
+                                                currentMoveSet.add(move.name)
+                                                // Save the updated move set to local datastore
+                                                val updatedPokemon = partyPokemon.copy(currentMoveSet = currentMoveSet.toList())
+                                                partyManager.updatePartyPokemon(updatedPokemon)
+                                            },
+                                            modifier = Modifier.size(32.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Add,
+                                                contentDescription = "Add move",
+                                                tint = Color(0xFF4CAF50),
+                                                modifier = Modifier.size(16.dp)
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -561,6 +660,9 @@ fun PartyPokemonDetailScreen(
                                 IconButton(
                                     onClick = {
                                         currentConditions.remove(condition)
+                                        // Save the updated conditions to local datastore
+                                        val updatedPokemon = partyPokemon.copy(conditions = currentConditions.toList())
+                                        partyManager.updatePartyPokemon(updatedPokemon)
                                     },
                                     modifier = Modifier.size(32.dp)
                                 ) {
@@ -663,11 +765,56 @@ fun PartyPokemonDetailScreen(
                 onDismissRequest = { showConditionDialog = false },
                 title = { Text("Add Status Condition") },
                 text = { 
-                    Text("Select a status condition to add to this Pokemon. You can remove conditions directly in the main view.")
+                    Column {
+                        Text("Select a status condition to add to this Pokemon:")
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
+                        // Show available conditions that aren't already applied
+                        val availableConditions = Condition.values().filter { condition ->
+                            !currentConditions.contains(condition)
+                        }
+                        
+                        if (availableConditions.isNotEmpty()) {
+                            availableConditions.forEach { condition ->
+                                TextButton(
+                                    onClick = {
+                                        currentConditions.add(condition)
+                                        // Save the updated conditions to local datastore
+                                        val updatedPokemon = partyPokemon.copy(conditions = currentConditions.toList())
+                                        partyManager.updatePartyPokemon(updatedPokemon)
+                                        showConditionDialog = false
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalAlignment = Alignment.Start
+                                    ) {
+                                        Text(
+                                            text = condition.displayName,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                        Text(
+                                            text = condition.description,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            Text(
+                                text = "All conditions are already applied",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                 },
                 confirmButton = {
                     TextButton(onClick = { showConditionDialog = false }) {
-                        Text("OK")
+                        Text("Cancel")
                     }
                 }
             )

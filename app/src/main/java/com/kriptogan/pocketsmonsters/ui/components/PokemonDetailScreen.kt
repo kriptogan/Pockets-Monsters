@@ -195,7 +195,7 @@ fun PokemonDetailScreen(
                             dndView.initiative < 0 -> "${dndView.initiative}"
                             else -> "+0"
                         },
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF1A1A1A),
                         textAlign = TextAlign.Center,
@@ -215,7 +215,7 @@ fun PokemonDetailScreen(
                     // Movement value (same size as type value)
                     Text(
                         text = "${dndView.movement}ft",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF1A1A1A),
                         textAlign = TextAlign.Center
@@ -276,7 +276,7 @@ fun PokemonDetailScreen(
                     // Hit Dice value (same size as type value)
                     Text(
                         text = dndView.hitDice,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF1A1A1A),
                         textAlign = TextAlign.Center
