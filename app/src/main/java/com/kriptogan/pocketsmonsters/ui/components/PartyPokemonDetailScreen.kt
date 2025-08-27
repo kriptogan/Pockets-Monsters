@@ -1,6 +1,7 @@
 package com.kriptogan.pocketsmonsters.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +26,9 @@ import coil.request.ImageRequest
 import com.kriptogan.pocketsmonsters.data.models.PartyPokemon
 import com.kriptogan.pocketsmonsters.data.models.Condition
 import com.kriptogan.pocketsmonsters.data.party.PartyManager
+import androidx.compose.ui.graphics.Color
+import com.kriptogan.pocketsmonsters.data.converter.DnDConverter
+import com.kriptogan.pocketsmonsters.data.models.Pokemon
 
 @Composable
 fun PartyPokemonDetailScreen(
@@ -50,7 +54,6 @@ fun PartyPokemonDetailScreen(
     val context = LocalContext.current
     val partyManager = remember { PartyManager(context) }
     
-    var currentHP by remember { mutableStateOf(partyPokemon.currentHP) }
     var currentMoveSet by remember { mutableStateOf(partyPokemon.currentMoveSet.toMutableList()) }
     var currentConditions by remember { mutableStateOf(partyPokemon.conditions.toMutableList()) }
     var showMoveSelectionDialog by remember { mutableStateOf(false) }
@@ -63,44 +66,35 @@ fun PartyPokemonDetailScreen(
             .padding(top = 20.dp)
     ) {
         // Header with back button
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = onBackClick) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-                
-                Spacer(modifier = Modifier.width(16.dp))
-                
-                Text(
-                    text = partyPokemon.name.replaceFirstChar { it.uppercase() },
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-                
-                Spacer(modifier = Modifier.weight(1f))
-                
-                Text(
-                    text = "Level ${partyPokemon.currentLevel}",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color(0xFFD32F2F)
                 )
             }
+            
+            Spacer(modifier = Modifier.width(16.dp))
+            
+            Text(
+                text = partyPokemon.name.replaceFirstChar { it.uppercase() },
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1A1A1A)
+            )
+        }
+        
+        // Create DnD view for stats
+        val dndConverter = remember { DnDConverter() }
+        val dndView = remember(partyPokemon.name) { 
+            // Use the base Pokemon data from PartyPokemon for proper DnD conversion
+            dndConverter.convertPokemonToDnD(partyPokemon.basePokemon)
         }
         
         // Content
@@ -109,399 +103,276 @@ fun PartyPokemonDetailScreen(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Pokemon Image and Basic Info
+            // Top Section - 3 panels side by side (same as Pokemon list details)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .height(200.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Pokemon Image
+                // 2.1. Left Panel - Creature Image
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .background(
+                            color = Color.Transparent,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = Color.White,
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data("file:///android_asset/front_images/${partyPokemon.name}.png")
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "Official artwork of ${partyPokemon.name}",
+                        modifier = Modifier
+                            .size(160.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Fit
+                    )
+                }
+                
+                // 2.2. Center Panel - Type + Combat Info (using actual DnD data)
                 Card(
                     modifier = Modifier
                         .weight(1f)
-                        .height(200.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        .fillMaxHeight(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(
+                        width = 1.dp,
+                        color = Color(0xFF4CAF50).copy(alpha = 0.3f)
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 ) {
-                    Box(
+                    Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.secondaryContainer),
-                        contentAlignment = Alignment.Center
+                            .padding(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data("file:///android_asset/front_images/${partyPokemon.name}.png")
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = "Official artwork of ${partyPokemon.name}",
-                            modifier = Modifier
-                                .size(180.dp)
-                                .clip(RoundedCornerShape(8.dp)),
-                            contentScale = ContentScale.Fit
+                        Text(
+                            text = "TYPE",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF666666),
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                        
+                        Text(
+                            text = partyPokemon.basePokemon.types.joinToString(", ") { it.type.name.replaceFirstChar { it.uppercase() } },
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF1A1A1A),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                        
+                        Text(
+                            text = "Initiative",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF666666),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                        
+                        Text(
+                            text = "+${dndView.initiative}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF1A1A1A),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                        
+                        Text(
+                            text = "Movement",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF666666),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                        
+                        Text(
+                            text = "${dndView.movement}ft",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF1A1A1A),
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
                 
-                // Basic Info
+                // 2.3. Right Panel - HP + Hit Dice
                 Card(
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(
+                        width = 1.dp,
+                        color = Color(0xFFE91E63).copy(alpha = 0.3f)
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        // HP label above value
                         Text(
-                            text = "Party Status",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
-                        // Level Display
-                        Text(
-                            text = "Level ${partyPokemon.currentLevel}",
-                            style = MaterialTheme.typography.titleMedium,
+                            text = "HP",
+                            style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = Color(0xFF666666),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 4.dp)
                         )
                         
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
-                        // HP Management
+                        // Current HP value
                         Text(
-                            text = "HP: $currentHP/${partyPokemon.maxHP}",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        
-                        Spacer(modifier = Modifier.height(8.dp))
-                        
-                        LinearProgressIndicator(
-                            progress = { currentHP.toFloat() / partyPokemon.maxHP.toFloat() },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(8.dp),
-                            color = MaterialTheme.colorScheme.primary,
-                            trackColor = MaterialTheme.colorScheme.surfaceVariant
-                        )
-                        
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
-                        // HP Controls
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            IconButton(
-                                onClick = { 
-                                    if (currentHP > 0) currentHP-- 
-                                },
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.errorContainer,
-                                        shape = RoundedCornerShape(20.dp)
-                                    )
-                            ) {
-                                                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Decrease HP",
-                                tint = MaterialTheme.colorScheme.onErrorContainer
-                            )
-                            }
-                            
-                            IconButton(
-                                onClick = { 
-                                    if (currentHP < partyPokemon.maxHP) currentHP++ 
-                                },
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.primaryContainer,
-                                        shape = RoundedCornerShape(20.dp)
-                                    )
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = "Increase HP",
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // D&D Stats Card
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "D&D Stats",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    // Display D&D stats
-                    partyPokemon.currentDnDStats.forEach { (statName, statValue) ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = statName,
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.weight(1f)
-                            )
-                            
-                            if (statName == "HP") {
-                                // HP shows the adjusted base HP value (divided by 3) as per new rules
-                                val baseHP = partyPokemon.basePokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0
-                                val adjustedBaseHP = kotlin.math.floor(baseHP / 3.0).toInt()
-                                Text(
-                                    text = adjustedBaseHP.toString(),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            } else {
-                                // Other stats show value and calculated modifier
-                                val modifier = calculateDnDModifier(statValue)
-                                Text(
-                                    text = "$statValue (${formatModifier(modifier)})",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Type Information Card
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Type Information",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    // Weaknesses
-                    if (partyPokemon.weaknesses.isNotEmpty()) {
-                        Text(
-                            text = "Weaknesses:",
+                            text = "${partyPokemon.currentHP}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.error
+                            color = Color(0xFF1A1A1A),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 4.dp)
                         )
+                        
+                        // Max HP value
                         Text(
-                            text = partyPokemon.weaknesses.joinToString(", ") { it.replaceFirstChar { it.uppercase() } },
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                    }
-                    
-                    // Resistances
-                    if (partyPokemon.resistances.isNotEmpty()) {
-                        Text(
-                            text = "Resistances:",
+                            text = "/${partyPokemon.maxHP}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.primary
+                            color = Color(0xFF1A1A1A),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 16.dp)
                         )
+                        
+                        // Hit Dice label above value
                         Text(
-                            text = partyPokemon.resistances.joinToString(", ") { it.replaceFirstChar { it.uppercase() } },
+                            text = "Hit Dice",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF666666),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                        
+                        // Hit Dice value
+                        Text(
+                            text = dndView.hitDice,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF1A1A1A),
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
             }
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             
-            // Physical Characteristics Card
+            // 3. Bottom Section - Stats Grid (2x3) - same as Pokemon list details
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                border = androidx.compose.foundation.BorderStroke(
+                    width = 1.dp,
+                    color = Color(0xFFF44336).copy(alpha = 0.3f)
+                ),
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    Text(
-                        text = "Physical Characteristics",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
+                    // Row 1: Attack, Sp.Attack, Speed
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Size",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = "${partyPokemon.actualSize / 10.0}m",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Weight",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = "${partyPokemon.actualWeight / 10.0}kg",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Base Size",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = "${partyPokemon.basePokemon.height / 10.0}m",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Base Weight",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = "${partyPokemon.basePokemon.weight / 10.0}kg",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Current Move Set
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Current Move Set",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
+                        // Attack (Red) - using DnD converter like Pokemon list view
+                        StatGridItem(
+                            label = "ATTACK",
+                            value = "${dndView.convertedStats["Attack"] ?: 0}",
+                            statModifier = "${dndView.modifiers["Attack"] ?: 0}",
+                            color = Color(0xFFF44336),
+                            modifier = Modifier.weight(1f)
                         )
                         
-                        TextButton(
-                            onClick = { showMoveSelectionDialog = true }
-                        ) {
-                            Text("Change Moves")
-                        }
+                        // Sp.Attack (Purple) - using DnD converter like Pokemon list view
+                        StatGridItem(
+                            label = "SP.ATTACK",
+                            value = "${dndView.convertedStats["Sp.Atk"] ?: 0}",
+                            statModifier = "${dndView.modifiers["Sp.Atk"] ?: 0}",
+                            color = Color(0xFF9C27B0),
+                            modifier = Modifier.weight(1f)
+                        )
+                        
+                        // Speed (Green/Blue) - using DnD converter like Pokemon list view
+                        StatGridItem(
+                            label = "SPEED",
+                            value = "${dndView.convertedStats["Speed"] ?: 0}",
+                            statModifier = "${dndView.modifiers["Speed"] ?: 0}",
+                            color = Color(0xFF4CAF50),
+                            modifier = Modifier.weight(1f)
+                        )
                     }
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
-                    if (currentMoveSet.isNotEmpty()) {
-                        currentMoveSet.forEachIndexed { index, move ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "${index + 1}. ${move.replaceFirstChar { it.uppercase() }}",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.Medium
-                                )
-                                
-                                IconButton(
-                                    onClick = {
-                                        currentMoveSet.removeAt(index)
-                                    },
-                                    modifier = Modifier.size(32.dp)
-                                ) {
-                                                                    Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = "Remove move",
-                                    modifier = Modifier.size(16.dp)
-                                )
-                                }
-                            }
-                        }
-                    } else {
-                        Text(
-                            text = "No moves selected",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                    // Row 2: Defense, Sp.Defense, AC
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        // Defense (Gray) - using DnD converter like Pokemon list view
+                        StatGridItem(
+                            label = "DEFENSE",
+                            value = "${dndView.convertedStats["Defense"] ?: 0}",
+                            statModifier = "${dndView.modifiers["Defense"] ?: 0}",
+                            color = Color(0xFF795548),
+                            modifier = Modifier.weight(1f)
+                        )
+                        
+                        // Sp.Defense (Teal/Blue) - using DnD converter like Pokemon list view
+                        StatGridItem(
+                            label = "SP.DEFENSE",
+                            value = "${dndView.convertedStats["Sp.Def"] ?: 0}",
+                            statModifier = "${dndView.modifiers["Sp.Def"] ?: 0}",
+                            color = Color(0xFF00BCD4),
+                            modifier = Modifier.weight(1f)
+                        )
+                        
+                        // AC (Red) - using DnD converter like Pokemon list view
+                        StatGridItem(
+                            label = "AC",
+                            value = "${dndView.ac}",
+                            statModifier = "", // AC does not have a modifier in D&D
+                            color = Color(0xFFD32F2F),
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
             }
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             
             // Available Moves
             Card(
@@ -703,26 +574,6 @@ fun PartyPokemonDetailScreen(
             }
             
             Spacer(modifier = Modifier.height(16.dp))
-            
-            // Save Changes Button
-            Button(
-                onClick = {
-                    // Update the party Pokemon with new values
-                    val updatedPokemon = partyPokemon.copy(
-                        currentHP = currentHP,
-                        currentMoveSet = currentMoveSet,
-                        conditions = currentConditions
-                    )
-                    partyManager.updatePartyPokemon(updatedPokemon)
-                    onBackClick()
-                },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Text("Save Changes")
-            }
         }
     }
     
@@ -768,20 +619,63 @@ private fun formatDate(timestamp: Long): String {
     return formatter.format(date)
 }
 
-/**
- * Format modifier (e.g., +1, -2)
- */
-private fun formatModifier(modifier: Int): String {
-    return if (modifier > 0) {
-        "+$modifier"
-    } else {
-        modifier.toString()
+@Composable
+private fun StatGridItem(
+    label: String,
+    value: String,
+    statModifier: String,
+    color: Color,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF666666),
+            textAlign = TextAlign.Center
+        )
+        
+        Spacer(modifier = Modifier.height(4.dp))
+        
+        // Value and modifier on the same line
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            // Show modifier first, then value in parentheses
+            if (statModifier.isNotEmpty()) {
+                Text(
+                    text = when {
+                        statModifier.toIntOrNull() ?: 0 > 0 -> "+${statModifier}"
+                        statModifier.toIntOrNull() ?: 0 < 0 -> "${statModifier}"
+                        else -> "+0"
+                    },
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1A1A1A),
+                    textAlign = TextAlign.Center
+                )
+                
+                Text(
+                    text = "(${value})",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF999999),
+                    textAlign = TextAlign.Center
+                )
+            } else {
+                // If no modifier, just show the value
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1A1A1A),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
     }
-}
-
-/**
- * Calculate D&D modifier using the standard formula: floor((stat - 10) / 2)
- */
-private fun calculateDnDModifier(statValue: Int): Int {
-    return kotlin.math.floor((statValue - 10) / 2.0).toInt()
 }
