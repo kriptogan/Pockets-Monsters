@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,33 +21,39 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kriptogan.pocketsmonsters.data.models.PartyPokemon
-import com.kriptogan.pocketsmonsters.data.party.PartyManager
 import com.kriptogan.pocketsmonsters.ui.components.PartyPokemonDetailScreen
+import com.kriptogan.pocketsmonsters.ui.viewmodel.PartyViewModel
+import com.kriptogan.pocketsmonsters.ui.viewmodel.PartyScreen
 
 @Composable
 fun MyPartyScreen(
     modifier: Modifier = Modifier,
     onPokemonClick: (PartyPokemon) -> Unit = {}
 ) {
-    val context = LocalContext.current
-    val partyManager = remember { PartyManager(context) }
+    val viewModel: PartyViewModel = viewModel()
+    val party by viewModel.party.collectAsState()
+    val selectedPartyPokemon by viewModel.selectedPartyPokemon.collectAsState()
+    val currentScreen by viewModel.currentScreen.collectAsState()
+    val lastViewedPartyPokemonIndex by viewModel.lastViewedPartyPokemonIndex.collectAsState()
     
-    var party by remember { mutableStateOf(partyManager.getParty()) }
-    var selectedPokemon by remember { mutableStateOf<PartyPokemon?>(null) }
+    val gridState = rememberLazyGridState()
     
-    LaunchedEffect(Unit) {
-        // Refresh party data when screen is shown
-        party = partyManager.getParty()
+    // Restore scroll position to the last viewed party Pokemon index
+    LaunchedEffect(lastViewedPartyPokemonIndex) {
+        if (lastViewedPartyPokemonIndex >= 0 && lastViewedPartyPokemonIndex < party.size) {
+            gridState.animateScrollToItem(lastViewedPartyPokemonIndex)
+        }
     }
     
     // If a Pokemon is selected, show its detail screen
-    if (selectedPokemon != null) {
+    if (currentScreen == PartyScreen.Detail && selectedPartyPokemon != null) {
         PartyPokemonDetailScreen(
-            partyPokemon = selectedPokemon,
-            onBackClick = { selectedPokemon = null }
+            partyPokemon = selectedPartyPokemon!!,
+            onBackClick = { viewModel.navigateToList() }
         )
         return
     }
@@ -80,6 +87,7 @@ fun MyPartyScreen(
         // Party Grid - 2 rows, 3 Pokemon per row
         LazyVerticalGrid(
             columns = GridCells.Fixed(3), // 3 columns for 2x3 grid
+            state = gridState,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.weight(1f)
@@ -88,10 +96,12 @@ fun MyPartyScreen(
             items(party) { partyPokemon ->
                 PartyPokemonGridCard(
                     partyPokemon = partyPokemon,
-                    onPokemonClick = { selectedPokemon = partyPokemon },
+                    onPokemonClick = { 
+                        viewModel.saveClickedPartyPokemonIndex(partyPokemon.id)
+                        viewModel.selectPartyPokemon(partyPokemon)
+                    },
                     onRemoveClick = {
-                        partyManager.removeFromParty(partyPokemon.id)
-                        party = partyManager.getParty()
+                        viewModel.removeFromParty(partyPokemon.id)
                     }
                 )
             }
