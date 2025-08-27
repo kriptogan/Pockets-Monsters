@@ -31,6 +31,7 @@ import com.kriptogan.pocketsmonsters.data.party.PartyManager
 fun PokemonDetailScreen(
     pokemon: Pokemon?,
     onBackClick: () -> Unit,
+    onPartyUpdated: () -> Unit = {}, // Callback to refresh parent screen
     modifier: Modifier = Modifier
 ) {
     // Handle system back button
@@ -50,7 +51,27 @@ fun PokemonDetailScreen(
 
     val dndConverter = remember { DnDConverter() }
     val dndView = remember(pokemon) { dndConverter.convertPokemonToDnD(pokemon) }
-    val partyManager = PartyManager(LocalContext.current)
+    
+    // Get context once at the composable level
+    val context = LocalContext.current
+    
+    // Get party state from ViewModel (passed down from parent)
+    val partySize = remember { mutableStateOf(0) }
+    val isInParty = remember { mutableStateOf(false) }
+    
+    // Update party state when Pokemon changes
+    LaunchedEffect(pokemon.id) {
+        // Get party state from PartyManager
+        val partyManager = PartyManager(context)
+        val currentPartySize = partyManager.getPartySize()
+        val currentIsInParty = partyManager.isInParty(pokemon.id)
+        
+        // Update state
+        partySize.value = currentPartySize
+        isInParty.value = currentIsInParty
+    }
+    
+    val canAddToParty = remember { derivedStateOf { partySize.value < 6 && !isInParty.value } }
 
     Column(
         modifier = modifier
@@ -354,42 +375,46 @@ fun PokemonDetailScreen(
         Spacer(modifier = Modifier.height(24.dp))
         
         // 4. Moves by Level
-        Text(
-            text = "Moves by Level",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF1A1A1A),
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-        
-        // Display moves organized by level
-        dndView.movesByDnDLevel.entries.sortedBy { it.key }.forEach { (dndLevel, moves) ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFF5F5F5)
-                )
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
+            border = androidx.compose.foundation.BorderStroke(
+                width = 1.dp,
+                color = Color(0xFFD32F2F).copy(alpha = 0.3f)
+            ),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "D&D Level $dndLevel",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFD32F2F)
-                    )
-                    
-                    Spacer(modifier = Modifier.height(8.dp))
-                    
-                    moves.forEach { moveName ->
+                Text(
+                    text = "Moves by Level",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1A1A1A),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+                
+                // Display moves organized by level
+                dndView.movesByDnDLevel.entries.sortedBy { it.key }.forEach { (dndLevel, moves) ->
+                    Column(
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    ) {
                         Text(
-                            text = "• $moveName",
+                            text = "Level $dndLevel",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFD32F2F)
+                        )
+                        
+                        Spacer(modifier = Modifier.height(4.dp))
+                        
+                        Text(
+                            text = moves.joinToString(", "),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFF1A1A1A),
-                            modifier = Modifier.padding(start = 8.dp, bottom = 4.dp)
+                            color = Color(0xFF1A1A1A)
                         )
                     }
                 }
@@ -401,15 +426,31 @@ fun PokemonDetailScreen(
         // 5. Add to Party Button
         Button(
             onClick = {
-                // TODO: Implement add to party functionality
+                if (canAddToParty.value) {
+                    val partyManager = PartyManager(context)
+                    val result = partyManager.addToParty(pokemon)
+                    
+                    if (result.isSuccess) {
+                        // Update local state immediately
+                        val newPartySize = partyManager.getPartySize()
+                        val newIsInParty = partyManager.isInParty(pokemon.id)
+                        
+                        partySize.value = newPartySize
+                        isInParty.value = newIsInParty
+                        
+                        // Notify parent that party has changed
+                        onPartyUpdated()
+                    }
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFD32F2F)
+                containerColor = if (canAddToParty.value) Color(0xFFD32F2F) else Color(0xFFCCCCCC)
             ),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            enabled = canAddToParty.value
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
@@ -420,7 +461,11 @@ fun PokemonDetailScreen(
             Spacer(modifier = Modifier.width(8.dp))
             
             Text(
-                text = "Add to Party",
+                text = when {
+                    isInParty.value -> "Already in Party"
+                    partySize.value >= 6 -> "Party is Full"
+                    else -> "Add to Party"
+                },
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )

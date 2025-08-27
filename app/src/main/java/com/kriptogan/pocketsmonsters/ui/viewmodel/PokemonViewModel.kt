@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.data.network.NetworkModule
+import com.kriptogan.pocketsmonsters.data.party.PartyManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -49,12 +50,20 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     private val _lastViewedPokemonIndex = MutableStateFlow<Int>(-1)
     val lastViewedPokemonIndex: StateFlow<Int> = _lastViewedPokemonIndex.asStateFlow()
     
+    // Party state
+    private val _partySize = MutableStateFlow(0)
+    val partySize: StateFlow<Int> = _partySize.asStateFlow()
+    
+    private val _partyPokemonIds = MutableStateFlow<Set<Int>>(emptySet())
+    val partyPokemonIds: StateFlow<Set<Int>> = _partyPokemonIds.asStateFlow()
+    
     // Offline data status
     private val _isOfflineDataAvailable = MutableStateFlow(false)
     val isOfflineDataAvailable: StateFlow<Boolean> = _isOfflineDataAvailable.asStateFlow()
     
     init {
         loadPokemonList()
+        refreshPartyState() // Initialize party state
     }
     
     /**
@@ -282,6 +291,43 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
      */
     fun getLastUpdateTime(): String {
         return "Now (Offline)"
+    }
+    
+    /**
+     * Refresh party state from PartyManager
+     */
+    fun refreshPartyState() {
+        val partyManager = PartyManager(getApplication())
+        val party = partyManager.getParty()
+        _partySize.value = party.size
+        _partyPokemonIds.value = party.map { it.id }.toSet()
+    }
+    
+    /**
+     * Add Pokemon to party
+     */
+    fun addPokemonToParty(pokemon: Pokemon) {
+        val partyManager = PartyManager(getApplication())
+        val result = partyManager.addToParty(pokemon)
+        
+        if (result.isSuccess) {
+            // Refresh party state to update UI
+            refreshPartyState()
+        }
+    }
+    
+    /**
+     * Check if Pokemon is in party
+     */
+    fun isPokemonInParty(pokemonId: Int): Boolean {
+        return _partyPokemonIds.value.contains(pokemonId)
+    }
+    
+    /**
+     * Get current party size
+     */
+    fun getCurrentPartySize(): Int {
+        return _partySize.value
     }
 }
 

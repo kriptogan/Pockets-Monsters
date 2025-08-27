@@ -130,6 +130,9 @@ fun MainScreen(
                     onBackClick = {
                         viewModel.navigateToList()
                     },
+                    onPartyUpdated = {
+                        viewModel.refreshPartyState() // Refresh party state when party changes
+                    },
                     modifier = Modifier
                 )
             }

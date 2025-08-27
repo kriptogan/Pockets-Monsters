@@ -17,6 +17,7 @@ fun PokedexScreen(
     onPokemonClick: (String) -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onBackClick: () -> Unit,
+    onPartyUpdated: () -> Unit = {}, // Callback for party updates
     modifier: Modifier = Modifier
 ) {
     if (selectedPokemon != null) {
@@ -24,6 +25,7 @@ fun PokedexScreen(
         PokemonDetailScreen(
             pokemon = selectedPokemon,
             onBackClick = onBackClick,
+            onPartyUpdated = onPartyUpdated, // Pass the callback
             modifier = modifier
         )
     } else {
