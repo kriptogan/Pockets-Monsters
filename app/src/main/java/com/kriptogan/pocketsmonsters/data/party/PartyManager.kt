@@ -204,7 +204,6 @@ class PartyManager(context: Context) {
             proficiency = 2,
             
             // D&D derived stats (calculated from currentDnDStats and actualWeight)
-            armorClass = 10,
             movementSpeed = 30
         )
     }

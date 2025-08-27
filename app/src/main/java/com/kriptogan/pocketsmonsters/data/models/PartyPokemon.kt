@@ -49,7 +49,6 @@ data class PartyPokemon(
     val proficiency: Int = 2,
     
     // D&D derived stats (calculated from currentDnDStats and actualWeight)
-    val armorClass: Int = 10,
     val movementSpeed: Int = 30,
     
     // Metadata
