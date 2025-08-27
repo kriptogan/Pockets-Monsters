@@ -24,6 +24,7 @@ import com.kriptogan.pocketsmonsters.ui.screens.WeaknessesScreen
 import com.kriptogan.pocketsmonsters.ui.screens.NaturesScreen
 import com.kriptogan.pocketsmonsters.ui.screens.EnergySlotsScreen
 import com.kriptogan.pocketsmonsters.ui.screens.MyPartyScreen
+import com.kriptogan.pocketsmonsters.ui.screens.DiceRollingScreen
 import com.kriptogan.pocketsmonsters.ui.theme.PocketsMonstersTheme
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonScreen
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonViewModel
@@ -152,11 +153,18 @@ fun MainScreen(
                             modifier = Modifier
                         )
                     }
+                    "dice_rolling" -> {
+                        DiceRollingScreen(
+                            onBackClick = { currentUtilityScreen = null },
+                            modifier = Modifier
+                        )
+                    }
                     else -> {
                         UtilitiesScreen(
                             onWeaknessesClick = { currentUtilityScreen = "weaknesses" },
                             onNaturesClick = { currentUtilityScreen = "natures" },
                             onEnergySlotsClick = { currentUtilityScreen = "energy_slots" },
+                            onDiceRollingClick = { currentUtilityScreen = "dice_rolling" },
                             modifier = Modifier
                         )
                     }
