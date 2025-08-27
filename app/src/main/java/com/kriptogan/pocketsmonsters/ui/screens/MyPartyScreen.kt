@@ -42,6 +42,10 @@ fun MyPartyScreen(
     val currentScreen by viewModel.currentScreen.collectAsState()
     val lastViewedPartyPokemonIndex by viewModel.lastViewedPartyPokemonIndex.collectAsState()
     
+    // Confirmation dialog state
+    var showRemoveConfirmation by remember { mutableStateOf(false) }
+    var pokemonToRemove by remember { mutableStateOf<PartyPokemon?>(null) }
+    
     // Observe party size changes from main ViewModel
     val mainPartySize by mainViewModel?.partySize?.collectAsState() ?: remember { mutableStateOf(0) }
     
@@ -117,7 +121,8 @@ fun MyPartyScreen(
                         viewModel.selectPartyPokemon(partyPokemon)
                     },
                     onRemoveClick = {
-                        viewModel.removeFromParty(partyPokemon.id)
+                        pokemonToRemove = partyPokemon
+                        showRemoveConfirmation = true
                     }
                 )
             }
@@ -127,6 +132,29 @@ fun MyPartyScreen(
                 EmptyPartySlotGrid()
             }
         }
+    }
+
+    // Confirmation Dialog
+    if (showRemoveConfirmation && pokemonToRemove != null) {
+        AlertDialog(
+            onDismissRequest = { showRemoveConfirmation = false; pokemonToRemove = null },
+            title = { Text("Remove Pokemon") },
+            text = { Text("Are you sure you want to remove ${pokemonToRemove?.name} from your party?") },
+            confirmButton = {
+                Button(onClick = {
+                    viewModel.removeFromParty(pokemonToRemove!!.id)
+                    showRemoveConfirmation = false
+                    pokemonToRemove = null
+                }) {
+                    Text("Remove")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showRemoveConfirmation = false; pokemonToRemove = null }) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 }
 

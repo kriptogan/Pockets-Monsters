@@ -29,6 +29,8 @@ import com.kriptogan.pocketsmonsters.data.party.PartyManager
 import androidx.compose.ui.graphics.Color
 import com.kriptogan.pocketsmonsters.data.converter.DnDConverter
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 
 @Composable
 fun PartyPokemonDetailScreen(
@@ -59,13 +61,16 @@ fun PartyPokemonDetailScreen(
     var showMoveSelectionDialog by remember { mutableStateOf(false) }
     var showConditionDialog by remember { mutableStateOf(false) }
     
+    // Local state for current HP to make UI reactive
+    var currentHP by remember { mutableStateOf(partyPokemon.currentHP) }
+    
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(top = 20.dp)
+            .padding(16.dp)
     ) {
-        // Header with back button
+        // 1. Simplified Header - Back button and Pokemon name only
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -97,19 +102,13 @@ fun PartyPokemonDetailScreen(
             dndConverter.convertPokemonToDnD(partyPokemon.basePokemon)
         }
         
-        // Content
-        Column(
+        // 2. Top Section - 3 panels side by side
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .height(200.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Top Section - 3 panels side by side (same as Pokemon list details)
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
                 // 2.1. Left Panel - Creature Image
                 Box(
                     modifier = Modifier
@@ -185,9 +184,10 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         
+                        // Initiative value
                         Text(
                             text = "+${dndView.initiative}",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF1A1A1A),
                             textAlign = TextAlign.Center,
@@ -203,9 +203,10 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         
+                        // Movement value
                         Text(
                             text = "${dndView.movement}ft",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF1A1A1A),
                             textAlign = TextAlign.Center
@@ -233,7 +234,7 @@ fun PartyPokemonDetailScreen(
                             .padding(12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // HP label above value
+                        // 1. HP label
                         Text(
                             text = "HP",
                             style = MaterialTheme.typography.bodySmall,
@@ -243,19 +244,9 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         
-                        // Current HP value
+                        // 2. HP value
                         Text(
-                            text = "${partyPokemon.currentHP}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF1A1A1A),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(bottom = 4.dp)
-                        )
-                        
-                        // Max HP value
-                        Text(
-                            text = "/${partyPokemon.maxHP}",
+                            text = "${partyPokemon.maxHP}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF1A1A1A),
@@ -263,7 +254,81 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                         
-                        // Hit Dice label above value
+                        // 3. Current HP label
+                        Text(
+                            text = "Current HP",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF666666),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                        
+                        // 4. Current HP value with arrow controls
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Down arrow (decrease HP)
+                            IconButton(
+                                onClick = {
+                                    if (currentHP > 0) {
+                                        val newHP = currentHP - 1
+                                        val result = partyManager.updatePartyPokemonHP(partyPokemon.id, newHP)
+                                        if (result.isSuccess) {
+                                            // Update local state to refresh UI immediately
+                                            // Note: In a real app, this would trigger a ViewModel refresh
+                                            // For now, we'll rely on the parent to refresh the data
+                                            currentHP = newHP
+                                        }
+                                    }
+                                },
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.KeyboardArrowDown,
+                                    contentDescription = "Decrease HP",
+                                    tint = if (currentHP > 0) Color(0xFFD32F2F) else Color(0xFFCCCCCC),
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                            
+                            // Current HP value
+                            Text(
+                                text = "${currentHP}",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Medium,
+                                color = Color(0xFF1A1A1A),
+                                textAlign = TextAlign.Center
+                            )
+                            
+                            // Up arrow (increase HP)
+                            IconButton(
+                                onClick = {
+                                    if (currentHP < partyPokemon.maxHP) {
+                                        val newHP = currentHP + 1
+                                        val result = partyManager.updatePartyPokemonHP(partyPokemon.id, newHP)
+                                        if (result.isSuccess) {
+                                            // Update local state to refresh UI immediately
+                                            // Note: In a real app, this would trigger a ViewModel refresh
+                                            // For now, we'll rely on the parent to refresh the data
+                                            currentHP = newHP
+                                        }
+                                    }
+                                },
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.KeyboardArrowUp,
+                                    contentDescription = "Increase HP",
+                                    tint = if (currentHP < partyPokemon.maxHP) Color(0xFF4CAF50) else Color(0xFFCCCCCC),
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+                        
+                        // 5. Hit Dice label
                         Text(
                             text = "Hit Dice",
                             style = MaterialTheme.typography.bodySmall,
@@ -273,10 +338,10 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         
-                        // Hit Dice value
+                        // 6. Hit Dice value
                         Text(
                             text = dndView.hitDice,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF1A1A1A),
                             textAlign = TextAlign.Center
@@ -499,11 +564,11 @@ fun PartyPokemonDetailScreen(
                                     },
                                     modifier = Modifier.size(32.dp)
                                 ) {
-                                                                    Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = "Remove condition",
-                                    modifier = Modifier.size(16.dp)
-                                )
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Remove condition",
+                                        modifier = Modifier.size(16.dp)
+                                    )
                                 }
                             }
                         }
@@ -575,40 +640,39 @@ fun PartyPokemonDetailScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
         }
-    }
-    
-    // Move Selection Dialog
-    if (showMoveSelectionDialog) {
-        AlertDialog(
-            onDismissRequest = { showMoveSelectionDialog = false },
-            title = { Text("Select 4 Moves") },
-            text = { 
-                Text("Choose up to 4 moves from the available pool. You can also manage moves directly in the main view.")
-            },
-            confirmButton = {
-                TextButton(onClick = { showMoveSelectionDialog = false }) {
-                    Text("OK")
+        
+        // Move Selection Dialog
+        if (showMoveSelectionDialog) {
+            AlertDialog(
+                onDismissRequest = { showMoveSelectionDialog = false },
+                title = { Text("Select 4 Moves") },
+                text = { 
+                    Text("Choose up to 4 moves from the available pool. You can also manage moves directly in the main view.")
+                },
+                confirmButton = {
+                    TextButton(onClick = { showMoveSelectionDialog = false }) {
+                        Text("OK")
+                    }
                 }
-            }
-        )
-    }
-    
-    // Condition Management Dialog
-    if (showConditionDialog) {
-        AlertDialog(
-            onDismissRequest = { showConditionDialog = false },
-            title = { Text("Add Status Condition") },
-            text = { 
-                Text("Select a status condition to add to this Pokemon. You can remove conditions directly in the main view.")
-            },
-            confirmButton = {
-                TextButton(onClick = { showConditionDialog = false }) {
-                    Text("OK")
+            )
+        }
+        
+        // Condition Management Dialog
+        if (showConditionDialog) {
+            AlertDialog(
+                onDismissRequest = { showConditionDialog = false },
+                title = { Text("Add Status Condition") },
+                text = { 
+                    Text("Select a status condition to add to this Pokemon. You can remove conditions directly in the main view.")
+                },
+                confirmButton = {
+                    TextButton(onClick = { showConditionDialog = false }) {
+                        Text("OK")
+                    }
                 }
-            }
-        )
+            )
+        }
     }
-}
 
 /**
  * Format timestamp to readable date

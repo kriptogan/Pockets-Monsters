@@ -102,6 +102,28 @@ class PartyManager(context: Context) {
     }
     
     /**
+     * Update party Pokemon HP
+     */
+    fun updatePartyPokemonHP(pokemonId: Int, newHP: Int): Result<Unit> {
+        val currentParty = getParty()
+        val index = currentParty.indexOfFirst { it.id == pokemonId }
+        
+        if (index == -1) {
+            return Result.failure(IllegalStateException("Pokemon not found in party"))
+        }
+        
+        val pokemon = currentParty[index]
+        val updatedPokemon = pokemon.copy(currentHP = newHP)
+        
+        val newParty = currentParty.toMutableList()
+        newParty[index] = updatedPokemon
+        saveParty(newParty)
+        
+        Log.d(TAG, "Updated ${pokemon.name} HP to $newHP")
+        return Result.success(Unit)
+    }
+    
+    /**
      * Check if party is full
      */
     fun isPartyFull(): Boolean {

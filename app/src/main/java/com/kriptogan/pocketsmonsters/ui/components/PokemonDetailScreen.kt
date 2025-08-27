@@ -193,7 +193,7 @@ fun PokemonDetailScreen(
                         text = when {
                             dndView.initiative > 0 -> "+${dndView.initiative}"
                             dndView.initiative < 0 -> "${dndView.initiative}"
-                            else -> "0"
+                            else -> "+0"
                         },
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium,
