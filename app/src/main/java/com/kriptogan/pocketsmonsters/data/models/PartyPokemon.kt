@@ -3,6 +3,7 @@ package com.kriptogan.pocketsmonsters.data.models
 import com.google.gson.annotations.SerializedName
 import kotlin.math.floor
 import kotlin.math.round
+import kotlin.math.min
 
 /**
  * Represents a Pokemon in the user's party with current stats and status
@@ -96,40 +97,31 @@ data class PartyPokemon(
     }
     
     /**
-     * Gain experience and check for level up and proficiency increase
-     * @param expAmount Amount of experience to gain
-     * @return Triple of (newLevel, leveledUp, proficiencyIncreased) where:
-     *         - newLevel: the new level after gaining experience
-     *         - leveledUp: true if a level up occurred
-     *         - proficiencyIncreased: true if proficiency bonus increased
+     * Gain experience and check for level change
+     * @param expAmount Amount of experience to gain (can be negative for level down)
+     * @return Pair of (message, updated Pokemon instance)
      */
-    fun gainExp(expAmount: Int): Triple<Int, Boolean, Boolean> {
+    fun gainExp(expAmount: Int): Pair<String, PartyPokemon> {
         val newCurrentExp = currentExp + expAmount
-        var newLevel = level
-        var leveledUp = false
-        var proficiencyIncreased = false
+        val newLevel = calculateLevelFromExp(newCurrentExp)
         
-        // Check if we can level up
-        while (newLevel < 20 && newCurrentExp >= EXP_TABLE[newLevel + 1]!!) {
-            newLevel++
-            leveledUp = true
-            
-            // Check if proficiency bonus increased
-            val oldProficiency = calculateProficiencyBonus(newLevel - 1)
-            val newProficiency = calculateProficiencyBonus(newLevel)
-            if (newProficiency > oldProficiency) {
-                proficiencyIncreased = true
+        return when {
+            newLevel > level -> {
+                // Level up occurred
+                val updatedPokemon = levelUp(newLevel, newCurrentExp)
+                "Level Up!" to updatedPokemon
+            }
+            newLevel < level -> {
+                // Level down occurred
+                val updatedPokemon = levelDown(newLevel, newCurrentExp)
+                "Level Down!" to updatedPokemon
+            }
+            else -> {
+                // No level change, just update experience
+                val updatedPokemon = this.copy(currentExp = newCurrentExp)
+                "Experience updated" to updatedPokemon
             }
         }
-        
-        // Calculate new exp to next level
-        val newExpToLevelUp = if (newLevel < 20) {
-            EXP_TABLE[newLevel + 1]!! - newCurrentExp
-        } else {
-            0 // Max level reached
-        }
-        
-        return Triple(newLevel, leveledUp, proficiencyIncreased)
     }
     
     /**
@@ -270,7 +262,54 @@ data class PartyPokemon(
      * Check if the Pokemon can level up
      */
     fun canLevelUp(): Boolean = level < 20 && currentExp >= expToLevelUp
+    
+    /**
+     * Calculate the level based on total experience
+     * @param exp Total experience points
+     * @return The level corresponding to the given experience
+     */
+    private fun calculateLevelFromExp(exp: Int): Int {
+        for (level in 20 downTo 1) {
+            val requiredExp = EXP_TABLE[level] ?: 0
+            if (exp >= requiredExp) {
+                return level
+            }
+        }
+        return 1
+    }
+    
+    /**
+     * Simple level up - update level, proficiency, and experience
+     * @param newLevel The new level
+     * @param newExp The new experience total
+     * @return Updated Pokemon instance
+     */
+    private fun levelUp(newLevel: Int, newExp: Int): PartyPokemon {
+        val newProficiency = calculateProficiencyBonus(newLevel)
+        return this.copy(
+            level = newLevel,
+            currentExp = newExp,
+            proficiency = newProficiency
+        )
+    }
+    
+    /**
+     * Simple level down - update level, proficiency, and experience
+     * @param newLevel The new level
+     * @param newExp The new experience total
+     * @return Updated Pokemon instance
+     */
+    private fun levelDown(newLevel: Int, newExp: Int): PartyPokemon {
+        val newProficiency = calculateProficiencyBonus(newLevel)
+        return this.copy(
+            level = newLevel,
+            currentExp = newExp,
+            proficiency = newProficiency
+        )
+    }
 }
+
+
 
 /**
  * Represents status conditions that can affect a Pokemon

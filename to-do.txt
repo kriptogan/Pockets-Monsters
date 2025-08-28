@@ -23,8 +23,8 @@ V 21. Update energy slots to include 6th-9th stages
 V 22. improve party details design.
 V 23. Proficiency
 V 24. bonuses and penalty to attributes management.
-25. Show level and exp
-26. Exp gain
+V 25. Show level and exp
+V 26. Exp gain
 V 27. Try to place the types inside the image at the bottom, one above the other.
 V * Move ac to the old card
 
@@ -50,7 +50,7 @@ When adding to the lis or passing a round, recalculate effects
 Clicking it will open a dialog with the current exp, and exp for next level.
 Input to type exp value and a gain button. Support negative numbers, to a minimum level 1.
 
-When level up or down, update the available moves.
+When level up or down, update the available moves. and evolution
 
 If a prepared move is no longer available remove it from the preparation list.
 

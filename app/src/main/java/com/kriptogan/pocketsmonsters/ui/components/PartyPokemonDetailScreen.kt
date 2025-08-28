@@ -61,33 +61,53 @@ fun PartyPokemonDetailScreen(
     val context = LocalContext.current
     val partyManager = remember { PartyManager(context) }
     
-    var currentMoveSet by remember { mutableStateOf(partyPokemon.currentMoveSet.toMutableList()) }
-    var currentConditions by remember { mutableStateOf(partyPokemon.conditions.toMutableList()) }
-    var showMoveSelectionDialog by remember { mutableStateOf(false) }
-    var showConditionDialog by remember { mutableStateOf(false) }
-    var showMaxHPDialog by remember { mutableStateOf(false) }
-    var showNatureDescriptionDialog by remember { mutableStateOf(false) }
-    var showFullRestDialog by remember { mutableStateOf(false) }
+         var currentMoveSet by remember { mutableStateOf(partyPokemon.currentMoveSet.toMutableList()) }
+     var currentConditions by remember { mutableStateOf(partyPokemon.conditions.toMutableList()) }
+     var showMoveSelectionDialog by remember { mutableStateOf(false) }
+     var showConditionDialog by remember { mutableStateOf(false) }
+          var showMaxHPDialog by remember { mutableStateOf(false) }
+      var showNatureDescriptionDialog by remember { mutableStateOf(false) }
+      var showFullRestDialog by remember { mutableStateOf(false) }
+      var showExpDialog by remember { mutableStateOf(false) }
+      
+     // Local state for current HP and max HP to make UI reactive
+     var currentHP by remember { mutableStateOf(partyPokemon.currentHP) }
+     var maxHP by remember { mutableStateOf(partyPokemon.maxHP) }
+     
+     // Local state for current experience and level to make UI reactive
+     var currentExp by remember { mutableStateOf(partyPokemon.currentExp) }
+     var currentLevel by remember { mutableStateOf(partyPokemon.level) }
     
-    // Local state for current HP and max HP to make UI reactive
-    var currentHP by remember { mutableStateOf(partyPokemon.currentHP) }
-    var maxHP by remember { mutableStateOf(partyPokemon.maxHP) }
+    // Local state for experience input
+    var expInput by remember { mutableStateOf("") }
     
-    // Sync local HP state with PartyManager data when screen becomes active
-    LaunchedEffect(Unit) {
-        val updatedParty = partyManager.getParty().find { it.id == partyPokemon.id }
+    // Local state for current Pokemon instance to track changes
+    var currentPokemon by remember { mutableStateOf(partyPokemon) }
+    
+    // Local state for level change messages
+    var levelChangeMessage by remember { mutableStateOf<String?>(null) }
+    
+         // Sync local HP state with PartyManager data when screen becomes active
+     LaunchedEffect(Unit) {
+         val updatedParty = partyManager.getParty().find { it.id == currentPokemon.id }
+         updatedParty?.let { 
+             currentHP = it.currentHP
+             maxHP = it.maxHP
+             currentExp = it.currentExp
+             currentLevel = it.level
+             currentPokemon = it
+         }
+     }
+    
+         // Sync local HP state whenever partyPokemon changes (e.g., when returning from other screens)
+     LaunchedEffect(partyPokemon.id) {
+         val updatedParty = partyManager.getParty().find { it.id == currentPokemon.id }
         updatedParty?.let { 
             currentHP = it.currentHP
             maxHP = it.maxHP
-        }
-    }
-    
-    // Sync local HP state whenever partyPokemon changes (e.g., when returning from other screens)
-    LaunchedEffect(partyPokemon.id) {
-        val updatedParty = partyManager.getParty().find { it.id == partyPokemon.id }
-        updatedParty?.let { 
-            currentHP = it.currentHP
-            maxHP = it.maxHP
+            currentExp = it.currentExp
+            currentLevel = it.level
+            currentPokemon = it
         }
     }
     
@@ -114,20 +134,29 @@ fun PartyPokemonDetailScreen(
             
             Spacer(modifier = Modifier.width(16.dp))
             
-            Text(
-                text = partyPokemon.name.replaceFirstChar { it.uppercase() },
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF1A1A1A)
-            )
+                                                  Text(
+                             text = currentPokemon.name.replaceFirstChar { it.uppercase() },
+                             style = MaterialTheme.typography.headlineMedium,
+                             fontWeight = FontWeight.Bold,
+                             color = Color(0xFF1A1A1A),
+                             modifier = Modifier.weight(1f)
+                         )
+             
+             Text(
+                 text = "Level $currentLevel",
+                 style = MaterialTheme.typography.titleMedium,
+                 fontWeight = FontWeight.Medium,
+                 color = Color.Black,
+                 modifier = Modifier.clickable { showExpDialog = true }
+             )
         }
         
-        // Create DnD view for stats
-        val dndConverter = remember { DnDConverter() }
-        val dndView = remember(partyPokemon.name) { 
-            // Use the base Pokemon data from PartyPokemon for proper DnD conversion
-            dndConverter.convertPokemonToDnD(partyPokemon.basePokemon)
-        }
+                 // Create DnD view for stats
+         val dndConverter = remember { DnDConverter() }
+         val dndView = remember(currentPokemon.name) { 
+             // Use the base Pokemon data from PartyPokemon for proper DnD conversion
+             dndConverter.convertPokemonToDnD(currentPokemon.basePokemon)
+         }
         
         // 2. Top Section - 3 panels side by side
         Row(
@@ -152,12 +181,12 @@ fun PartyPokemonDetailScreen(
                         )
                 ) {
                     // Pokemon image - perfectly centered in the entire area
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data("file:///android_asset/front_images/${partyPokemon.name}.png")
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = "Official artwork of ${partyPokemon.name}",
+                                         AsyncImage(
+                         model = ImageRequest.Builder(LocalContext.current)
+                             .data("file:///android_asset/front_images/${currentPokemon.name}.png")
+                             .crossfade(true)
+                             .build(),
+                         contentDescription = "Official artwork of ${currentPokemon.name}",
                         modifier = Modifier
                             .size(160.dp)
                             .clip(RoundedCornerShape(8.dp)),
@@ -171,7 +200,7 @@ fun PartyPokemonDetailScreen(
                             .align(Alignment.BottomCenter)
                             .padding(bottom = 8.dp)
                     ) {
-                        partyPokemon.basePokemon.types.forEach { type ->
+                                                 currentPokemon.basePokemon.types.forEach { type ->
                             Box(
                                 modifier = Modifier
                                     .padding(vertical = 2.dp)
@@ -223,14 +252,14 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         
-                        Text(
-                            text = "${partyPokemon.calculateCurrentArmorClass()}",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF1A1A1A),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
+                                                 Text(
+                             text = "${currentPokemon.calculateCurrentArmorClass()}",
+                             style = MaterialTheme.typography.titleLarge,
+                             fontWeight = FontWeight.Medium,
+                             color = Color(0xFF1A1A1A),
+                             textAlign = TextAlign.Center,
+                             modifier = Modifier.padding(bottom = 16.dp)
+                         )
                         
                         Text(
                             text = "Initiative",
@@ -241,13 +270,13 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         
-                        // Initiative value
-                        Text(
-                            text = when {
-                                partyPokemon.calculateCurrentInitiative() > 0 -> "+${partyPokemon.calculateCurrentInitiative()}"
-                                partyPokemon.calculateCurrentInitiative() < 0 -> "${partyPokemon.calculateCurrentInitiative()}"
-                                else -> "+0"
-                            },
+                                                 // Initiative value
+                         Text(
+                             text = when {
+                                 currentPokemon.calculateCurrentInitiative() > 0 -> "+${currentPokemon.calculateCurrentInitiative()}"
+                                 currentPokemon.calculateCurrentInitiative() < 0 -> "${currentPokemon.calculateCurrentInitiative()}"
+                                 else -> "+0"
+                             },
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF1A1A1A),
@@ -338,7 +367,7 @@ fun PartyPokemonDetailScreen(
                                 onClick = {
                                     if (currentHP > 0) {
                                         val newHP = currentHP - 1
-                                        val result = partyManager.updatePartyPokemonHP(partyPokemon.id, newHP)
+                                                                                 val result = partyManager.updatePartyPokemonHP(currentPokemon.id, newHP)
                                         if (result.isSuccess) {
                                             // Update local state to refresh UI immediately
                                             // Note: In a real app, this would trigger a ViewModel refresh
@@ -376,7 +405,7 @@ fun PartyPokemonDetailScreen(
                                  onClick = {
                                      if (currentHP < maxHP) {
                                          val newHP = currentHP + 1
-                                         val result = partyManager.updatePartyPokemonHP(partyPokemon.id, newHP)
+                                         val result = partyManager.updatePartyPokemonHP(currentPokemon.id, newHP)
                                          if (result.isSuccess) {
                                              // Update local state to refresh UI immediately
                                              // Note: In a real app, this would trigger a ViewModel refresh
@@ -440,7 +469,7 @@ fun PartyPokemonDetailScreen(
                     ) {
                         // Nature name
                         Text(
-                            text = partyPokemon.nature.name,
+                            text = currentPokemon.nature.name,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary,
@@ -466,14 +495,14 @@ fun PartyPokemonDetailScreen(
                                 tint = Color.Red,
                                 modifier = Modifier.size(20.dp)
                             )
-                            Text(
-                                text = if (partyPokemon.nature.increasedStat != null) 
-                                    "${partyPokemon.nature.increasedStat} (+${partyPokemon.proficiency})" 
-                                else "None",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Color.Red,
-                                fontWeight = FontWeight.Bold
-                            )
+                                                         Text(
+                                 text = if (currentPokemon.nature.increasedStat != null) 
+                                     "${currentPokemon.nature.increasedStat} (+${currentPokemon.proficiency})" 
+                                 else "None",
+                                 style = MaterialTheme.typography.titleMedium,
+                                 color = Color.Red,
+                                 fontWeight = FontWeight.Bold
+                             )
                         }
                         
                         // Separator
@@ -496,9 +525,9 @@ fun PartyPokemonDetailScreen(
                                 modifier = Modifier.size(20.dp)
                             )
                             Text(
-                                text = if (partyPokemon.nature.decreasedStat != null) 
-                                    "${partyPokemon.nature.decreasedStat} (-2)" 
-                                else "None",
+                                                                 text = if (currentPokemon.nature.decreasedStat != null) 
+                                     "${currentPokemon.nature.decreasedStat} (-2)" 
+                                 else "None",
                                 style = MaterialTheme.typography.titleMedium,
                                 color = Color.Blue,
                                 fontWeight = FontWeight.Bold
@@ -530,38 +559,38 @@ fun PartyPokemonDetailScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        // Attack (Red) - using DnD converter like Pokemon list view
-                        StatGridItem(
-                            label = "ATTACK",
-                            value = "${dndView.convertedStats["Attack"] ?: 0}",
-                            statModifier = "${dndView.modifiers["Attack"] ?: 0}",
-                            color = Color(0xFFF44336),
-                            isProficient = partyPokemon.nature.increasedStat == "Attack",
-                            isDeficient = partyPokemon.nature.decreasedStat == "Attack",
-                            modifier = Modifier.weight(1f)
-                        )
-                        
-                        // Sp.Attack (Purple) - using DnD converter like Pokemon list view
-                        StatGridItem(
-                            label = "SP.ATTACK",
-                            value = "${dndView.convertedStats["Sp.Atk"] ?: 0}",
-                            statModifier = "${dndView.modifiers["Sp.Atk"] ?: 0}",
-                            color = Color(0xFF9C27B0),
-                            isProficient = partyPokemon.nature.increasedStat == "Sp. Atk",
-                            isDeficient = partyPokemon.nature.decreasedStat == "Sp. Atk",
-                            modifier = Modifier.weight(1f)
-                        )
-                        
-                        // Speed (Green/Blue) - using DnD converter like Pokemon list view
-                        StatGridItem(
-                            label = "SPEED",
-                            value = "${dndView.convertedStats["Speed"] ?: 0}",
-                            statModifier = "${dndView.modifiers["Speed"] ?: 0}",
-                            color = Color(0xFF4CAF50),
-                            isProficient = partyPokemon.nature.increasedStat == "Speed",
-                            isDeficient = partyPokemon.nature.decreasedStat == "Speed",
-                            modifier = Modifier.weight(1f)
-                        )
+                                                 // Attack (Red) - using DnD converter like Pokemon list view
+                         StatGridItem(
+                             label = "ATTACK",
+                             value = "${dndView.convertedStats["Attack"] ?: 0}",
+                             statModifier = "${dndView.modifiers["Attack"] ?: 0}",
+                             color = Color(0xFFF44336),
+                             isProficient = false,
+                             isDeficient = false,
+                             modifier = Modifier.weight(1f)
+                         )
+                         
+                         // Sp.Attack (Purple) - using DnD converter like Pokemon list view
+                         StatGridItem(
+                             label = "SP.ATTACK",
+                             value = "${dndView.convertedStats["Sp.Atk"] ?: 0}",
+                             statModifier = "${dndView.modifiers["Sp.Atk"] ?: 0}",
+                             color = Color(0xFF9C27B0),
+                             isProficient = false,
+                             isDeficient = false,
+                             modifier = Modifier.weight(1f)
+                         )
+                         
+                         // Speed (Green/Blue) - using DnD converter like Pokemon list view
+                         StatGridItem(
+                             label = "SPEED",
+                             value = "${dndView.convertedStats["Speed"] ?: 0}",
+                             statModifier = "${dndView.modifiers["Speed"] ?: 0}",
+                             color = Color(0xFF4CAF50),
+                             isProficient = false,
+                             isDeficient = false,
+                             modifier = Modifier.weight(1f)
+                         )
                     }
                     
                     Spacer(modifier = Modifier.height(16.dp))
@@ -571,27 +600,27 @@ fun PartyPokemonDetailScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        // Defense (Gray) - using DnD converter like Pokemon list view
-                        StatGridItem(
-                            label = "DEFENSE",
-                            value = "${dndView.convertedStats["Defense"] ?: 0}",
-                            statModifier = "${dndView.modifiers["Defense"] ?: 0}",
-                            color = Color(0xFF795548),
-                            isProficient = partyPokemon.nature.increasedStat == "Defense",
-                            isDeficient = partyPokemon.nature.decreasedStat == "Defense",
-                            modifier = Modifier.weight(1f)
-                        )
-                        
-                        // Sp.Defense (Teal/Blue) - using DnD converter like Pokemon list view
-                        StatGridItem(
-                            label = "SP.DEFENSE",
-                            value = "${dndView.convertedStats["Sp.Def"] ?: 0}",
-                            statModifier = "${dndView.modifiers["Sp.Def"] ?: 0}",
-                            color = Color(0xFF00BCD4),
-                            isProficient = partyPokemon.nature.increasedStat == "Sp. Def",
-                            isDeficient = partyPokemon.nature.decreasedStat == "Sp. Def",
-                            modifier = Modifier.weight(1f)
-                        )
+                                                 // Defense (Gray) - using DnD converter like Pokemon list view
+                         StatGridItem(
+                             label = "DEFENSE",
+                             value = "${dndView.convertedStats["Defense"] ?: 0}",
+                             statModifier = "${dndView.modifiers["Defense"] ?: 0}",
+                             color = Color(0xFF795548),
+                             isProficient = false,
+                             isDeficient = false,
+                             modifier = Modifier.weight(1f)
+                         )
+                         
+                         // Sp.Defense (Teal/Blue) - using DnD converter like Pokemon list view
+                         StatGridItem(
+                             label = "SP.DEFENSE",
+                             value = "${dndView.convertedStats["Sp.Def"] ?: 0}",
+                             statModifier = "${dndView.modifiers["Sp.Def"] ?: 0}",
+                             color = Color(0xFF00BCD4),
+                             isProficient = false,
+                             isDeficient = false,
+                             modifier = Modifier.weight(1f)
+                         )
                         
                                                  // Empty space where AC was (removed to avoid duplication)
                          Spacer(modifier = Modifier.weight(1f))
@@ -634,13 +663,13 @@ fun PartyPokemonDetailScreen(
                                     fontWeight = FontWeight.Medium
                                 )
                                 
-                                IconButton(
-                                    onClick = {
-                                        currentMoveSet.remove(moveName)
-                                        // Save the updated move set to local datastore
-                                        val updatedPokemon = partyPokemon.copy(currentMoveSet = currentMoveSet.toList())
-                                        partyManager.updatePartyPokemon(updatedPokemon)
-                                    },
+                                                                 IconButton(
+                                     onClick = {
+                                         currentMoveSet.remove(moveName)
+                                         // Save the updated move set to local datastore
+                                         val updatedPokemon = currentPokemon.copy(currentMoveSet = currentMoveSet.toList())
+                                         partyManager.updatePartyPokemon(updatedPokemon)
+                                     },
                                     modifier = Modifier.size(32.dp)
                                 ) {
                                     Icon(
@@ -662,16 +691,16 @@ fun PartyPokemonDetailScreen(
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
-                    Text(
-                        text = "Available Moves (Level ${partyPokemon.level})",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
+                                         Text(
+                         text = "Available Moves (Level ${currentPokemon.level})",
+                         style = MaterialTheme.typography.titleMedium,
+                         fontWeight = FontWeight.Bold
+                     )
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
-                    if (partyPokemon.availableMoves.isNotEmpty()) {
-                        partyPokemon.availableMoves.forEach { move ->
+                                         if (currentPokemon.availableMoves.isNotEmpty()) {
+                         currentPokemon.availableMoves.forEach { move ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -699,12 +728,12 @@ fun PartyPokemonDetailScreen(
                                     if (currentMoveSet.contains(move.name)) {
                                         // Show remove button for moves in current set
                                         IconButton(
-                                            onClick = {
-                                                currentMoveSet.remove(move.name)
-                                                // Save the updated move set to local datastore
-                                                val updatedPokemon = partyPokemon.copy(currentMoveSet = currentMoveSet.toList())
-                                                partyManager.updatePartyPokemon(updatedPokemon)
-                                            },
+                                                                                         onClick = {
+                                                 currentMoveSet.remove(move.name)
+                                                 // Save the updated move set to local datastore
+                                                 val updatedPokemon = currentPokemon.copy(currentMoveSet = currentMoveSet.toList())
+                                                 partyManager.updatePartyPokemon(updatedPokemon)
+                                             },
                                             modifier = Modifier.size(32.dp)
                                         ) {
                                             Icon(
@@ -717,12 +746,12 @@ fun PartyPokemonDetailScreen(
                                     } else if (currentMoveSet.size < 4) {
                                         // Show add button for available moves
                                         IconButton(
-                                            onClick = {
-                                                currentMoveSet.add(move.name)
-                                                // Save the updated move set to local datastore
-                                                val updatedPokemon = partyPokemon.copy(currentMoveSet = currentMoveSet.toList())
-                                                partyManager.updatePartyPokemon(updatedPokemon)
-                                            },
+                                                                                         onClick = {
+                                                 currentMoveSet.add(move.name)
+                                                 // Save the updated move set to local datastore
+                                                 val updatedPokemon = currentPokemon.copy(currentMoveSet = currentMoveSet.toList())
+                                                 partyManager.updatePartyPokemon(updatedPokemon)
+                                             },
                                             modifier = Modifier.size(32.dp)
                                         ) {
                                             Icon(
@@ -802,10 +831,10 @@ fun PartyPokemonDetailScreen(
                                 
                                 IconButton(
                                     onClick = {
-                                        currentConditions.remove(condition)
-                                        // Save the updated conditions to local datastore
-                                        val updatedPokemon = partyPokemon.copy(conditions = currentConditions.toList())
-                                        partyManager.updatePartyPokemon(updatedPokemon)
+                                                                                 currentConditions.remove(condition)
+                                         // Save the updated conditions to local datastore
+                                         val updatedPokemon = currentPokemon.copy(conditions = currentConditions.toList())
+                                         partyManager.updatePartyPokemon(updatedPokemon)
                                     },
                                     modifier = Modifier.size(32.dp)
                                 ) {
@@ -863,8 +892,8 @@ fun PartyPokemonDetailScreen(
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
                             
-                            if (partyPokemon.weaknesses.isNotEmpty()) {
-                                partyPokemon.weaknesses.forEach { type ->
+                                                         if (currentPokemon.weaknesses.isNotEmpty()) {
+                                 currentPokemon.weaknesses.forEach { type ->
                                     Box(
                                         modifier = Modifier
                                             .padding(vertical = 2.dp)
@@ -907,8 +936,8 @@ fun PartyPokemonDetailScreen(
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
                             
-                            if (partyPokemon.resistances.isNotEmpty()) {
-                                partyPokemon.resistances.forEach { type ->
+                                                         if (currentPokemon.resistances.isNotEmpty()) {
+                                 currentPokemon.resistances.forEach { type ->
                                     Box(
                                         modifier = Modifier
                                             .padding(vertical = 2.dp)
@@ -951,7 +980,7 @@ fun PartyPokemonDetailScreen(
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
                             
-                            val immunities = getImmunities(partyPokemon.basePokemon.types.map { it.type.name })
+                                                         val immunities = getImmunities(currentPokemon.basePokemon.types.map { it.type.name })
                             if (immunities.isNotEmpty()) {
                                 immunities.forEach { type ->
                                     Box(
@@ -1023,9 +1052,9 @@ fun PartyPokemonDetailScreen(
                             availableConditions.forEach { condition ->
                                 TextButton(
                                     onClick = {
-                                        currentConditions.add(condition)
-                                        // Save the updated conditions to local datastore
-                                        val updatedPokemon = partyPokemon.copy(conditions = currentConditions.toList())
+                                                                                 currentConditions.add(condition)
+                                         // Save the updated conditions to local datastore
+                                         val updatedPokemon = currentPokemon.copy(conditions = currentConditions.toList())
                                         partyManager.updatePartyPokemon(updatedPokemon)
                                         showConditionDialog = false
                                     },
@@ -1113,11 +1142,11 @@ fun PartyPokemonDetailScreen(
                                     currentHP = newMaxHPValue
                                 }
                                 
-                                // Save to PartyManager
-                                val updatedPokemon = partyPokemon.copy(
-                                    maxHP = newMaxHPValue,
-                                    currentHP = currentHP
-                                )
+                                                                 // Save to PartyManager
+                                 val updatedPokemon = currentPokemon.copy(
+                                     maxHP = newMaxHPValue,
+                                     currentHP = currentHP
+                                 )
                                 partyManager.updatePartyPokemon(updatedPokemon)
                                 
                                 showMaxHPDialog = false
@@ -1142,25 +1171,25 @@ fun PartyPokemonDetailScreen(
             AlertDialog(
                 onDismissRequest = { showNatureDescriptionDialog = false },
                 title = { 
-                    Text(
-                        text = partyPokemon.nature.name,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                                             Text(
+                             text = currentPokemon.nature.name,
+                             style = MaterialTheme.typography.titleLarge,
+                             fontWeight = FontWeight.Bold,
+                             color = MaterialTheme.colorScheme.primary
+                         )
                 },
                 text = { 
                     Column {
-                        Text(
-                            text = partyPokemon.nature.description,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFF1A1A1A)
-                        )
+                                                 Text(
+                             text = currentPokemon.nature.description,
+                             style = MaterialTheme.typography.bodyMedium,
+                             color = Color(0xFF1A1A1A)
+                         )
                         
                         Spacer(modifier = Modifier.height(16.dp))
                         
                         // Show stat effects
-                        if (partyPokemon.nature.increasedStat != null || partyPokemon.nature.decreasedStat != null) {
+                                                 if (currentPokemon.nature.increasedStat != null || currentPokemon.nature.decreasedStat != null) {
                             Text(
                                 text = "Stat Effects:",
                                 style = MaterialTheme.typography.bodyMedium,
@@ -1169,7 +1198,7 @@ fun PartyPokemonDetailScreen(
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
                             
-                            if (partyPokemon.nature.increasedStat != null) {
+                                                         if (currentPokemon.nature.increasedStat != null) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -1181,7 +1210,7 @@ fun PartyPokemonDetailScreen(
                                         modifier = Modifier.size(20.dp)
                                     )
                                     Text(
-                                        text = "${partyPokemon.nature.increasedStat} (+${partyPokemon.proficiency})",
+                                        text = "${currentPokemon.nature.increasedStat} (+${currentPokemon.proficiency})",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = Color.Red,
                                         fontWeight = FontWeight.Medium
@@ -1189,7 +1218,7 @@ fun PartyPokemonDetailScreen(
                                 }
                             }
                             
-                            if (partyPokemon.nature.decreasedStat != null) {
+                                                         if (currentPokemon.nature.decreasedStat != null) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1202,7 +1231,7 @@ fun PartyPokemonDetailScreen(
                                         modifier = Modifier.size(20.dp)
                                     )
                                     Text(
-                                        text = "${partyPokemon.nature.decreasedStat} (-2)",
+                                        text = "${currentPokemon.nature.decreasedStat} (-2)",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = Color.Blue,
                                         fontWeight = FontWeight.Medium
@@ -1241,8 +1270,8 @@ fun PartyPokemonDetailScreen(
                 },
                 text = { 
                     Column {
-                        Text(
-                            text = "This will restore ${partyPokemon.name}'s HP to maximum (${maxHP}).",
+                                                 Text(
+                             text = "This will restore ${currentPokemon.name}'s HP to maximum (${maxHP}).",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color(0xFF1A1A1A)
                         )
@@ -1265,8 +1294,8 @@ fun PartyPokemonDetailScreen(
                 confirmButton = {
                     TextButton(
                         onClick = {
-                            // Set current HP to max HP
-                            val result = partyManager.updatePartyPokemonHP(partyPokemon.id, maxHP)
+                                                         // Set current HP to max HP
+                             val result = partyManager.updatePartyPokemonHP(currentPokemon.id, maxHP)
                             if (result.isSuccess) {
                                 currentHP = maxHP
                             }
@@ -1279,6 +1308,202 @@ fun PartyPokemonDetailScreen(
                 dismissButton = {
                     TextButton(onClick = { showFullRestDialog = false }) {
                         Text("Cancel")
+                    }
+                }
+            )
+        }
+        
+        // Experience Dialog
+        if (showExpDialog) {
+            AlertDialog(
+                onDismissRequest = { 
+                    showExpDialog = false
+                    levelChangeMessage = null
+                },
+                title = { 
+                    Text(
+                        text = "Experience Management",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                },
+                text = { 
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        // Level
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "Level:",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = "$currentLevel",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        
+                        // Current EXP
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "Current EXP:",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = "$currentExp",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        
+                        // Next level EXP
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "Next level:",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                                                 text = if (currentLevel < 20) {
+                                     "${currentPokemon.getExpRequiredForLevel(currentLevel + 1)} EXP"
+                                 } else {
+                                    "Max level reached"
+                                },
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = if (currentLevel < 20) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                            )
+                        }
+                        
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
+                        // Experience Input Section
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "Add/Remove Experience:",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                OutlinedTextField(
+                                    value = expInput,
+                                    onValueChange = { expInput = it },
+                                    label = { Text("EXP Amount") },
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                    modifier = Modifier.weight(1f),
+                                    singleLine = true
+                                )
+                                
+                                Button(
+                                    onClick = {
+                                        val expAmount = expInput.toIntOrNull() ?: 0
+                                        if (expAmount != 0) {
+                                            val (message, updatedPokemon) = currentPokemon.gainExp(expAmount)
+                                            
+                                            // Update the party with the new Pokemon instance
+                                            partyManager.updatePartyPokemon(updatedPokemon)
+                                            
+                                            // Update local state to reflect changes immediately
+                                            currentExp = updatedPokemon.currentExp
+                                            currentLevel = updatedPokemon.level
+                                            currentPokemon = updatedPokemon
+                                            
+                                            // Capture the level change message
+                                            levelChangeMessage = message
+                                            
+                                            // Clear input
+                                            expInput = ""
+                                        }
+                                    },
+                                    enabled = expInput.isNotEmpty() && expInput.toIntOrNull() != null
+                                ) {
+                                    Text("Gain")
+                                }
+                            }
+                            
+                            Text(
+                                text = "Enter positive numbers to gain EXP, negative numbers to lose EXP",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            
+                            // Display level change messages
+                            if (levelChangeMessage != null) {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(
+                                            color = when {
+                                                levelChangeMessage!!.contains("Level Up") -> Color(0xFF4CAF50)
+                                                levelChangeMessage!!.contains("Level Down") -> Color(0xFFFF9800)
+                                                else -> Color(0xFF2196F3)
+                                            }.copy(alpha = 0.1f),
+                                            shape = RoundedCornerShape(8.dp)
+                                        )
+                                        .border(
+                                            width = 1.dp,
+                                            color = when {
+                                                levelChangeMessage!!.contains("Level Up") -> Color(0xFF4CAF50)
+                                                levelChangeMessage!!.contains("Level Down") -> Color(0xFFFF9800)
+                                                else -> Color(0xFF2196F3)
+                                            },
+                                            shape = RoundedCornerShape(8.dp)
+                                        )
+                                        .padding(12.dp)
+                                ) {
+                                    Text(
+                                        text = levelChangeMessage!!,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = when {
+                                            levelChangeMessage!!.contains("Level Up") -> Color(0xFF4CAF50)
+                                            levelChangeMessage!!.contains("Level Down") -> Color(0xFFFF9800)
+                                            else -> Color(0xFF2196F3)
+                                        },
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { 
+                        showExpDialog = false
+                        levelChangeMessage = null
+                    }) {
+                        Text("Close")
                     }
                 }
             )
