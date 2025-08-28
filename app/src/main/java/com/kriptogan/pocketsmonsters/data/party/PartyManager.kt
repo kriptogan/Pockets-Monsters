@@ -275,58 +275,260 @@ class PartyManager(context: Context) {
     }
     
     /**
-     * Calculate weaknesses based on types (simplified)
+     * Calculate weaknesses based on types with proper dual type support
      */
     private fun calculateWeaknesses(types: List<String>): List<String> {
-        // This is a simplified implementation
-        // You can expand this with proper type effectiveness tables
-        return when {
-            types.contains("fire") -> listOf("water", "ground", "rock")
-            types.contains("water") -> listOf("electric", "grass")
-            types.contains("grass") -> listOf("fire", "ice", "poison", "flying", "bug")
-            types.contains("electric") -> listOf("ground")
-            types.contains("ice") -> listOf("fire", "fighting", "rock", "steel")
-            types.contains("fighting") -> listOf("flying", "psychic", "fairy")
-            types.contains("poison") -> listOf("ground", "psychic")
-            types.contains("ground") -> listOf("water", "grass", "ice")
-            types.contains("flying") -> listOf("electric", "ice", "rock")
-            types.contains("psychic") -> listOf("bug", "ghost", "dark")
-            types.contains("bug") -> listOf("fire", "flying", "rock")
-            types.contains("rock") -> listOf("water", "grass", "fighting", "ground", "steel")
-            types.contains("ghost") -> listOf("ghost", "dark")
-            types.contains("dragon") -> listOf("ice", "dragon", "fairy")
-            types.contains("dark") -> listOf("fighting", "bug", "fairy")
-            types.contains("steel") -> listOf("fire", "fighting", "ground")
-            types.contains("fairy") -> listOf("poison", "steel")
+        if (types.isEmpty()) return emptyList()
+        if (types.size == 1) return getSingleTypeWeaknesses(types[0])
+        
+        // For dual types, we need to calculate combined effectiveness
+        val type1 = types[0]
+        val type2 = types[1]
+        
+        // Get individual type weaknesses
+        val weaknesses1 = getSingleTypeWeaknesses(type1)
+        val weaknesses2 = getSingleTypeWeaknesses(type2)
+        
+        // Get individual type resistances
+        val resistances1 = getSingleTypeResistances(type1)
+        val resistances2 = getSingleTypeResistances(type2)
+        
+        // Get individual type immunities
+        val immunities1 = getSingleTypeImmunities(type1)
+        val immunities2 = getSingleTypeImmunities(type2)
+        
+        // Calculate combined effectiveness
+        val allTypes = (weaknesses1 + weaknesses2 + resistances1 + resistances2 + immunities1 + immunities2).distinct()
+        
+        return allTypes.filter { type ->
+            val effectiveness1 = getTypeEffectiveness(type, type1)
+            val effectiveness2 = getTypeEffectiveness(type, type2)
+            val totalEffectiveness = effectiveness1 * effectiveness2
+            
+            // Return true if this type is weak (2x or 4x effective) AND not immune
+            totalEffectiveness > 1.0 && totalEffectiveness > 0.0
+        }
+    }
+    
+    /**
+     * Calculate resistances based on types with proper dual type support
+     */
+    private fun calculateResistances(types: List<String>): List<String> {
+        if (types.isEmpty()) return emptyList()
+        if (types.size == 1) return getSingleTypeResistances(types[0])
+        
+        // For dual types, calculate combined effectiveness
+        val type1 = types[0]
+        val type2 = types[1]
+        
+        // Get all types that could potentially be resisted
+        val allTypes = listOf("normal", "fire", "water", "electric", "grass", "ice", "fighting", 
+                              "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", 
+                              "dragon", "dark", "steel", "fairy")
+        
+        return allTypes.filter { type ->
+            val effectiveness1 = getTypeEffectiveness(type, type1)
+            val effectiveness2 = getTypeEffectiveness(type, type2)
+            val totalEffectiveness = effectiveness1 * effectiveness2
+            
+            // Return true if this type is resisted (0.5x or 0.25x effective)
+            totalEffectiveness < 1.0 && totalEffectiveness > 0.0
+        }
+    }
+    
+    /**
+     * Get single type weaknesses
+     */
+    private fun getSingleTypeWeaknesses(type: String): List<String> {
+        return when (type.lowercase()) {
+            "normal" -> listOf("fighting")
+            "fire" -> listOf("water", "ground", "rock")
+            "water" -> listOf("electric", "grass")
+            "electric" -> listOf("ground")
+            "grass" -> listOf("fire", "ice", "poison", "flying", "bug")
+            "ice" -> listOf("fire", "fighting", "rock", "steel")
+            "fighting" -> listOf("flying", "psychic", "fairy")
+            "poison" -> listOf("ground", "psychic")
+            "ground" -> listOf("water", "grass", "ice")
+            "flying" -> listOf("electric", "ice", "rock")
+            "psychic" -> listOf("bug", "ghost", "dark")
+            "bug" -> listOf("fire", "flying", "rock")
+            "rock" -> listOf("water", "grass", "fighting", "ground", "steel")
+            "ghost" -> listOf("ghost", "dark")
+            "dragon" -> listOf("ice", "dragon", "fairy")
+            "dark" -> listOf("fighting", "bug", "fairy")
+            "steel" -> listOf("fire", "fighting", "ground")
+            "fairy" -> listOf("poison", "steel")
             else -> emptyList()
         }
     }
     
     /**
-     * Calculate resistances based on types (simplified)
+     * Get single type resistances
      */
-    private fun calculateResistances(types: List<String>): List<String> {
-        // This is a simplified implementation
-        // You can expand this with proper type effectiveness tables
-        return when {
-            types.contains("fire") -> listOf("fire", "grass", "ice", "bug", "steel")
-            types.contains("water") -> listOf("fire", "water", "ice", "steel")
-            types.contains("grass") -> listOf("water", "electric", "grass", "ground")
-            types.contains("electric") -> listOf("electric", "flying", "steel")
-            types.contains("ice") -> listOf("ice")
-            types.contains("fighting") -> listOf("bug", "rock", "dark")
-            types.contains("poison") -> listOf("grass", "fighting", "poison", "bug", "fairy")
-            types.contains("ground") -> listOf("poison", "rock")
-            types.contains("flying") -> listOf("grass", "fighting", "bug")
-            types.contains("psychic") -> listOf("fighting", "psychic")
-            types.contains("bug") -> listOf("grass", "fighting", "ground")
-            types.contains("rock") -> listOf("normal", "fire", "poison", "flying")
-            types.contains("ghost") -> listOf("poison", "bug")
-            types.contains("dragon") -> listOf("fire", "water", "electric", "grass")
-            types.contains("dark") -> listOf("ghost", "dark")
-            types.contains("steel") -> listOf("normal", "grass", "ice", "flying", "psychic", "bug", "rock", "dragon", "steel", "fairy")
-            types.contains("fairy") -> listOf("fighting", "bug", "dark")
+    private fun getSingleTypeResistances(type: String): List<String> {
+        return when (type.lowercase()) {
+            "normal" -> emptyList()
+            "fire" -> listOf("fire", "grass", "ice", "bug", "steel")
+            "water" -> listOf("fire", "water", "ice", "steel")
+            "electric" -> listOf("electric", "flying", "steel")
+            "grass" -> listOf("water", "electric", "grass", "ground")
+            "ice" -> listOf("ice")
+            "fighting" -> listOf("bug", "rock", "dark")
+            "poison" -> listOf("grass", "fighting", "poison", "bug", "fairy")
+            "ground" -> listOf("poison", "rock")
+            "flying" -> listOf("grass", "fighting", "bug")
+            "psychic" -> listOf("fighting", "psychic")
+            "bug" -> listOf("grass", "fighting", "ground")
+            "rock" -> listOf("normal", "fire", "poison", "flying")
+            "ghost" -> listOf("poison", "bug")
+            "dragon" -> listOf("fire", "water", "electric", "grass")
+            "dark" -> listOf("ghost", "dark")
+            "steel" -> listOf("normal", "grass", "ice", "flying", "psychic", "bug", "rock", "dragon", "steel", "fairy")
+            "fairy" -> listOf("fighting", "bug", "dark")
             else -> emptyList()
         }
+    }
+    
+    /**
+     * Get single type immunities
+     */
+    private fun getSingleTypeImmunities(type: String): List<String> {
+        return when (type.lowercase()) {
+            "normal" -> listOf("ghost")
+            "electric" -> listOf("ground")
+            "fighting" -> listOf("ghost")
+            "poison" -> listOf("steel")
+            "ground" -> listOf("flying")
+            "psychic" -> listOf("dark")
+            "ghost" -> listOf("normal")
+            "dragon" -> listOf("fairy")
+            else -> emptyList()
+        }
+    }
+    
+    /**
+     * Get type effectiveness multiplier for a specific type combination
+     */
+    private fun getTypeEffectiveness(attackingType: String, defendingType: String): Double {
+        return when (attackingType) {
+            "normal" -> when (defendingType) {
+                "rock", "steel" -> 0.5
+                "ghost" -> 0.0
+                else -> 1.0
+            }
+            "fire" -> when (defendingType) {
+                "fire", "water", "rock", "dragon" -> 0.5
+                "grass", "ice", "bug", "steel" -> 2.0
+                else -> 1.0
+            }
+            "water" -> when (defendingType) {
+                "water", "grass", "dragon" -> 0.5
+                "fire", "ground", "rock" -> 2.0
+                else -> 1.0
+            }
+            "electric" -> when (defendingType) {
+                "electric", "grass", "dragon" -> 0.5
+                "water", "flying" -> 2.0
+                "ground" -> 0.0
+                else -> 1.0
+            }
+            "grass" -> when (defendingType) {
+                "fire", "grass", "poison", "flying", "bug", "dragon", "steel" -> 0.5
+                "water", "ground", "rock" -> 2.0
+                else -> 1.0
+            }
+            "ice" -> when (defendingType) {
+                "fire", "water", "ice", "steel" -> 0.5
+                "grass", "ground", "flying", "dragon" -> 2.0
+                else -> 1.0
+            }
+            "fighting" -> when (defendingType) {
+                "normal", "ice", "rock", "dark", "steel" -> 2.0
+                "poison", "flying", "psychic", "bug", "fairy" -> 0.5
+                "ghost" -> 0.0
+                else -> 1.0
+            }
+            "poison" -> when (defendingType) {
+                "grass", "fairy" -> 2.0
+                "poison", "ground", "rock", "ghost" -> 0.5
+                "steel" -> 0.0
+                else -> 1.0
+            }
+            "ground" -> when (defendingType) {
+                "fire", "electric", "poison", "rock", "steel" -> 2.0
+                "grass", "bug" -> 0.5
+                "flying" -> 0.0
+                else -> 1.0
+            }
+            "flying" -> when (defendingType) {
+                "grass", "fighting", "bug" -> 2.0
+                "electric", "rock", "steel" -> 0.5
+                else -> 1.0
+            }
+            "psychic" -> when (defendingType) {
+                "fighting", "poison" -> 2.0
+                "psychic", "steel" -> 0.5
+                "dark" -> 0.0
+                else -> 1.0
+            }
+            "bug" -> when (defendingType) {
+                "grass", "psychic", "dark" -> 2.0
+                "fire", "fighting", "poison", "flying", "ghost", "steel", "fairy" -> 0.5
+                else -> 1.0
+            }
+            "rock" -> when (defendingType) {
+                "fire", "ice", "flying", "bug" -> 2.0
+                "fighting", "ground", "steel" -> 0.5
+                else -> 1.0
+            }
+            "ghost" -> when (defendingType) {
+                "psychic", "ghost" -> 2.0
+                "dark" -> 0.5
+                "normal" -> 0.0
+                else -> 1.0
+            }
+            "dragon" -> when (defendingType) {
+                "dragon" -> 2.0
+                "steel" -> 0.5
+                "fairy" -> 0.0
+                else -> 1.0
+            }
+            "dark" -> when (defendingType) {
+                "psychic", "ghost" -> 2.0
+                "fighting", "dark", "fairy" -> 0.5
+                else -> 1.0
+            }
+            "steel" -> when (defendingType) {
+                "ice", "rock", "fairy" -> 2.0
+                "fire", "water", "electric", "steel" -> 0.5
+                else -> 1.0
+            }
+            "fairy" -> when (defendingType) {
+                "fighting", "dragon", "dark" -> 2.0
+                "fire", "poison", "steel" -> 0.5
+                else -> 1.0
+            }
+            else -> 1.0
+        }
+    }
+    
+    /**
+     * Debug function to test type effectiveness calculations
+     */
+    fun debugTypeEffectiveness(types: List<String>, attackingType: String): String {
+        if (types.isEmpty()) return "No types"
+        if (types.size == 1) {
+            val effectiveness = getTypeEffectiveness(attackingType, types[0])
+            return "${types[0]} vs $attackingType: ${effectiveness}x"
+        }
+        
+        val type1 = types[0]
+        val type2 = types[1]
+        val effectiveness1 = getTypeEffectiveness(attackingType, type1)
+        val effectiveness2 = getTypeEffectiveness(attackingType, type2)
+        val total = effectiveness1 * effectiveness2
+        
+        return "$type1/$type2 vs $attackingType: ${effectiveness1}x × ${effectiveness2}x = ${total}x"
     }
 }
