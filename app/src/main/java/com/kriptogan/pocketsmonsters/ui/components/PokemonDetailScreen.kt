@@ -514,6 +514,168 @@ fun PokemonDetailScreen(
                 fontWeight = FontWeight.Bold
             )
         }
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // 6. Type Effectiveness Card
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "Type Effectiveness",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+                
+                // Three columns: Weaknesses, Resistances, Immunities
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Top
+                ) {
+                    // Weaknesses
+                    Column(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            text = "Weaknesses",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFD32F2F),
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        
+                        val weaknesses = getWeaknesses(pokemon.types.map { it.type.name })
+                        if (weaknesses.isNotEmpty()) {
+                            weaknesses.forEach { type ->
+                                Box(
+                                    modifier = Modifier
+                                        .padding(vertical = 2.dp)
+                                        .width(70.dp)
+                                        .height(20.dp)
+                                        .background(
+                                            color = getTypeColor(type),
+                                            shape = RoundedCornerShape(12.dp)
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = type.replaceFirstChar { it.uppercase() },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        } else {
+                            Text(
+                                text = "None",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color(0xFF999999),
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                            )
+                        }
+                    }
+                    
+                    // Resistances
+                    Column(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            text = "Resistances",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF4CAF50),
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        
+                        val resistances = getResistances(pokemon.types.map { it.type.name })
+                        if (resistances.isNotEmpty()) {
+                            resistances.forEach { type ->
+                                Box(
+                                    modifier = Modifier
+                                        .padding(vertical = 2.dp)
+                                        .width(70.dp)
+                                        .height(20.dp)
+                                        .background(
+                                            color = getTypeColor(type),
+                                            shape = RoundedCornerShape(12.dp)
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = type.replaceFirstChar { it.uppercase() },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        } else {
+                            Text(
+                                text = "None",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color(0xFF999999),
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                            )
+                        }
+                    }
+                    
+                    // Immunities
+                    Column(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            text = "Immunities",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF424242),
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        
+                        val immunities = getImmunities(pokemon.types.map { it.type.name })
+                        if (immunities.isNotEmpty()) {
+                            immunities.forEach { type ->
+                                Box(
+                                    modifier = Modifier
+                                        .padding(vertical = 2.dp)
+                                        .width(70.dp)
+                                        .height(20.dp)
+                                        .background(
+                                            color = Color(0xFF424242),
+                                            shape = RoundedCornerShape(12.dp)
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = type.replaceFirstChar { it.uppercase() },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        } else {
+                            Text(
+                                text = "None",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color(0xFF999999),
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -602,5 +764,264 @@ private fun getTypeColor(typeName: String): Color {
         "steel" -> Color(0xFFB8B8D0)
         "fairy" -> Color(0xFFEE99AC)
         else -> Color(0xFFA8A878) // Default to normal
+    }
+}
+
+/**
+ * Calculate weaknesses based on Pokemon types
+ */
+private fun getWeaknesses(types: List<String>): List<String> {
+    if (types.isEmpty()) return emptyList()
+    if (types.size == 1) return getSingleTypeWeaknesses(types[0])
+    
+    // For dual types, calculate combined weaknesses
+    val type1 = types[0]
+    val type2 = types[1]
+    
+    // Get all types that could potentially be weaknesses
+    val allTypes = listOf("normal", "fire", "water", "electric", "grass", "ice", "fighting", 
+                          "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", 
+                          "dragon", "dark", "steel", "fairy")
+    
+    return allTypes.filter { type ->
+        val effectiveness1 = getTypeEffectiveness(type, type1)
+        val effectiveness2 = getTypeEffectiveness(type, type2)
+        val totalEffectiveness = effectiveness1 * effectiveness2
+        
+        // Return true if this type is weak (2x or 4x effective) AND not immune
+        totalEffectiveness > 1.0 && totalEffectiveness > 0.0
+    }
+}
+
+/**
+ * Calculate resistances based on Pokemon types
+ */
+private fun getResistances(types: List<String>): List<String> {
+    if (types.isEmpty()) return emptyList()
+    if (types.size == 1) return getSingleTypeResistances(types[0])
+    
+    // For dual types, calculate combined resistances
+    val type1 = types[0]
+    val type2 = types[1]
+    
+    // Get all types that could potentially be resisted
+    val allTypes = listOf("normal", "fire", "water", "electric", "grass", "ice", "fighting", 
+                          "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", 
+                          "dragon", "dark", "steel", "fairy")
+    
+    return allTypes.filter { type ->
+        val effectiveness1 = getTypeEffectiveness(type, type1)
+        val effectiveness2 = getTypeEffectiveness(type, type2)
+        val totalEffectiveness = effectiveness1 * effectiveness2
+        
+        // Return true if this type is resisted (0.5x or 0.25x effective)
+        totalEffectiveness < 1.0 && totalEffectiveness > 0.0
+    }
+}
+
+/**
+ * Calculate immunities based on Pokemon types
+ */
+private fun getImmunities(types: List<String>): List<String> {
+    if (types.isEmpty()) return emptyList()
+    if (types.size == 1) return getSingleTypeImmunities(types[0])
+    
+    // For dual types, calculate combined immunities
+    val type1 = types[0]
+    val type2 = types[1]
+    
+    // Get all attacking types that could potentially be immunities
+    val allAttackingTypes = listOf("normal", "fire", "water", "electric", "grass", "ice", "fighting", 
+                                   "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", 
+                                   "dragon", "dark", "steel", "fairy")
+    
+    return allAttackingTypes.filter { attackingType ->
+        val effectiveness1 = getTypeEffectiveness(attackingType, type1)
+        val effectiveness2 = getTypeEffectiveness(attackingType, type2)
+        val totalEffectiveness = effectiveness1 * effectiveness2
+        
+        // Return true if this attacking type has 0x effectiveness (Pokemon is immune)
+        totalEffectiveness == 0.0
+    }
+}
+
+/**
+ * Get single type weaknesses
+ */
+private fun getSingleTypeWeaknesses(type: String): List<String> {
+    return when (type.lowercase()) {
+        "normal" -> listOf("fighting")
+        "fire" -> listOf("water", "ground", "rock")
+        "water" -> listOf("electric", "grass")
+        "electric" -> listOf("ground")
+        "grass" -> listOf("fire", "ice", "poison", "flying", "bug")
+        "ice" -> listOf("fire", "fighting", "rock", "steel")
+        "fighting" -> listOf("flying", "psychic", "fairy")
+        "poison" -> listOf("ground", "psychic")
+        "ground" -> listOf("water", "grass", "ice")
+        "flying" -> listOf("electric", "ice", "rock")
+        "psychic" -> listOf("bug", "ghost", "dark")
+        "bug" -> listOf("fire", "flying", "rock")
+        "rock" -> listOf("water", "grass", "fighting", "ground", "steel")
+        "ghost" -> listOf("ghost", "dark")
+        "dragon" -> listOf("ice", "dragon", "fairy")
+        "dark" -> listOf("fighting", "bug", "fairy")
+        "steel" -> listOf("fire", "fighting", "ground")
+        "fairy" -> listOf("poison", "steel")
+        else -> emptyList()
+    }
+}
+
+/**
+ * Get single type resistances
+ */
+private fun getSingleTypeResistances(type: String): List<String> {
+    return when (type.lowercase()) {
+        "normal" -> emptyList()
+        "fire" -> listOf("fire", "grass", "ice", "bug", "steel")
+        "water" -> listOf("fire", "water", "ice", "steel")
+        "electric" -> listOf("electric", "flying", "steel")
+        "grass" -> listOf("water", "electric", "grass", "ground")
+        "ice" -> listOf("ice")
+        "fighting" -> listOf("bug", "rock", "dark")
+        "poison" -> listOf("grass", "fighting", "poison", "bug", "fairy")
+        "ground" -> listOf("poison", "rock")
+        "flying" -> listOf("grass", "fighting", "bug")
+        "psychic" -> listOf("fighting", "psychic")
+        "bug" -> listOf("grass", "fighting", "ground")
+        "rock" -> listOf("normal", "fire", "poison", "flying")
+        "ghost" -> listOf("poison", "bug")
+        "dragon" -> listOf("fire", "water", "electric", "grass")
+        "dark" -> listOf("ghost", "dark")
+        "steel" -> listOf("normal", "grass", "ice", "flying", "psychic", "bug", "rock", "dragon", "steel", "fairy")
+        "fairy" -> listOf("fighting", "bug", "dark")
+        else -> emptyList()
+    }
+}
+
+/**
+ * Get single type immunities
+ */
+private fun getSingleTypeImmunities(type: String): List<String> {
+    return when (type.lowercase()) {
+        "normal" -> listOf("ghost")
+        "electric" -> listOf("ground")
+        "fighting" -> listOf("ghost")
+        "poison" -> listOf("steel")
+        "ground" -> listOf("flying")
+        "psychic" -> listOf("dark")
+        "ghost" -> listOf("normal")
+        "dragon" -> listOf("fairy")
+        "fairy" -> listOf("dragon")
+        else -> emptyList()
+    }
+}
+
+/**
+ * Get type effectiveness multiplier for a specific type combination
+ * @param attackingType The type of the attacking move
+ * @param defendingType The type of the defending Pokemon
+ * @return The effectiveness multiplier (0.0, 0.5, 1.0, or 2.0)
+ */
+private fun getTypeEffectiveness(attackingType: String, defendingType: String): Double {
+    return when (attackingType) {
+        "normal" -> when (defendingType) {
+            "rock", "steel" -> 0.5
+            "ghost" -> 0.0
+            else -> 1.0
+        }
+        "fire" -> when (defendingType) {
+            "fire", "water", "rock", "dragon" -> 0.5
+            "grass", "ice", "bug", "steel" -> 2.0
+            else -> 1.0
+        }
+        "water" -> when (defendingType) {
+            "water", "grass", "dragon" -> 0.5
+            "fire", "ground", "rock" -> 2.0
+            else -> 1.0
+        }
+        "electric" -> when (defendingType) {
+            "electric", "grass", "dragon" -> 0.5
+            "water", "flying" -> 2.0
+            "ground" -> 0.0
+            else -> 1.0
+        }
+        "grass" -> when (defendingType) {
+            "fire", "grass", "poison", "flying", "bug", "dragon", "steel" -> 0.5
+            "water", "ground", "rock" -> 2.0
+            else -> 1.0
+        }
+        "ice" -> when (defendingType) {
+            "fire", "water", "ice", "steel" -> 0.5
+            "grass", "ground", "flying", "dragon" -> 2.0
+            else -> 1.0
+        }
+        "fighting" -> when (defendingType) {
+            "normal", "ice", "rock", "dark", "steel" -> 2.0
+            "poison", "flying", "psychic", "bug", "fairy" -> 0.5
+            "ghost" -> 0.0
+            else -> 1.0
+        }
+        "poison" -> when (defendingType) {
+            "grass", "fairy" -> 2.0
+            "poison", "ground", "rock", "ghost" -> 0.5
+            "steel" -> 0.0
+            else -> 1.0
+        }
+        "ground" -> when (defendingType) {
+            "fire", "electric", "poison", "rock", "steel" -> 2.0
+            "grass", "bug" -> 0.5
+            "flying" -> 0.0
+            else -> 1.0
+        }
+        "flying" -> when (defendingType) {
+            "grass", "fighting", "bug" -> 2.0
+            "electric", "rock", "steel" -> 0.5
+            else -> 1.0
+        }
+        "psychic" -> when (defendingType) {
+            "fighting", "poison" -> 2.0
+            "psychic", "steel" -> 0.5
+            "dark" -> 0.0
+            else -> 1.0
+        }
+        "bug" -> when (defendingType) {
+            "grass", "psychic", "dark" -> 2.0
+            "fire", "fighting", "poison", "flying", "ghost", "steel", "fairy" -> 0.5
+            else -> 1.0
+        }
+        "rock" -> when (defendingType) {
+            "fire", "ice", "flying", "bug" -> 2.0
+            "fighting", "ground", "steel" -> 0.5
+            else -> 1.0
+        }
+        "ghost" -> when (defendingType) {
+            "psychic", "ghost" -> 2.0
+            "dark" -> 0.5
+            "normal" -> 0.0
+            else -> 1.0
+        }
+        "dragon" -> when (defendingType) {
+            "dragon" -> 2.0
+            "steel" -> 0.5
+            "fairy" -> 0.0
+            else -> 1.0
+        }
+        "dark" -> when (defendingType) {
+            "psychic", "ghost" -> 2.0
+            "fighting", "dark", "fairy" -> 0.5
+            else -> 1.0
+        }
+        "steel" -> when (defendingType) {
+            "ice", "rock", "fairy" -> 2.0
+            "fire", "water", "electric", "steel" -> 0.5
+            else -> 1.0
+        }
+        "fairy" -> when (defendingType) {
+            "fighting", "dragon", "dark" -> 2.0
+            "fire", "poison", "steel" -> 0.5
+            else -> 1.0
+        }
+        else -> 1.0
     }
 }

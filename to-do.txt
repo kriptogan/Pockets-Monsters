@@ -68,4 +68,4 @@ Support option to prepare moves with a cost, if not all 4 positions are taken.
 
 V 30. Instead of party information, show the nature and description of nature.
 
-31. weaknesses and resistance
+V 31. weaknesses and resistance
