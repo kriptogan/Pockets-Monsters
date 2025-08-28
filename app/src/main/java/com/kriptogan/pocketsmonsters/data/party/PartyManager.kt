@@ -10,6 +10,13 @@ import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.data.models.PartyPokemon
 import com.kriptogan.pocketsmonsters.data.models.Condition
 import com.kriptogan.pocketsmonsters.data.models.Nature
+import com.kriptogan.pocketsmonsters.data.models.TypeSlot
+import com.kriptogan.pocketsmonsters.data.models.TypeInfo
+import com.kriptogan.pocketsmonsters.data.models.Stat
+import com.kriptogan.pocketsmonsters.data.models.StatInfo
+import com.kriptogan.pocketsmonsters.data.models.LevelUpMove
+import com.kriptogan.pocketsmonsters.data.models.AbilitySlot
+import com.kriptogan.pocketsmonsters.data.models.Ability
 import kotlin.random.Random
 
 class PartyManager(context: Context) {
@@ -157,11 +164,217 @@ class PartyManager(context: Context) {
     /**
      * Execute evolution for a Pokemon
      * @param pokemonId The ID of the Pokemon to evolve
+     * @return Result containing the evolved Pokemon or error message
      */
-    fun executeEvolution(pokemonId: Int) {
-        android.util.Log.d(TAG, "Evolution started!")
-        // TODO: Implement evolution logic
+    fun executeEvolution(pokemonId: Int): Result<PartyPokemon> {
+        return try {
+            android.util.Log.d(TAG, "Evolution started for Pokemon ID: $pokemonId")
+            
+            // 1. Find the current Pokemon in the party
+            val currentPokemon = getParty().find { it.id == pokemonId }
+                ?: return Result.failure(Exception("Pokemon not found in party"))
+            
+            // 2. Save the current values to preserve
+            val natureToPreserve = currentPokemon.nature
+            val levelToPreserve = currentPokemon.level
+            val currentExpToPreserve = currentPokemon.currentExp
+            
+            android.util.Log.d(TAG, "Preserving: Nature=${natureToPreserve.name}, Level=$levelToPreserve, Exp=$currentExpToPreserve")
+            
+            // 3. Search for the evolution form in pokemons.json
+            val evolutionData = currentPokemon.evolution
+                ?: return Result.failure(Exception("No evolution data found"))
+            
+            val evolvedBasePokemon = findPokemonById(evolutionData.evolutionId)
+                ?: return Result.failure(Exception("Evolution form not found in pokemons.json"))
+            
+            android.util.Log.d(TAG, "Found evolution form: ${evolvedBasePokemon.name}")
+            
+            // 4. Create new PartyPokemon with evolved form but preserved values
+            val evolvedPartyPokemon = createPartyPokemon(
+                pokemon = evolvedBasePokemon,
+                level = levelToPreserve,
+                currentExp = currentExpToPreserve,
+                nature = natureToPreserve
+            )
+            
+            // 5. Replace the old Pokemon with the evolved one
+            val currentParty = getParty().toMutableList()
+            val pokemonIndex = currentParty.indexOfFirst { it.id == pokemonId }
+            if (pokemonIndex != -1) {
+                currentParty[pokemonIndex] = evolvedPartyPokemon
+                saveParty(currentParty)
+                android.util.Log.d(TAG, "Evolution completed successfully!")
+                Result.success(evolvedPartyPokemon)
+            } else {
+                Result.failure(Exception("Failed to replace Pokemon in party"))
+            }
+            
+        } catch (e: Exception) {
+            android.util.Log.e(TAG, "Evolution failed", e)
+            Result.failure(e)
+        }
     }
+    
+    /**
+     * Find Pokemon by ID in pokemons.json
+     * @param pokemonId The ID of the Pokemon to find
+     * @return Pokemon if found, null otherwise
+     */
+    private fun findPokemonById(pokemonId: Int): Pokemon? {
+        return try {
+            val inputStream = context.assets.open("pokemons.json")
+            val jsonString = inputStream.bufferedReader().use { it.readText() }
+            val jsonArray = org.json.JSONArray(jsonString)
+            
+            for (i in 0 until jsonArray.length()) {
+                val pokemon = jsonArray.getJSONObject(i)
+                if (pokemon.getInt("id") == pokemonId) {
+                    // Parse the Pokemon data
+                    val name = pokemon.getString("name")
+                    val types = mutableListOf<TypeSlot>()
+                    val stats = mutableListOf<Stat>()
+                    val moves = mutableListOf<LevelUpMove>()
+                    val abilities = mutableListOf<AbilitySlot>()
+                    
+                    // Parse types
+                    if (pokemon.has("types")) {
+                        val typesArray = pokemon.getJSONArray("types")
+                        for (j in 0 until typesArray.length()) {
+                            val type = typesArray.getJSONObject(j)
+                            val slot = type.getInt("slot")
+                            val typeName = type.getJSONObject("type").getString("name")
+                                                         types.add(TypeSlot(slot, TypeInfo(typeName, "")))
+                        }
+                    }
+                    
+                    // Parse stats
+                    if (pokemon.has("stats")) {
+                        val statsArray = pokemon.getJSONArray("stats")
+                        for (j in 0 until statsArray.length()) {
+                            val stat = statsArray.getJSONObject(j)
+                            val baseStat = stat.getInt("base_stat")
+                            val statName = stat.getJSONObject("stat").getString("name")
+                                                         stats.add(Stat(baseStat, 0, StatInfo(statName, "")))
+                        }
+                    }
+                    
+                    // Parse moves
+                    if (pokemon.has("moves")) {
+                        val movesArray = pokemon.getJSONArray("moves")
+                        for (j in 0 until movesArray.length()) {
+                            val move = movesArray.getJSONObject(j)
+                            val levelLearnedAt = move.getJSONArray("version_group_details")
+                                .getJSONObject(0)
+                                .getJSONObject("level_learned_at")
+                                .getInt("level")
+                            val moveName = move.getJSONObject("move").getString("name")
+                                                         moves.add(LevelUpMove(moveName, levelLearnedAt, "red-blue"))
+                        }
+                    }
+                    
+                    // Parse abilities
+                    if (pokemon.has("abilities")) {
+                        val abilitiesArray = pokemon.getJSONArray("abilities")
+                        for (j in 0 until abilitiesArray.length()) {
+                            val ability = abilitiesArray.getJSONObject(j)
+                            val slot = ability.getInt("slot")
+                            val abilityName = ability.getJSONObject("ability").getString("name")
+                                                         abilities.add(AbilitySlot(Ability(abilityName), false, slot))
+                        }
+                    }
+                    
+                                         return Pokemon(
+                         id = pokemonId,
+                         name = name,
+                         types = types,
+                         stats = stats,
+                         abilities = abilities,
+                         height = 1, // Default height
+                         weight = 1, // Default weight
+                         baseExperience = 0, // Default base experience
+                         levelUpMoves = moves, // Use the parsed moves
+                         spritePath = "" // Default sprite path
+                     )
+                }
+            }
+            null
+        } catch (e: Exception) {
+            android.util.Log.e(TAG, "Error finding Pokemon by ID", e)
+            null
+        }
+    }
+    
+    /**
+     * Create PartyPokemon with specific level, experience, and nature
+     * @param pokemon The base Pokemon
+     * @param level The desired level
+     * @param currentExp The desired current experience
+     * @param nature The desired nature
+     * @return New PartyPokemon instance
+     */
+    private fun createPartyPokemon(
+        pokemon: Pokemon,
+        level: Int,
+        currentExp: Int,
+        nature: Nature
+    ): PartyPokemon {
+        // Calculate proficiency bonus for the specified level
+        val proficiency = calculateProficiencyBonus(level)
+        
+        // Calculate HP based on level and base stats
+        val baseHP = pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 10
+        val maxHP = calculateMaxHP(baseHP, level)
+        
+        // Search for evolution data for the evolved form
+        val evolutionData = PartyPokemon.findEvolutionData(context, pokemon.id)
+        
+        return PartyPokemon(
+            id = pokemon.id,
+            name = pokemon.name,
+            basePokemon = pokemon,
+            level = level,
+            currentExp = currentExp,
+            maxHP = maxHP,
+            currentHP = maxHP, // Start with full HP
+            nature = nature,
+            proficiency = proficiency,
+            currentMoveSet = emptyList(),
+            conditions = emptyList(),
+            weaknesses = calculateWeaknesses(pokemon.types.map { it.type.name }),
+            resistances = calculateResistances(pokemon.types.map { it.type.name }),
+                         actualSize = 1,
+             actualWeight = 1,
+                         availableMoves = pokemon.levelUpMoves.filter { it.levelLearnedAt <= level },
+            convertedDnDStats = emptyMap(),
+            currentDnDStats = emptyMap(),
+            movementSpeed = 30,
+            evolution = evolutionData
+        )
+    }
+    
+    /**
+     * Calculate proficiency bonus based on level
+     */
+    private fun calculateProficiencyBonus(level: Int): Int {
+        return when {
+            level <= 4 -> 2
+            level <= 8 -> 3
+            level <= 12 -> 4
+            level <= 16 -> 5
+            else -> 6
+        }
+    }
+    
+    /**
+     * Calculate max HP based on base HP and level
+     */
+    private fun calculateMaxHP(baseHP: Int, level: Int): Int {
+        val dndHP = kotlin.math.floor(baseHP / 3.0).toInt()
+        return dndHP + (level - 1) * 2 // Simple HP calculation
+    }
+    
+
     
     /**
      * Create a new PartyPokemon from base Pokemon

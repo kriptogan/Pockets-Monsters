@@ -36,6 +36,9 @@ import com.kriptogan.pocketsmonsters.data.converter.DnDConverter
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun PartyPokemonDetailScreen(
@@ -60,6 +63,7 @@ fun PartyPokemonDetailScreen(
     
     val context = LocalContext.current
     val partyManager = remember { PartyManager(context) }
+    val coroutineScope = rememberCoroutineScope()
     
          var currentMoveSet by remember { mutableStateOf(partyPokemon.currentMoveSet.toMutableList()) }
      var currentConditions by remember { mutableStateOf(partyPokemon.conditions.toMutableList()) }
@@ -89,6 +93,9 @@ fun PartyPokemonDetailScreen(
      
      // Local state for evolution confirmation dialog
      var showEvolutionDialog by remember { mutableStateOf(false) }
+     
+     // Local state for evolution progress
+     var isEvolutionInProgress by remember { mutableStateOf(false) }
     
          // Sync local HP state with PartyManager data when screen becomes active
      LaunchedEffect(Unit) {
@@ -114,12 +121,67 @@ fun PartyPokemonDetailScreen(
         }
     }
     
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp)
-    ) {
+         // Show evolution progress screen if evolution is in progress
+     if (isEvolutionInProgress) {
+         Box(
+             modifier = Modifier.fillMaxSize(),
+             contentAlignment = Alignment.Center
+         ) {
+             Column(
+                 horizontalAlignment = Alignment.CenterHorizontally,
+                 verticalArrangement = Arrangement.spacedBy(24.dp)
+             ) {
+                 // Evolution animation placeholder (you can add a proper animation later)
+                 Box(
+                     modifier = Modifier
+                         .size(120.dp)
+                         .background(
+                             color = Color(0xFF9C27B0).copy(alpha = 0.1f),
+                             shape = RoundedCornerShape(60.dp)
+                         )
+                         .border(
+                             width = 3.dp,
+                             color = Color(0xFF9C27B0),
+                             shape = RoundedCornerShape(60.dp)
+                         ),
+                     contentAlignment = Alignment.Center
+                 ) {
+                     Text(
+                         text = "✨",
+                         style = MaterialTheme.typography.displayMedium
+                     )
+                 }
+                 
+                 Text(
+                     text = "Evolution in Progress...",
+                     style = MaterialTheme.typography.headlineMedium,
+                     fontWeight = FontWeight.Bold,
+                     color = Color(0xFF9C27B0),
+                     textAlign = TextAlign.Center
+                 )
+                 
+                 Text(
+                     text = "Your ${currentPokemon.name.replaceFirstChar { it.uppercase() }} is evolving!",
+                     style = MaterialTheme.typography.bodyLarge,
+                     color = Color(0xFF666666),
+                     textAlign = TextAlign.Center
+                 )
+                 
+                 CircularProgressIndicator(
+                     color = Color(0xFF9C27B0),
+                     modifier = Modifier.size(48.dp)
+                 )
+             }
+         }
+         return
+     }
+     
+     Column(
+         modifier = modifier
+             .fillMaxSize()
+             .verticalScroll(rememberScrollState())
+             .padding(16.dp)
+     ) {
         // 1. Simplified Header - Back button and Pokemon name only
         Row(
             modifier = Modifier
@@ -1549,21 +1611,51 @@ fun PartyPokemonDetailScreen(
                          textAlign = TextAlign.Center
                      )
                  },
-                 confirmButton = {
-                     Button(
-                         onClick = {
-                             partyManager.executeEvolution(currentPokemon.id)
-                             showEvolutionDialog = false
-                             showExpDialog = false
-                             levelChangeMessage = null
-                         },
-                         colors = ButtonDefaults.buttonColors(
-                             containerColor = Color(0xFF9C27B0)
-                         )
-                     ) {
-                         Text("Confirm Evolution")
-                     }
-                 },
+                                   confirmButton = {
+                      Button(
+                          onClick = {
+                              // Start evolution process
+                              isEvolutionInProgress = true
+                              showEvolutionDialog = false
+                              showExpDialog = false
+                              levelChangeMessage = null
+                              
+                              // Execute evolution in background
+                              coroutineScope.launch {
+                                  val result = partyManager.executeEvolution(currentPokemon.id)
+                                  
+                                  // Switch back to main thread to update UI
+                                  withContext(Dispatchers.Main) {
+                                      if (result.isSuccess) {
+                                          val evolvedPokemon = result.getOrNull()
+                                          if (evolvedPokemon != null) {
+                                              // Update local state with evolved Pokemon
+                                              currentPokemon = evolvedPokemon
+                                              currentHP = evolvedPokemon.currentHP
+                                              maxHP = evolvedPokemon.maxHP
+                                              currentExp = evolvedPokemon.currentExp
+                                              currentLevel = evolvedPokemon.level
+                                              currentMoveSet = evolvedPokemon.currentMoveSet.toMutableList()
+                                              currentConditions = evolvedPokemon.conditions.toMutableList()
+                                          }
+                                      } else {
+                                          // Evolution failed - show error and return to normal view
+                                          val error = result.exceptionOrNull()?.message ?: "Evolution failed"
+                                          android.util.Log.e("Evolution", "Failed: $error")
+                                      }
+                                      
+                                      // Hide evolution progress screen
+                                      isEvolutionInProgress = false
+                                  }
+                              }
+                          },
+                          colors = ButtonDefaults.buttonColors(
+                              containerColor = Color(0xFF9C27B0)
+                          )
+                      ) {
+                          Text("Confirm Evolution")
+                      }
+                  },
                  dismissButton = {
                      TextButton(onClick = { showEvolutionDialog = false }) {
                          Text("Cancel")
