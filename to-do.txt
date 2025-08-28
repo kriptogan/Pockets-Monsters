@@ -21,8 +21,8 @@ V 19. רשימת התקפות לפי רמות
 V 20. הוספה לקבוצה
 V 21. Update energy slots to include 6th-9th stages
 V 22. improve party details design.
-23. Proficiency
-24. bonuses and penalty to attributes management.
+V 23. Proficiency
+V 24. bonuses and penalty to attributes management.
 25. Show level and exp
 26. Exp gain
 V 27. Try to place the types inside the image at the bottom, one above the other.

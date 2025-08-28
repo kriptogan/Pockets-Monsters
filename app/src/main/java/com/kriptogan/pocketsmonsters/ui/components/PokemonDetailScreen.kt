@@ -309,6 +309,26 @@ fun PokemonDetailScreen(
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF1A1A1A),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                    
+                    // Base Experience label above value
+                    Text(
+                        text = "Base Exp",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF666666),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                    
+                    // Base Experience value (same size as other values)
+                    Text(
+                        text = "${pokemon.baseExperience}",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF1A1A1A),
                         textAlign = TextAlign.Center
                     )
                 }

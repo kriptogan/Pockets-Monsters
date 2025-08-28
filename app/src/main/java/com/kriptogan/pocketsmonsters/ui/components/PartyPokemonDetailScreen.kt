@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -64,6 +66,8 @@ fun PartyPokemonDetailScreen(
     var showMoveSelectionDialog by remember { mutableStateOf(false) }
     var showConditionDialog by remember { mutableStateOf(false) }
     var showMaxHPDialog by remember { mutableStateOf(false) }
+    var showNatureDescriptionDialog by remember { mutableStateOf(false) }
+    var showFullRestDialog by remember { mutableStateOf(false) }
     
     // Local state for current HP and max HP to make UI reactive
     var currentHP by remember { mutableStateOf(partyPokemon.currentHP) }
@@ -359,7 +363,12 @@ fun PartyPokemonDetailScreen(
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
                                 color = Color(0xFF1A1A1A),
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.pointerInput(Unit) {
+                                    detectTapGestures(
+                                        onLongPress = { showFullRestDialog = true }
+                                    )
+                                }
                             )
                             
                                                          // Up arrow (increase HP)
@@ -434,7 +443,8 @@ fun PartyPokemonDetailScreen(
                             text = partyPokemon.nature.name,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.clickable { showNatureDescriptionDialog = true }
                         )
                         
                         // Separator
@@ -963,6 +973,153 @@ fun PartyPokemonDetailScreen(
                 },
                 dismissButton = {
                     TextButton(onClick = { showMaxHPDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
+        
+        // Nature Description Dialog
+        if (showNatureDescriptionDialog) {
+            AlertDialog(
+                onDismissRequest = { showNatureDescriptionDialog = false },
+                title = { 
+                    Text(
+                        text = partyPokemon.nature.name,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                },
+                text = { 
+                    Column {
+                        Text(
+                            text = partyPokemon.nature.description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFF1A1A1A)
+                        )
+                        
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
+                        // Show stat effects
+                        if (partyPokemon.nature.increasedStat != null || partyPokemon.nature.decreasedStat != null) {
+                            Text(
+                                text = "Stat Effects:",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF666666),
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            
+                            if (partyPokemon.nature.increasedStat != null) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowUp,
+                                        contentDescription = "Increased",
+                                        tint = Color.Red,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Text(
+                                        text = "${partyPokemon.nature.increasedStat} (+${partyPokemon.proficiency})",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Color.Red,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                }
+                            }
+                            
+                            if (partyPokemon.nature.decreasedStat != null) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    modifier = Modifier.padding(top = 4.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowDown,
+                                        contentDescription = "Decreased",
+                                        tint = Color.Blue,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Text(
+                                        text = "${partyPokemon.nature.decreasedStat} (-2)",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Color.Blue,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                }
+                            }
+                        } else {
+                            Text(
+                                text = "This nature has no stat effects.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color(0xFF666666),
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                            )
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showNatureDescriptionDialog = false }) {
+                        Text("Close")
+                    }
+                }
+            )
+        }
+        
+        // Full Rest Confirmation Dialog
+        if (showFullRestDialog) {
+            AlertDialog(
+                onDismissRequest = { showFullRestDialog = false },
+                title = { 
+                    Text(
+                        text = "Execute Full Rest?",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                },
+                text = { 
+                    Column {
+                        Text(
+                            text = "This will restore ${partyPokemon.name}'s HP to maximum (${maxHP}).",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFF1A1A1A)
+                        )
+                        
+                        Spacer(modifier = Modifier.height(8.dp))
+                        
+                        Text(
+                            text = "Current HP: ${currentHP}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFF666666)
+                        )
+                        
+                        Text(
+                            text = "Max HP: ${maxHP}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFF666666)
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            // Set current HP to max HP
+                            val result = partyManager.updatePartyPokemonHP(partyPokemon.id, maxHP)
+                            if (result.isSuccess) {
+                                currentHP = maxHP
+                            }
+                            showFullRestDialog = false
+                        }
+                    ) {
+                        Text("Rest")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showFullRestDialog = false }) {
                         Text("Cancel")
                     }
                 }
