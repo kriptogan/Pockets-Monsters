@@ -51,7 +51,10 @@ data class PartyPokemon(
     val movementSpeed: Int = 30,
     
     // Metadata
-    val addedToPartyAt: Long = System.currentTimeMillis()
+    val addedToPartyAt: Long = System.currentTimeMillis(),
+    
+    // Evolution data
+    val evolution: EvolutionDetails? = null
 ) {
     
     companion object {
@@ -94,6 +97,38 @@ data class PartyPokemon(
                 else -> 6         // Cap at +6 for levels above 20
             }
         }
+        
+                /**
+         * Search for evolution data in pokemons.json file
+         * @param context Android context to access assets
+         * @param pokemonId The ID of the Pokemon to search for
+         * @return EvolutionDetails if found, null otherwise
+         */
+        fun findEvolutionData(context: android.content.Context, pokemonId: Int): EvolutionDetails? {
+            return try {
+                val inputStream = context.assets.open("pokemons.json")
+                val jsonString = inputStream.bufferedReader().use { it.readText() }
+                val jsonArray = org.json.JSONArray(jsonString)
+
+                for (i in 0 until jsonArray.length()) {
+                    val pokemon = jsonArray.getJSONObject(i)
+                    if (pokemon.getInt("id") == pokemonId) {
+                        if (pokemon.has("evolution")) {
+                            val evolution = pokemon.getJSONObject("evolution")
+                            return EvolutionDetails(
+                                level = evolution.getInt("level"),
+                                evolutionId = evolution.getInt("evolutionId")
+                            )
+                        }
+                        break
+                    }
+                }
+                null
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
     }
     
     /**
@@ -108,8 +143,8 @@ data class PartyPokemon(
         return when {
             newLevel > level -> {
                 // Level up occurred
-                val updatedPokemon = levelUp(newLevel, newCurrentExp)
-                "Level Up!" to updatedPokemon
+                val (message, updatedPokemon) = levelUp(newLevel, newCurrentExp)
+                message to updatedPokemon
             }
             newLevel < level -> {
                 // Level down occurred
@@ -282,15 +317,31 @@ data class PartyPokemon(
      * Simple level up - update level, proficiency, and experience
      * @param newLevel The new level
      * @param newExp The new experience total
-     * @return Updated Pokemon instance
+     * @return Pair of (message, updated Pokemon instance)
      */
-    private fun levelUp(newLevel: Int, newExp: Int): PartyPokemon {
+    private fun levelUp(newLevel: Int, newExp: Int): Pair<String, PartyPokemon> {
         val newProficiency = calculateProficiencyBonus(newLevel)
-        return this.copy(
+        
+        // Check if evolution level is reached
+        // Convert Pokemon game level to DnD level: ceil(level/5)
+        val evolutionMessage = if (evolution != null) {
+            val evolutionDnDLevel = kotlin.math.ceil(evolution.level / 5.0).toInt()
+            if (newLevel >= evolutionDnDLevel) {
+                "Reached evolution!"
+            } else {
+                "Level Up!"
+            }
+        } else {
+            "Level Up!"
+        }
+        
+        val updatedPokemon = this.copy(
             level = newLevel,
             currentExp = newExp,
             proficiency = newProficiency
         )
+        
+        return evolutionMessage to updatedPokemon
     }
     
     /**
@@ -334,3 +385,11 @@ enum class Condition(val displayName: String, val description: String) {
     STUNNED("Stunned", "Cannot act, others have advantage"),
     UNCONSCIOUS("Unconscious", "Cannot act, others have advantage")
 }
+
+/**
+ * Represents evolution details for a Pokemon
+ */
+data class EvolutionDetails(
+    val level: Int,
+    val evolutionId: Int
+)

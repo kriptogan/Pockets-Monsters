@@ -84,8 +84,11 @@ fun PartyPokemonDetailScreen(
     // Local state for current Pokemon instance to track changes
     var currentPokemon by remember { mutableStateOf(partyPokemon) }
     
-    // Local state for level change messages
-    var levelChangeMessage by remember { mutableStateOf<String?>(null) }
+         // Local state for level change messages
+     var levelChangeMessage by remember { mutableStateOf<String?>(null) }
+     
+     // Local state for evolution confirmation dialog
+     var showEvolutionDialog by remember { mutableStateOf(false) }
     
          // Sync local HP state with PartyManager data when screen becomes active
      LaunchedEffect(Unit) {
@@ -1466,6 +1469,7 @@ fun PartyPokemonDetailScreen(
                                             color = when {
                                                 levelChangeMessage!!.contains("Level Up") -> Color(0xFF4CAF50)
                                                 levelChangeMessage!!.contains("Level Down") -> Color(0xFFFF9800)
+                                                levelChangeMessage!!.contains("Reached evolution") -> Color(0xFF9C27B0)
                                                 else -> Color(0xFF2196F3)
                                             }.copy(alpha = 0.1f),
                                             shape = RoundedCornerShape(8.dp)
@@ -1475,24 +1479,40 @@ fun PartyPokemonDetailScreen(
                                             color = when {
                                                 levelChangeMessage!!.contains("Level Up") -> Color(0xFF4CAF50)
                                                 levelChangeMessage!!.contains("Level Down") -> Color(0xFFFF9800)
+                                                levelChangeMessage!!.contains("Reached evolution") -> Color(0xFF9C27B0)
                                                 else -> Color(0xFF2196F3)
                                             },
                                             shape = RoundedCornerShape(8.dp)
                                         )
                                         .padding(12.dp)
                                 ) {
-                                    Text(
-                                        text = levelChangeMessage!!,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        fontWeight = FontWeight.Bold,
-                                        color = when {
-                                            levelChangeMessage!!.contains("Level Up") -> Color(0xFF4CAF50)
-                                            levelChangeMessage!!.contains("Level Down") -> Color(0xFFFF9800)
-                                            else -> Color(0xFF2196F3)
-                                        },
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = levelChangeMessage!!,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            color = when {
+                                                levelChangeMessage!!.contains("Level Up") -> Color(0xFF4CAF50)
+                                                levelChangeMessage!!.contains("Level Down") -> Color(0xFFFF9800)
+                                                levelChangeMessage!!.contains("Reached evolution") -> Color(0xFF9C27B0)
+                                                else -> Color(0xFF2196F3)
+                                            },
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                        
+                                                                                 // Automatically show evolution dialog when evolution is available
+                                         if (levelChangeMessage!!.contains("Reached evolution")) {
+                                             LaunchedEffect(Unit) {
+                                                 showEvolutionDialog = true
+                                                 // Close the experience dialog since we're showing evolution directly
+                                                 showExpDialog = false
+                                             }
+                                         }
+                                    }
                                 }
                             }
                         }
@@ -1505,10 +1525,53 @@ fun PartyPokemonDetailScreen(
                     }) {
                         Text("Close")
                     }
-                }
-            )
-        }
-    }
+                                 }
+             )
+         }
+         
+         // Evolution Confirmation Dialog
+         if (showEvolutionDialog) {
+             AlertDialog(
+                 onDismissRequest = { showEvolutionDialog = false },
+                 title = { 
+                     Text(
+                         text = "Evolution Confirmation",
+                         style = MaterialTheme.typography.titleLarge,
+                         fontWeight = FontWeight.Bold,
+                         color = Color(0xFF9C27B0)
+                     )
+                 },
+                 text = { 
+                     Text(
+                         text = "Pokemon reached evolution!",
+                         style = MaterialTheme.typography.bodyLarge,
+                         color = Color(0xFF1A1A1A),
+                         textAlign = TextAlign.Center
+                     )
+                 },
+                 confirmButton = {
+                     Button(
+                         onClick = {
+                             partyManager.executeEvolution(currentPokemon.id)
+                             showEvolutionDialog = false
+                             showExpDialog = false
+                             levelChangeMessage = null
+                         },
+                         colors = ButtonDefaults.buttonColors(
+                             containerColor = Color(0xFF9C27B0)
+                         )
+                     ) {
+                         Text("Confirm Evolution")
+                     }
+                 },
+                 dismissButton = {
+                     TextButton(onClick = { showEvolutionDialog = false }) {
+                         Text("Cancel")
+                     }
+                 }
+             )
+         }
+     }
 
 /**
  * Format timestamp to readable date

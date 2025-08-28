@@ -21,6 +21,7 @@ class PartyManager(context: Context) {
         private const val MAX_PARTY_SIZE = 6
     }
     
+    private val context: Context = context
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     private val gson = Gson()
     private val dndConverter = DnDConverter()
@@ -154,6 +155,15 @@ class PartyManager(context: Context) {
     }
     
     /**
+     * Execute evolution for a Pokemon
+     * @param pokemonId The ID of the Pokemon to evolve
+     */
+    fun executeEvolution(pokemonId: Int) {
+        android.util.Log.d(TAG, "Evolution started!")
+        // TODO: Implement evolution logic
+    }
+    
+    /**
      * Create a new PartyPokemon from base Pokemon
      */
     private fun createPartyPokemon(pokemon: Pokemon): PartyPokemon {
@@ -181,6 +191,9 @@ class PartyManager(context: Context) {
         // Assign a random nature
         val randomNature = getRandomNature()
         
+        // Search for evolution data
+        val evolutionData = PartyPokemon.findEvolutionData(context, pokemon.id)
+        
         return PartyPokemon(
             id = pokemon.id,
             name = pokemon.name,
@@ -204,7 +217,10 @@ class PartyManager(context: Context) {
             proficiency = 2,
             
             // D&D derived stats (calculated from currentDnDStats and actualWeight)
-            movementSpeed = 30
+            movementSpeed = 30,
+            
+            // Evolution data
+            evolution = evolutionData
         )
     }
     

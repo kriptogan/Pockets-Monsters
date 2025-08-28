@@ -54,7 +54,7 @@ When level up or down, update the available moves. and evolution
 
 If a prepared move is no longer available remove it from the preparation list.
 
-29. 8. Moves management.
+29. Moves management.
 
 Show prepared moves (free cost and 4 move with an energy cost). Support remove action.
 
