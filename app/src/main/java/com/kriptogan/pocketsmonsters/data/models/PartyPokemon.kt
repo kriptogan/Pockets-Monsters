@@ -239,7 +239,7 @@ data class PartyPokemon(
         
         val ac = 10 + speedModifier + proficiencyBonus
         
-        Log.d("PartyPokemon", "evolution test: AC calculation for $name: speedStat=$speedStat, speedModifier=$speedModifier, proficiencyBonus=$proficiencyBonus, AC=$ac")
+        Log.d("PartyPokemon", "AC calculation for $name: speedStat=$speedStat, speedModifier=$speedModifier, proficiencyBonus=$proficiencyBonus, AC=$ac")
         
         return ac
     }
@@ -248,12 +248,12 @@ data class PartyPokemon(
      * Log current DnD stats for debugging evolution
      */
     fun logCurrentDnDStats() {
-        Log.d("PartyPokemon", "evolution test: Current DnD stats for $name: $currentDnDStats")
-        Log.d("PartyPokemon", "evolution test: Stats breakdown for $name:")
+        Log.d("PartyPokemon", "Current DnD stats for $name: $currentDnDStats")
+        Log.d("PartyPokemon", "Stats breakdown for $name:")
         currentDnDStats.forEach { (statName, value) ->
             val modifier = floor((value - 10) / 2.0).toInt()
             val modifierText = if (modifier >= 0) "+$modifier" else "$modifier"
-            Log.d("PartyPokemon", "evolution test:   $statName: $value (modifier: $modifierText)")
+            Log.d("PartyPokemon", "  $statName: $value (modifier: $modifierText)")
         }
     }
     
@@ -275,7 +275,7 @@ data class PartyPokemon(
         
         val initiative = speedModifier + proficiencyBonus
         
-        Log.d("PartyPokemon", "evolution test: Initiative calculation for $name: speedStat=$speedStat, speedModifier=$speedModifier, proficiencyBonus=$proficiencyBonus, Initiative=$initiative")
+        Log.d("PartyPokemon", "Initiative calculation for $name: speedStat=$speedStat, speedModifier=$speedModifier, proficiencyBonus=$proficiencyBonus, Initiative=$initiative")
         
         return initiative
     }
@@ -357,7 +357,7 @@ data class PartyPokemon(
         // Convert Pokemon game level to DnD level: ceil(level/5)
         val evolutionMessage = if (evolution != null) {
             val evolutionDnDLevel = kotlin.math.ceil(evolution.level / 5.0).toInt()
-            Log.d("PartyPokemon", "evolution test: Evolution check for $name: level=$newLevel, evolutionDnDLevel=$evolutionDnDLevel")
+            Log.d("PartyPokemon", "Evolution check for $name: level=$newLevel, evolutionDnDLevel=$evolutionDnDLevel")
             if (newLevel >= evolutionDnDLevel) {
                 "Reached evolution!"
             } else {

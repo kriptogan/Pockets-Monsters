@@ -619,77 +619,77 @@ fun PartyPokemonDetailScreen(
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    // Row 1: Attack, Sp.Attack, Speed
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                                                 // Attack (Red) - using DnD converter like Pokemon list view
-                         StatGridItem(
-                             label = "ATTACK",
-                             value = "${dndView.convertedStats["Attack"] ?: 0}",
-                             statModifier = "${dndView.modifiers["Attack"] ?: 0}",
-                             color = Color(0xFFF44336),
-                             isProficient = false,
-                             isDeficient = false,
-                             modifier = Modifier.weight(1f)
-                         )
-                         
-                         // Sp.Attack (Purple) - using DnD converter like Pokemon list view
-                         StatGridItem(
-                             label = "SP.ATTACK",
-                             value = "${dndView.convertedStats["Sp.Atk"] ?: 0}",
-                             statModifier = "${dndView.modifiers["Sp.Atk"] ?: 0}",
-                             color = Color(0xFF9C27B0),
-                             isProficient = false,
-                             isDeficient = false,
-                             modifier = Modifier.weight(1f)
-                         )
-                         
-                         // Speed (Green/Blue) - using DnD converter like Pokemon list view
-                         StatGridItem(
-                             label = "SPEED",
-                             value = "${dndView.convertedStats["Speed"] ?: 0}",
-                             statModifier = "${dndView.modifiers["Speed"] ?: 0}",
-                             color = Color(0xFF4CAF50),
-                             isProficient = false,
-                             isDeficient = false,
-                             modifier = Modifier.weight(1f)
-                         )
-                    }
+                                         // Row 1: Attack, Sp.Attack, Speed
+                     Row(
+                         modifier = Modifier.fillMaxWidth(),
+                         horizontalArrangement = Arrangement.SpaceEvenly
+                     ) {
+                                                  // Attack (Red) - using DnD converter like Pokemon list view
+                          StatGridItem(
+                              label = "ATTACK",
+                              value = "${dndView.convertedStats["Attack"] ?: 0}",
+                              statModifier = "${dndView.modifiers["Attack"] ?: 0}",
+                              color = Color(0xFFF44336),
+                              isProficient = currentPokemon.nature.increasedStat == "Attack",
+                              isDeficient = currentPokemon.nature.decreasedStat == "Attack",
+                              modifier = Modifier.weight(1f)
+                          )
+                          
+                          // Sp.Attack (Purple) - using DnD converter like Pokemon list view
+                          StatGridItem(
+                              label = "SP.ATTACK",
+                              value = "${dndView.convertedStats["Sp.Atk"] ?: 0}",
+                              statModifier = "${dndView.modifiers["Sp.Atk"] ?: 0}",
+                              color = Color(0xFF9C27B0),
+                              isProficient = currentPokemon.nature.increasedStat == "Sp.Atk" || currentPokemon.nature.increasedStat == "Sp. Atk",
+                              isDeficient = currentPokemon.nature.decreasedStat == "Sp.Atk" || currentPokemon.nature.decreasedStat == "Sp. Atk",
+                              modifier = Modifier.weight(1f)
+                          )
+                          
+                          // Speed (Green/Blue) - using DnD converter like Pokemon list view
+                          StatGridItem(
+                              label = "SPEED",
+                              value = "${dndView.convertedStats["Speed"] ?: 0}",
+                              statModifier = "${dndView.modifiers["Speed"] ?: 0}",
+                              color = Color(0xFF4CAF50),
+                              isProficient = currentPokemon.nature.increasedStat == "Speed",
+                              isDeficient = currentPokemon.nature.decreasedStat == "Speed",
+                              modifier = Modifier.weight(1f)
+                          )
+                     }
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
-                    // Row 2: Defense, Sp.Defense, AC
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                                                 // Defense (Gray) - using DnD converter like Pokemon list view
-                         StatGridItem(
-                             label = "DEFENSE",
-                             value = "${dndView.convertedStats["Defense"] ?: 0}",
-                             statModifier = "${dndView.modifiers["Defense"] ?: 0}",
-                             color = Color(0xFF795548),
-                             isProficient = false,
-                             isDeficient = false,
-                             modifier = Modifier.weight(1f)
-                         )
-                         
-                         // Sp.Defense (Teal/Blue) - using DnD converter like Pokemon list view
-                         StatGridItem(
-                             label = "SP.DEFENSE",
-                             value = "${dndView.convertedStats["Sp.Def"] ?: 0}",
-                             statModifier = "${dndView.modifiers["Sp.Def"] ?: 0}",
-                             color = Color(0xFF00BCD4),
-                             isProficient = false,
-                             isDeficient = false,
-                             modifier = Modifier.weight(1f)
-                         )
+                                         // Row 2: Defense, Sp.Defense, AC
+                     Row(
+                         modifier = Modifier.fillMaxWidth(),
+                         horizontalArrangement = Arrangement.SpaceEvenly
+                     ) {
+                                                  // Defense (Gray) - using DnD converter like Pokemon list view
+                          StatGridItem(
+                              label = "DEFENSE",
+                              value = "${dndView.convertedStats["Defense"] ?: 0}",
+                              statModifier = "${dndView.modifiers["Defense"] ?: 0}",
+                              color = Color(0xFF795548),
+                              isProficient = currentPokemon.nature.increasedStat == "Defense",
+                              isDeficient = currentPokemon.nature.decreasedStat == "Defense",
+                              modifier = Modifier.weight(1f)
+                          )
+                          
+                          // Sp.Defense (Teal/Blue) - using DnD converter like Pokemon list view
+                          StatGridItem(
+                              label = "SP.DEFENSE",
+                              value = "${dndView.convertedStats["Sp.Def"] ?: 0}",
+                              statModifier = "${dndView.modifiers["Sp.Def"] ?: 0}",
+                              color = Color(0xFF00BCD4),
+                              isProficient = currentPokemon.nature.increasedStat == "Sp.Def" || currentPokemon.nature.increasedStat == "Sp. Def",
+                              isDeficient = currentPokemon.nature.decreasedStat == "Sp.Def" || currentPokemon.nature.decreasedStat == "Sp. Def",
+                              modifier = Modifier.weight(1f)
+                          )
                         
-                                                 // Empty space where AC was (removed to avoid duplication)
-                         Spacer(modifier = Modifier.weight(1f))
-                    }
+                                                  // Empty space where AC was (removed to avoid duplication)
+                          Spacer(modifier = Modifier.weight(1f))
+                     }
                 }
             }
             
