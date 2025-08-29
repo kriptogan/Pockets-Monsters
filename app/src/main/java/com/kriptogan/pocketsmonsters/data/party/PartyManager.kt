@@ -373,6 +373,25 @@ class PartyManager(context: Context) {
         val evolutionData = PartyPokemon.findEvolutionData(context, pokemon.id)
         android.util.Log.d(TAG, "Evolution data found: $evolutionData")
         
+        android.util.Log.d("lvlup process", "=== Creating PartyPokemon ===")
+        android.util.Log.d("lvlup process", "Base Pokemon levelUpMoves count: ${pokemon.levelUpMoves.size}")
+        android.util.Log.d("lvlup process", "Base Pokemon levelUpMoves: ${pokemon.levelUpMoves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
+        android.util.Log.d("lvlup process", "Creating for level: $level")
+        
+        // Convert level to D&D level for proper move filtering
+        val currentDnDLevel = kotlin.math.ceil(level / 5.0).toInt()
+        android.util.Log.d("lvlup process", "Current D&D level: $currentDnDLevel (from Pokemon level $level)")
+        
+        // Filter moves based on D&D level conversion
+        val availableMoves = pokemon.levelUpMoves.filter { move ->
+            val moveDnDLevel = kotlin.math.ceil(move.levelLearnedAt / 5.0).toInt()
+            val isAvailable = moveDnDLevel <= currentDnDLevel
+            android.util.Log.d("lvlup process", "Move ${move.name}: Pokemon Lv${move.levelLearnedAt} → D&D Lv$moveDnDLevel, available=$isAvailable")
+            isAvailable
+        }
+        
+        android.util.Log.d("lvlup process", "Filtered availableMoves count: ${availableMoves.size}")
+        
         val partyPokemon = PartyPokemon(
             id = pokemon.id,
             name = pokemon.name,
@@ -389,7 +408,7 @@ class PartyManager(context: Context) {
             resistances = calculateResistances(pokemon.types.map { it.type.name }),
             actualSize = actualSize,
             actualWeight = actualWeight,
-            availableMoves = pokemon.levelUpMoves.filter { it.levelLearnedAt <= level },
+            availableMoves = availableMoves,
             convertedDnDStats = dndView.convertedStats,
             currentDnDStats = currentDnDStats,
             movementSpeed = 30, // This will be recalculated by the Pokemon
@@ -457,8 +476,16 @@ class PartyManager(context: Context) {
         
         android.util.Log.d(TAG, "Size/Weight calculation: baseHeight=${pokemon.height}, baseWeight=${pokemon.weight}, actualSize=$actualSize, actualWeight=$actualWeight")
         
-        // Get available moves for level 1
-        val availableMoves = pokemon.levelUpMoves.filter { it.levelLearnedAt <= 1 }
+        // Get available moves for level 1 using D&D level conversion
+        val currentDnDLevel = kotlin.math.ceil(1 / 5.0).toInt() // Always 1 for level 1
+        android.util.Log.d("lvlup process", "Creating level 1 Pokemon - D&D level: $currentDnDLevel")
+        
+        val availableMoves = pokemon.levelUpMoves.filter { move ->
+            val moveDnDLevel = kotlin.math.ceil(move.levelLearnedAt / 5.0).toInt()
+            val isAvailable = moveDnDLevel <= currentDnDLevel
+            android.util.Log.d("lvlup process", "Move ${move.name}: Pokemon Lv${move.levelLearnedAt} → D&D Lv$moveDnDLevel, available=$isAvailable")
+            isAvailable
+        }
         
         // Calculate weaknesses and resistances (simplified - you can expand this)
         val weaknesses = calculateWeaknesses(pokemon.types.map { it.type.name })

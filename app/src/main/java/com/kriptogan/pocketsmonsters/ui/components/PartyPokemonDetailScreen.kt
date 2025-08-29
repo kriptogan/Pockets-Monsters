@@ -96,6 +96,9 @@ fun PartyPokemonDetailScreen(
      
      // Local state for evolution progress
      var isEvolutionInProgress by remember { mutableStateOf(false) }
+     
+     // Force UI refresh when Pokemon changes
+     var refreshTrigger by remember { mutableStateOf(0) }
     
          // Sync local HP state with PartyManager data when screen becomes active
      LaunchedEffect(Unit) {
@@ -106,6 +109,8 @@ fun PartyPokemonDetailScreen(
              currentExp = it.currentExp
              currentLevel = it.level
              currentPokemon = it
+             currentMoveSet = it.currentMoveSet.toMutableList()
+             refreshTrigger++
          }
      }
     
@@ -118,6 +123,8 @@ fun PartyPokemonDetailScreen(
             currentExp = it.currentExp
             currentLevel = it.level
             currentPokemon = it
+            currentMoveSet = it.currentMoveSet.toMutableList()
+            refreshTrigger++
         }
     }
     
@@ -757,13 +764,23 @@ fun PartyPokemonDetailScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     
                                          Text(
-                         text = "Available Moves (Level ${currentPokemon.level})",
+                         text = "Available Moves (Level ${currentPokemon.level}) - ${currentPokemon.availableMoves.size} moves",
                          style = MaterialTheme.typography.titleMedium,
                          fontWeight = FontWeight.Bold
                      )
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
+                                         // Debug: Log available moves and base Pokemon info
+                                         android.util.Log.d("lvlup process", "=== UI Display Debug ===")
+                                         android.util.Log.d("lvlup process", "Displaying available moves: ${currentPokemon.availableMoves.map { it.name }}")
+                                         android.util.Log.d("lvlup process", "Base Pokemon levelUpMoves: ${currentPokemon.basePokemon.levelUpMoves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
+                                         android.util.Log.d("lvlup process", "Current level: ${currentPokemon.level}")
+                                         
+                                         // Test recalculateAvailableMoves function
+                                         val testRecalculated = currentPokemon.recalculateAvailableMoves()
+                                         android.util.Log.d("lvlup process", "Test recalculated moves: ${testRecalculated.availableMoves.map { it.name }}")
+                                         
                                          if (currentPokemon.availableMoves.isNotEmpty()) {
                          currentPokemon.availableMoves.forEach { move ->
                             Row(
@@ -1491,15 +1508,31 @@ fun PartyPokemonDetailScreen(
                                     onClick = {
                                         val expAmount = expInput.toIntOrNull() ?: 0
                                         if (expAmount != 0) {
+                                            android.util.Log.d("PartyPokemonDetailScreen", "Before gainExp: level=${currentPokemon.level}, availableMoves=${currentPokemon.availableMoves.size}")
                                             val (message, updatedPokemon) = currentPokemon.gainExp(expAmount)
                                             
                                             // Update the party with the new Pokemon instance
                                             partyManager.updatePartyPokemon(updatedPokemon)
                                             
+                                            // Debug logging before update
+                                            android.util.Log.d("lvlup process", "=== UI Update Process ===")
+                                            android.util.Log.d("lvlup process", "Before update - currentPokemon level: ${currentPokemon.level}, availableMoves: ${currentPokemon.availableMoves.size}")
+                                            android.util.Log.d("lvlup process", "Before update - currentPokemon availableMoves: ${currentPokemon.availableMoves.map { it.name }}")
+                                            
                                             // Update local state to reflect changes immediately
                                             currentExp = updatedPokemon.currentExp
                                             currentLevel = updatedPokemon.level
                                             currentPokemon = updatedPokemon
+                                            currentMoveSet = updatedPokemon.currentMoveSet.toMutableList()
+                                            
+                                            // Force UI refresh
+                                            refreshTrigger++
+                                            
+                                            // Debug logging after update
+                                            android.util.Log.d("lvlup process", "After update - currentPokemon level: ${currentPokemon.level}, availableMoves: ${currentPokemon.availableMoves.size}")
+                                            android.util.Log.d("lvlup process", "After update - currentPokemon availableMoves: ${currentPokemon.availableMoves.map { it.name }}")
+                                            android.util.Log.d("lvlup process", "Updated Pokemon: level=${updatedPokemon.level}, availableMoves=${updatedPokemon.availableMoves.size}, currentMoveSet=${updatedPokemon.currentMoveSet.size}")
+                                            android.util.Log.d("lvlup process", "Available moves: ${updatedPokemon.availableMoves.map { it.name }}")
                                             
                                             // Capture the level change message
                                             levelChangeMessage = message
@@ -1637,6 +1670,7 @@ fun PartyPokemonDetailScreen(
                                               currentLevel = evolvedPokemon.level
                                               currentMoveSet = evolvedPokemon.currentMoveSet.toMutableList()
                                               currentConditions = evolvedPokemon.conditions.toMutableList()
+                                              refreshTrigger++
                                           }
                                       } else {
                                           // Evolution failed - show error and return to normal view
