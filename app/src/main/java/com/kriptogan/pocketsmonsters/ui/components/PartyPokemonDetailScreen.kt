@@ -218,7 +218,7 @@ fun PartyPokemonDetailScreen(
         
                  // Create DnD view for stats
          val dndConverter = remember { DnDConverter() }
-         val dndView = remember(currentPokemon.name) { 
+         val dndView = remember(currentPokemon.name, currentPokemon.basePokemon.id) { 
              // Use the base Pokemon data from PartyPokemon for proper DnD conversion
              dndConverter.convertPokemonToDnD(currentPokemon.basePokemon)
          }
@@ -358,14 +358,14 @@ fun PartyPokemonDetailScreen(
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         
-                        // Movement value
-                        Text(
-                            text = "${dndView.movement}ft",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF1A1A1A),
-                            textAlign = TextAlign.Center
-                        )
+                                                 // Movement value
+                         Text(
+                             text = "${currentPokemon.calculateCurrentMovementSpeed()}ft",
+                             style = MaterialTheme.typography.titleLarge,
+                             fontWeight = FontWeight.Medium,
+                             color = Color(0xFF1A1A1A),
+                             textAlign = TextAlign.Center
+                         )
                     }
                 }
                 

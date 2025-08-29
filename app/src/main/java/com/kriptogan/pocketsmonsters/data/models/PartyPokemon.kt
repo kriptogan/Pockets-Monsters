@@ -1,5 +1,6 @@
 package com.kriptogan.pocketsmonsters.data.models
 
+import android.util.Log
 import com.google.gson.annotations.SerializedName
 import kotlin.math.floor
 import kotlin.math.round
@@ -227,13 +228,33 @@ data class PartyPokemon(
      * - proficiencyBonus = +proficiency if Speed is proficient, -2 if Speed is deficient, 0 if neutral
      */
     fun calculateCurrentArmorClass(): Int {
+        // Log current DnD stats for debugging
+        logCurrentDnDStats()
+        
         val speedStat = currentDnDStats["Speed"] ?: 10
         val speedModifier = floor((speedStat - 10) / 2.0).toInt()
         
         // Check if Speed stat is proficient or deficient
         val proficiencyBonus = getStatProficiencyBonus("Speed")
         
-        return 10 + speedModifier + proficiencyBonus
+        val ac = 10 + speedModifier + proficiencyBonus
+        
+        Log.d("PartyPokemon", "evolution test: AC calculation for $name: speedStat=$speedStat, speedModifier=$speedModifier, proficiencyBonus=$proficiencyBonus, AC=$ac")
+        
+        return ac
+    }
+    
+    /**
+     * Log current DnD stats for debugging evolution
+     */
+    fun logCurrentDnDStats() {
+        Log.d("PartyPokemon", "evolution test: Current DnD stats for $name: $currentDnDStats")
+        Log.d("PartyPokemon", "evolution test: Stats breakdown for $name:")
+        currentDnDStats.forEach { (statName, value) ->
+            val modifier = floor((value - 10) / 2.0).toInt()
+            val modifierText = if (modifier >= 0) "+$modifier" else "$modifier"
+            Log.d("PartyPokemon", "evolution test:   $statName: $value (modifier: $modifierText)")
+        }
     }
     
     /**
@@ -243,13 +264,20 @@ data class PartyPokemon(
      * - proficiencyBonus = +proficiency if Speed is proficient, -2 if Speed is deficient, 0 if neutral
      */
     fun calculateCurrentInitiative(): Int {
+        // Log current DnD stats for debugging
+        logCurrentDnDStats()
+        
         val speedStat = currentDnDStats["Speed"] ?: 10
         val speedModifier = floor((speedStat - 10) / 2.0).toInt()
         
         // Check if Speed stat is proficient or deficient
         val proficiencyBonus = getStatProficiencyBonus("Speed")
         
-        return speedModifier + proficiencyBonus
+        val initiative = speedModifier + proficiencyBonus
+        
+        Log.d("PartyPokemon", "evolution test: Initiative calculation for $name: speedStat=$speedStat, speedModifier=$speedModifier, proficiencyBonus=$proficiencyBonus, Initiative=$initiative")
+        
+        return initiative
     }
     
     /**
@@ -260,10 +288,11 @@ data class PartyPokemon(
         val speedStat = currentDnDStats["Speed"] ?: 10
         
         // Step 1: Base Score
-        val baseScore = floor(speedStat / 10.0 + 5).toInt()
+        val baseScore = speedStat
         
         // Step 2: Weight Modifier (convert actualWeight to kg)
         val weightInKg = actualWeight / 10
+        
         val weightModifier = when {
             weightInKg < 10 -> 1       // 0-9.9 kg: +1
             weightInKg < 50 -> 0       // 10-49.9 kg: +0
@@ -281,7 +310,9 @@ data class PartyPokemon(
         // Step 5: Round to Nearest 5
         val movementInFeet = roundToNearest5(rawMovementInFeet)
         
-        return movementInFeet.toInt()
+        val finalMovement = movementInFeet.toInt()
+        
+        return finalMovement
     }
     
     /**
@@ -326,6 +357,7 @@ data class PartyPokemon(
         // Convert Pokemon game level to DnD level: ceil(level/5)
         val evolutionMessage = if (evolution != null) {
             val evolutionDnDLevel = kotlin.math.ceil(evolution.level / 5.0).toInt()
+            Log.d("PartyPokemon", "evolution test: Evolution check for $name: level=$newLevel, evolutionDnDLevel=$evolutionDnDLevel")
             if (newLevel >= evolutionDnDLevel) {
                 "Reached evolution!"
             } else {

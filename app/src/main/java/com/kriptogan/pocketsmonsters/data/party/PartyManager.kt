@@ -74,7 +74,7 @@ class PartyManager(context: Context) {
             val newParty = currentParty + partyPokemon
             saveParty(newParty)
             
-            Log.d(TAG, "Added ${pokemon.name} to party. Party size: ${newParty.size}")
+            Log.d(TAG, "evolution test: Added ${pokemon.name} to party. Party size: ${newParty.size}")
             return Result.success(partyPokemon)
             
         } catch (e: Exception) {
@@ -168,7 +168,7 @@ class PartyManager(context: Context) {
      */
     fun executeEvolution(pokemonId: Int): Result<PartyPokemon> {
         return try {
-            android.util.Log.d(TAG, "Evolution started for Pokemon ID: $pokemonId")
+            android.util.Log.d(TAG, "evolution test: Evolution started for Pokemon ID: $pokemonId")
             
             // 1. Find the current Pokemon in the party
             val currentPokemon = getParty().find { it.id == pokemonId }
@@ -179,7 +179,7 @@ class PartyManager(context: Context) {
             val levelToPreserve = currentPokemon.level
             val currentExpToPreserve = currentPokemon.currentExp
             
-            android.util.Log.d(TAG, "Preserving: Nature=${natureToPreserve.name}, Level=$levelToPreserve, Exp=$currentExpToPreserve")
+            android.util.Log.d(TAG, "evolution test: Preserving: Nature=${natureToPreserve.name}, Level=$levelToPreserve, Exp=$currentExpToPreserve")
             
             // 3. Search for the evolution form in pokemons.json
             val evolutionData = currentPokemon.evolution
@@ -188,7 +188,9 @@ class PartyManager(context: Context) {
             val evolvedBasePokemon = findPokemonById(evolutionData.evolutionId)
                 ?: return Result.failure(Exception("Evolution form not found in pokemons.json"))
             
-            android.util.Log.d(TAG, "Found evolution form: ${evolvedBasePokemon.name}")
+            android.util.Log.d(TAG, "evolution test: Found evolution form: ${evolvedBasePokemon.name}")
+            android.util.Log.d(TAG, "evolution test: Evolution form stats: ${evolvedBasePokemon.stats.map { "${it.stat.name}=${it.baseStat}" }}")
+            android.util.Log.d(TAG, "evolution test: Evolution form height: ${evolvedBasePokemon.height}, weight: ${evolvedBasePokemon.weight}")
             
             // 4. Create new PartyPokemon with evolved form but preserved values
             val evolvedPartyPokemon = createPartyPokemon(
@@ -198,20 +200,22 @@ class PartyManager(context: Context) {
                 nature = natureToPreserve
             )
             
+            android.util.Log.d(TAG, "evolution test: Created evolved PartyPokemon: maxHP=${evolvedPartyPokemon.maxHP}, currentDnDStats=${evolvedPartyPokemon.currentDnDStats}")
+            
             // 5. Replace the old Pokemon with the evolved one
             val currentParty = getParty().toMutableList()
             val pokemonIndex = currentParty.indexOfFirst { it.id == pokemonId }
             if (pokemonIndex != -1) {
                 currentParty[pokemonIndex] = evolvedPartyPokemon
                 saveParty(currentParty)
-                android.util.Log.d(TAG, "Evolution completed successfully!")
+                android.util.Log.d(TAG, "evolution test: Evolution completed successfully!")
                 Result.success(evolvedPartyPokemon)
             } else {
                 Result.failure(Exception("Failed to replace Pokemon in party"))
             }
             
         } catch (e: Exception) {
-            android.util.Log.e(TAG, "Evolution failed", e)
+            android.util.Log.e(TAG, "evolution test: Evolution failed", e)
             Result.failure(e)
         }
     }
@@ -284,18 +288,26 @@ class PartyManager(context: Context) {
                         }
                     }
                     
-                                         return Pokemon(
-                         id = pokemonId,
-                         name = name,
-                         types = types,
-                         stats = stats,
-                         abilities = abilities,
-                         height = 1, // Default height
-                         weight = 1, // Default weight
-                         baseExperience = 0, // Default base experience
-                         levelUpMoves = moves, // Use the parsed moves
-                         spritePath = "" // Default sprite path
-                     )
+                    // Parse height and weight
+                    val height = if (pokemon.has("height")) pokemon.getInt("height") else 1
+                    val weight = if (pokemon.has("weight")) pokemon.getInt("weight") else 1
+                    val baseExperience = if (pokemon.has("base_experience")) pokemon.getInt("base_experience") else 0
+                    val spritePath = if (pokemon.has("sprites") && pokemon.getJSONObject("sprites").has("front_default")) {
+                        pokemon.getJSONObject("sprites").getString("front_default")
+                    } else ""
+                    
+                    return Pokemon(
+                        id = pokemonId,
+                        name = name,
+                        types = types,
+                        stats = stats,
+                        abilities = abilities,
+                        height = height,
+                        weight = weight,
+                        baseExperience = baseExperience,
+                        levelUpMoves = moves, // Use the parsed moves
+                        spritePath = spritePath
+                    )
                 }
             }
             null
@@ -319,17 +331,49 @@ class PartyManager(context: Context) {
         currentExp: Int,
         nature: Nature
     ): PartyPokemon {
+        android.util.Log.d(TAG, "evolution test: === Creating PartyPokemon for ${pokemon.name} ===")
+        android.util.Log.d(TAG, "evolution test: Input parameters: level=$level, currentExp=$currentExp, nature=${nature.name}")
+        
+        // Convert to D&D stats using DnDConverter
+        val dndView = dndConverter.convertPokemonToDnD(pokemon)
+        android.util.Log.d(TAG, "evolution test: DnD conversion for ${pokemon.name}: convertedStats=${dndView.convertedStats}")
+        
         // Calculate proficiency bonus for the specified level
         val proficiency = calculateProficiencyBonus(level)
+        android.util.Log.d(TAG, "evolution test: Proficiency bonus for level $level: $proficiency")
         
-        // Calculate HP based on level and base stats
+        // Calculate HP based on level and base stats using proper DnD conversion
         val baseHP = pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 10
-        val maxHP = calculateMaxHP(baseHP, level)
+        val adjustedBaseHP = kotlin.math.floor(baseHP / 3.0).toInt() // New rule: floor(Base HP ÷ 3)
+        
+        // Calculate HP using proper Hit Dice rules
+        val hitDiceValue = when {
+            baseHP <= 50 -> 4  // d6 average
+            baseHP <= 100 -> 5 // d8 average
+            baseHP <= 150 -> 6 // d10 average
+            else -> 7          // d12 average
+        }
+        val maxHP = adjustedBaseHP
+        
+        android.util.Log.d(TAG, "evolution test: HP calculation: baseHP=$baseHP, adjustedBaseHP=$adjustedBaseHP, hitDiceValue=$hitDiceValue, level=$level, maxHP=$maxHP")
+        
+        // Generate size and weight variations (5% variation)
+        val sizeVariation = Random.nextDouble(-0.05, 0.06) // -5% to +5%
+        val weightVariation = Random.nextDouble(-0.05, 0.06) // -5% to +5%
+        val actualSize = maxOf(1, (pokemon.height * (1 + sizeVariation)).toInt())
+        val actualWeight = maxOf(1, (pokemon.weight * (1 + weightVariation)).toInt())
+        
+        android.util.Log.d(TAG, "evolution test: Size/Weight calculation: baseHeight=${pokemon.height}, baseWeight=${pokemon.weight}, actualSize=$actualSize, actualWeight=$actualWeight")
+        
+        // Keep base DnD stats without nature modifiers - they will be applied during calculations
+        val currentDnDStats = dndView.convertedStats.toMutableMap()
+        android.util.Log.d(TAG, "evolution test: Base DnD stats (no nature modifiers): $currentDnDStats")
         
         // Search for evolution data for the evolved form
         val evolutionData = PartyPokemon.findEvolutionData(context, pokemon.id)
+        android.util.Log.d(TAG, "evolution test: Evolution data found: $evolutionData")
         
-        return PartyPokemon(
+        val partyPokemon = PartyPokemon(
             id = pokemon.id,
             name = pokemon.name,
             basePokemon = pokemon,
@@ -343,14 +387,19 @@ class PartyManager(context: Context) {
             conditions = emptyList(),
             weaknesses = calculateWeaknesses(pokemon.types.map { it.type.name }),
             resistances = calculateResistances(pokemon.types.map { it.type.name }),
-                         actualSize = 1,
-             actualWeight = 1,
-                         availableMoves = pokemon.levelUpMoves.filter { it.levelLearnedAt <= level },
-            convertedDnDStats = emptyMap(),
-            currentDnDStats = emptyMap(),
-            movementSpeed = 30,
+            actualSize = actualSize,
+            actualWeight = actualWeight,
+            availableMoves = pokemon.levelUpMoves.filter { it.levelLearnedAt <= level },
+            convertedDnDStats = dndView.convertedStats,
+            currentDnDStats = currentDnDStats,
+            movementSpeed = 30, // This will be recalculated by the Pokemon
             evolution = evolutionData
         )
+        
+        android.util.Log.d(TAG, "evolution test: === PartyPokemon created successfully ===")
+        android.util.Log.d(TAG, "evolution test: Final PartyPokemon: id=${partyPokemon.id}, name=${partyPokemon.name}, level=${partyPokemon.level}, maxHP=${partyPokemon.maxHP}, currentDnDStats=${partyPokemon.currentDnDStats}")
+        
+        return partyPokemon
     }
     
     /**
@@ -367,11 +416,17 @@ class PartyManager(context: Context) {
     }
     
     /**
-     * Calculate max HP based on base HP and level
+     * Calculate max HP based on base HP and level using proper Hit Dice rules
      */
     private fun calculateMaxHP(baseHP: Int, level: Int): Int {
         val dndHP = kotlin.math.floor(baseHP / 3.0).toInt()
-        return dndHP + (level - 1) * 2 // Simple HP calculation
+        val hitDiceValue = when {
+            baseHP <= 50 -> 4  // d6 average
+            baseHP <= 100 -> 5 // d8 average
+            baseHP <= 150 -> 6 // d10 average
+            else -> 7          // d12 average
+        }
+        return dndHP + (level - 1) * hitDiceValue
     }
     
 
@@ -380,19 +435,27 @@ class PartyManager(context: Context) {
      * Create a new PartyPokemon from base Pokemon
      */
     private fun createPartyPokemon(pokemon: Pokemon): PartyPokemon {
+        android.util.Log.d(TAG, "evolution test: === Creating initial PartyPokemon for ${pokemon.name} ===")
+        android.util.Log.d(TAG, "evolution test: Input parameters: level=1, currentExp=0, random nature")
+        
         // Convert to D&D stats
         val dndView = dndConverter.convertPokemonToDnD(pokemon)
+        android.util.Log.d(TAG, "evolution test: DnD conversion for ${pokemon.name}: convertedStats=${dndView.convertedStats}")
         
         // Calculate HP based on current level (level 1) using new rules
         val baseHP = pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0
         val adjustedBaseHP = kotlin.math.floor(baseHP / 3.0).toInt() // New rule: floor(Base HP ÷ 3)
         val maxHP = adjustedBaseHP // For level 1, HP equals adjusted base HP
         
+        android.util.Log.d(TAG, "evolution test: HP calculation: baseHP=$baseHP, adjustedBaseHP=$adjustedBaseHP, maxHP=$maxHP")
+        
         // Generate size and weight variations (5% variation)
         val sizeVariation = Random.nextDouble(-0.05, 0.06) // -5% to +5%
         val weightVariation = Random.nextDouble(-0.05, 0.06) // -5% to +5%
         val actualSize = maxOf(1, (pokemon.height * (1 + sizeVariation)).toInt())
         val actualWeight = maxOf(1, (pokemon.weight * (1 + weightVariation)).toInt())
+        
+        android.util.Log.d(TAG, "evolution test: Size/Weight calculation: baseHeight=${pokemon.height}, baseWeight=${pokemon.weight}, actualSize=$actualSize, actualWeight=$actualWeight")
         
         // Get available moves for level 1
         val availableMoves = pokemon.levelUpMoves.filter { it.levelLearnedAt <= 1 }
@@ -403,11 +466,17 @@ class PartyManager(context: Context) {
         
         // Assign a random nature
         val randomNature = getRandomNature()
+        android.util.Log.d(TAG, "evolution test: Random nature assigned: ${randomNature.name}")
+        
+        // Keep base DnD stats without nature modifiers - they will be applied during calculations
+        val currentDnDStats = dndView.convertedStats.toMutableMap()
+        android.util.Log.d(TAG, "evolution test: Base DnD stats (no nature modifiers): $currentDnDStats")
         
         // Search for evolution data
         val evolutionData = PartyPokemon.findEvolutionData(context, pokemon.id)
+        android.util.Log.d(TAG, "evolution test: Evolution data found: $evolutionData")
         
-        return PartyPokemon(
+        val partyPokemon = PartyPokemon(
             id = pokemon.id,
             name = pokemon.name,
             basePokemon = pokemon,
@@ -419,7 +488,7 @@ class PartyManager(context: Context) {
             availableMoves = availableMoves,
             currentMoveSet = availableMoves.take(4).map { it.name },
             convertedDnDStats = dndView.convertedStats,
-            currentDnDStats = dndView.convertedStats.toMutableMap(),
+            currentDnDStats = currentDnDStats,
             weaknesses = weaknesses,
             resistances = resistances,
             conditions = emptyList(),
@@ -435,6 +504,11 @@ class PartyManager(context: Context) {
             // Evolution data
             evolution = evolutionData
         )
+        
+        android.util.Log.d(TAG, "evolution test: === Initial PartyPokemon created successfully ===")
+        android.util.Log.d(TAG, "evolution test: Final PartyPokemon: id=${partyPokemon.id}, name=${partyPokemon.name}, level=${partyPokemon.level}, maxHP=${partyPokemon.maxHP}, currentDnDStats=${partyPokemon.currentDnDStats}")
+        
+        return partyPokemon
     }
     
     /**
