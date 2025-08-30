@@ -188,9 +188,17 @@ class PartyManager(context: Context) {
             val evolvedBasePokemon = findPokemonById(evolutionData.evolutionId)
                 ?: return Result.failure(Exception("Evolution form not found in pokemons.json"))
             
-                    android.util.Log.d(TAG, "Found evolution form: ${evolvedBasePokemon.name}")
-        android.util.Log.d(TAG, "Evolution form stats: ${evolvedBasePokemon.stats.map { "${it.stat.name}=${it.baseStat}" }}")
-        android.util.Log.d(TAG, "Evolution form height: ${evolvedBasePokemon.height}, weight: ${evolvedBasePokemon.weight}")
+            android.util.Log.d(TAG, "=== Evolution Data Found ===")
+            android.util.Log.d(TAG, "Evolution data: $evolutionData")
+            android.util.Log.d(TAG, "Evolution level: ${evolutionData.level}")
+            android.util.Log.d(TAG, "Evolution ID: ${evolutionData.evolutionId}")
+            
+            android.util.Log.d(TAG, "=== Evolved Base Pokemon Found ===")
+            android.util.Log.d(TAG, "Found evolution form: ${evolvedBasePokemon.name}")
+            android.util.Log.d(TAG, "Evolution form stats: ${evolvedBasePokemon.stats.map { "${it.stat.name}=${it.baseStat}" }}")
+            android.util.Log.d(TAG, "Evolution form height: ${evolvedBasePokemon.height}, weight: ${evolvedBasePokemon.weight}")
+            android.util.Log.d(TAG, "Evolution form levelUpMoves count: ${evolvedBasePokemon.levelUpMoves.size}")
+            android.util.Log.d(TAG, "Evolution form levelUpMoves: ${evolvedBasePokemon.levelUpMoves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
             
             // 4. Create new PartyPokemon with evolved form but preserved values
             val evolvedPartyPokemon = createPartyPokemon(
@@ -209,9 +217,9 @@ class PartyManager(context: Context) {
                 currentParty[pokemonIndex] = evolvedPartyPokemon
                 saveParty(currentParty)
                 android.util.Log.d(TAG, "Evolution completed successfully!")
-                Result.success(evolvedPartyPokemon)
+                return Result.success(evolvedPartyPokemon)
             } else {
-                Result.failure(Exception("Failed to replace Pokemon in party"))
+                return Result.failure(Exception("Failed to replace Pokemon in party"))
             }
             
         } catch (e: Exception) {
@@ -226,15 +234,33 @@ class PartyManager(context: Context) {
      * @return Pokemon if found, null otherwise
      */
     private fun findPokemonById(pokemonId: Int): Pokemon? {
+        android.util.Log.d(TAG, "=== findPokemonById called ===")
+        android.util.Log.d(TAG, "Looking for Pokemon with ID: $pokemonId")
+        
         return try {
+            android.util.Log.d(TAG, "Opening pokemons.json from assets...")
             val inputStream = context.assets.open("pokemons.json")
+            android.util.Log.d(TAG, "Reading pokemons.json content...")
             val jsonString = inputStream.bufferedReader().use { it.readText() }
+            android.util.Log.d(TAG, "JSON content length: ${jsonString.length} characters")
+            
+            android.util.Log.d(TAG, "Parsing JSON array...")
             val jsonArray = org.json.JSONArray(jsonString)
+            android.util.Log.d(TAG, "JSON array length: ${jsonArray.length()} Pokemon entries")
             
             for (i in 0 until jsonArray.length()) {
                 val pokemon = jsonArray.getJSONObject(i)
-                if (pokemon.getInt("id") == pokemonId) {
+                val currentId = pokemon.getInt("id")
+                val currentName = pokemon.getString("name")
+                
+                android.util.Log.d(TAG, "Checking Pokemon $i: ID=$currentId, name=$currentName")
+                
+                if (currentId == pokemonId) {
+                    android.util.Log.d(TAG, "*** FOUND TARGET POKEMON! ***")
+                    android.util.Log.d(TAG, "Target Pokemon: $currentName (ID: $currentId)")
+                    
                     // Parse the Pokemon data
+                    android.util.Log.d(TAG, "Parsing Pokemon data for: $currentName")
                     val name = pokemon.getString("name")
                     val types = mutableListOf<TypeSlot>()
                     val stats = mutableListOf<Stat>()
@@ -242,53 +268,107 @@ class PartyManager(context: Context) {
                     val abilities = mutableListOf<AbilitySlot>()
                     
                     // Parse types
+                    android.util.Log.d(TAG, "Parsing types...")
                     if (pokemon.has("types")) {
                         val typesArray = pokemon.getJSONArray("types")
+                        android.util.Log.d(TAG, "Types array length: ${typesArray.length()}")
                         for (j in 0 until typesArray.length()) {
                             val type = typesArray.getJSONObject(j)
                             val slot = type.getInt("slot")
                             val typeName = type.getJSONObject("type").getString("name")
-                                                         types.add(TypeSlot(slot, TypeInfo(typeName, "")))
+                            android.util.Log.d(TAG, "Type $j: slot=$slot, name=$typeName")
+                            types.add(TypeSlot(slot, TypeInfo(typeName, "")))
                         }
+                    } else {
+                        android.util.Log.d(TAG, "No types field found")
                     }
                     
                     // Parse stats
+                    android.util.Log.d(TAG, "Parsing stats...")
                     if (pokemon.has("stats")) {
                         val statsArray = pokemon.getJSONArray("stats")
+                        android.util.Log.d(TAG, "Stats array length: ${statsArray.length()}")
                         for (j in 0 until statsArray.length()) {
                             val stat = statsArray.getJSONObject(j)
                             val baseStat = stat.getInt("base_stat")
                             val statName = stat.getJSONObject("stat").getString("name")
-                                                         stats.add(Stat(baseStat, 0, StatInfo(statName, "")))
+                            android.util.Log.d(TAG, "Stat $j: $statName = $baseStat")
+                            stats.add(Stat(baseStat, 0, StatInfo(statName, "")))
                         }
+                    } else {
+                        android.util.Log.d(TAG, "No stats field found")
                     }
                     
                     // Parse moves
-                    if (pokemon.has("moves")) {
-                        val movesArray = pokemon.getJSONArray("moves")
+                    android.util.Log.d(TAG, "=== Parsing moves ===")
+                    if (pokemon.has("level_up_moves")) {
+                        val movesArray = pokemon.getJSONArray("level_up_moves")
+                        android.util.Log.d(TAG, "level_up_moves array length: ${movesArray.length()}")
+                        
                         for (j in 0 until movesArray.length()) {
-                            val move = movesArray.getJSONObject(j)
-                            val levelLearnedAt = move.getJSONArray("version_group_details")
-                                .getJSONObject(0)
-                                .getJSONObject("level_learned_at")
-                                .getInt("level")
-                            val moveName = move.getJSONObject("move").getString("name")
-                                                         moves.add(LevelUpMove(moveName, levelLearnedAt, "red-blue"))
+                            try {
+                                val move = movesArray.getJSONObject(j)
+                                
+                                // Handle the actual JSON structure from pokemons.json
+                                val levelLearnedAt = if (move.has("level_learned_at")) {
+                                    move.getInt("level_learned_at")
+                                } else {
+                                    // Fallback: try to parse from version_group_details if it exists
+                                    try {
+                                        move.getJSONArray("version_group_details")
+                                            .getJSONObject(0)
+                                            .getJSONObject("level_learned_at")
+                                            .getInt("level")
+                                    } catch (e: Exception) {
+                                        android.util.Log.w(TAG, "Could not parse level_learned_at for move $j, using default level 1")
+                                        1
+                                    }
+                                }
+                                
+                                val moveName = if (move.has("name")) {
+                                    move.getString("name")
+                                } else {
+                                    // Fallback: try to parse from nested move object if it exists
+                                    try {
+                                        move.getJSONObject("move").getString("name")
+                                    } catch (e: Exception) {
+                                        android.util.Log.w(TAG, "Could not parse move name for move $j, using default name 'unknown'")
+                                        "unknown"
+                                    }
+                                }
+                                
+                                android.util.Log.d(TAG, "Move $j: $moveName (Lv$levelLearnedAt)")
+                                moves.add(LevelUpMove(moveName, levelLearnedAt, "red-blue"))
+                            } catch (moveError: Exception) {
+                                android.util.Log.e(TAG, "Error parsing move $j: ${moveError.message}")
+                                android.util.Log.e(TAG, "Move JSON: ${movesArray.getJSONObject(j)}")
+                            }
                         }
+                    } else {
+                        android.util.Log.d(TAG, "No level_up_moves field found")
                     }
                     
+                    android.util.Log.d(TAG, "Final moves count: ${moves.size}")
+                    android.util.Log.d(TAG, "Final moves: ${moves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
+                    
                     // Parse abilities
+                    android.util.Log.d(TAG, "Parsing abilities...")
                     if (pokemon.has("abilities")) {
                         val abilitiesArray = pokemon.getJSONArray("abilities")
+                        android.util.Log.d(TAG, "Abilities array length: ${abilitiesArray.length()}")
                         for (j in 0 until abilitiesArray.length()) {
                             val ability = abilitiesArray.getJSONObject(j)
                             val slot = ability.getInt("slot")
                             val abilityName = ability.getJSONObject("ability").getString("name")
-                                                         abilities.add(AbilitySlot(Ability(abilityName), false, slot))
+                            android.util.Log.d(TAG, "Ability $j: slot=$slot, name=$abilityName")
+                            abilities.add(AbilitySlot(Ability(abilityName), false, slot))
                         }
+                    } else {
+                        android.util.Log.d(TAG, "No abilities field found")
                     }
                     
                     // Parse height and weight
+                    android.util.Log.d(TAG, "Parsing height and weight...")
                     val height = if (pokemon.has("height")) pokemon.getInt("height") else 1
                     val weight = if (pokemon.has("weight")) pokemon.getInt("weight") else 1
                     val baseExperience = if (pokemon.has("base_experience")) pokemon.getInt("base_experience") else 0
@@ -296,7 +376,11 @@ class PartyManager(context: Context) {
                         pokemon.getJSONObject("sprites").getString("front_default")
                     } else ""
                     
-                    return Pokemon(
+                    android.util.Log.d(TAG, "Height: $height, Weight: $weight, Base Exp: $baseExperience")
+                    android.util.Log.d(TAG, "Sprite path: $spritePath")
+                    
+                    android.util.Log.d(TAG, "Creating Pokemon object...")
+                    val pokemonObject = Pokemon(
                         id = pokemonId,
                         name = name,
                         types = types,
@@ -305,14 +389,24 @@ class PartyManager(context: Context) {
                         height = height,
                         weight = weight,
                         baseExperience = baseExperience,
-                        levelUpMoves = moves, // Use the parsed moves
+                        levelUpMoves = moves,
                         spritePath = spritePath
                     )
+                    
+                    android.util.Log.d(TAG, "*** Pokemon object created successfully! ***")
+                    android.util.Log.d(TAG, "Final Pokemon: ${pokemonObject.name}, Types: ${pokemonObject.types.map { it.type.name }}, Moves: ${pokemonObject.levelUpMoves.size}")
+                    
+                    return pokemonObject
                 }
             }
+            
+            android.util.Log.d(TAG, "Pokemon with ID $pokemonId not found in pokemons.json")
             null
+            
         } catch (e: Exception) {
-            android.util.Log.e(TAG, "Error finding Pokemon by ID", e)
+            android.util.Log.e(TAG, "*** ERROR in findPokemonById ***", e)
+            android.util.Log.e(TAG, "Error details: ${e.message}")
+            android.util.Log.e(TAG, "Stack trace: ${e.stackTraceToString()}")
             null
         }
     }
@@ -378,9 +472,9 @@ class PartyManager(context: Context) {
         android.util.Log.d("lvlup process", "Base Pokemon levelUpMoves: ${pokemon.levelUpMoves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
         android.util.Log.d("lvlup process", "Creating for level: $level")
         
-        // Convert level to D&D level for proper move filtering
-        val currentDnDLevel = kotlin.math.ceil(level / 5.0).toInt()
-        android.util.Log.d("lvlup process", "Current D&D level: $currentDnDLevel (from Pokemon level $level)")
+        // Level is already the D&D level, no conversion needed
+        val currentDnDLevel = level
+        android.util.Log.d("lvlup process", "Current D&D level: $currentDnDLevel (level is already D&D level)")
         
         // Filter moves based on D&D level conversion
         val availableMoves = pokemon.levelUpMoves.filter { move ->
@@ -476,8 +570,8 @@ class PartyManager(context: Context) {
         
         android.util.Log.d(TAG, "Size/Weight calculation: baseHeight=${pokemon.height}, baseWeight=${pokemon.weight}, actualSize=$actualSize, actualWeight=$actualWeight")
         
-        // Get available moves for level 1 using D&D level conversion
-        val currentDnDLevel = kotlin.math.ceil(1 / 5.0).toInt() // Always 1 for level 1
+        // Level 1 is already the D&D level, no conversion needed
+        val currentDnDLevel = 1
         android.util.Log.d("lvlup process", "Creating level 1 Pokemon - D&D level: $currentDnDLevel")
         
         val availableMoves = pokemon.levelUpMoves.filter { move ->
