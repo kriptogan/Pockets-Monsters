@@ -163,48 +163,83 @@ class PartyManager(context: Context) {
      * @param pokemonId The ID of the Pokemon to evolve
      * @return Result containing the evolved Pokemon or error message
      */
-    fun executeEvolution(pokemonId: Int): Result<PartyPokemon> {
+        fun executeEvolution(pokemonId: Int): Result<PartyPokemon> {
+        Log.d("evolution test", "=== EVOLUTION PROCESS STARTED ===")
+        Log.d("evolution test", "Pokemon ID to evolve: $pokemonId")
+        
         return try {
             // 1. Find the current Pokemon in the party
+            Log.d("evolution test", "Step 1: Finding Pokemon in party...")
             val currentPokemon = getParty().find { it.id == pokemonId }
-                ?: return Result.failure(Exception("Pokemon not found in party"))
+            if (currentPokemon == null) {
+                Log.e("evolution test", "ERROR: Pokemon not found in party with ID: $pokemonId")
+                return Result.failure(Exception("Pokemon not found in party"))
+            }
+            Log.d("evolution test", "Found Pokemon: ${currentPokemon.name} (ID: ${currentPokemon.id})")
+            Log.d("evolution test", "Current level: ${currentPokemon.level}, Current EXP: ${currentPokemon.currentExp}")
             
             // 2. Save the current values to preserve
+            Log.d("evolution test", "Step 2: Preserving current values...")
             val natureToPreserve = currentPokemon.nature
             val levelToPreserve = currentPokemon.level
             val currentExpToPreserve = currentPokemon.currentExp
+            Log.d("evolution test", "Preserving - Nature: ${natureToPreserve.name}, Level: $levelToPreserve, EXP: $currentExpToPreserve")
             
             // 3. Search for the evolution form in pokemons.json
+            Log.d("evolution test", "Step 3: Checking evolution data...")
             val evolutionData = currentPokemon.evolution
-                ?: return Result.failure(Exception("No evolution data found"))
+            if (evolutionData == null) {
+                Log.e("evolution test", "ERROR: No evolution data found for ${currentPokemon.name}")
+                return Result.failure(Exception("No evolution data found"))
+            }
+            Log.d("evolution test", "Evolution data found: evolutionId=${evolutionData.evolutionId}, level=${evolutionData.level}")
             
+            Log.d("evolution test", "Searching for evolved Pokemon with ID: ${evolutionData.evolutionId}")
             val evolvedBasePokemon = findPokemonById(evolutionData.evolutionId)
-                ?: return Result.failure(Exception("Evolution form not found in pokemons.json"))
-            
-
+            if (evolvedBasePokemon == null) {
+                Log.e("evolution test", "ERROR: Evolution form not found in pokemons.json with ID: ${evolutionData.evolutionId}")
+                return Result.failure(Exception("Evolution form not found in pokemons.json"))
+            }
+            Log.d("evolution test", "Found evolved Pokemon: ${evolvedBasePokemon.name} (ID: ${evolvedBasePokemon.id})")
+            Log.d("evolution test", "Evolved Pokemon types: ${evolvedBasePokemon.types.map { it.type.name }}")
+            Log.d("evolution test", "Evolved Pokemon stats count: ${evolvedBasePokemon.stats.size}")
+            Log.d("evolution test", "Evolved Pokemon moves count: ${evolvedBasePokemon.levelUpMoves.size}")
             
             // 4. Create new PartyPokemon with evolved form but preserved values
+            Log.d("evolution test", "Step 4: Creating evolved PartyPokemon...")
             val evolvedPartyPokemon = createPartyPokemon(
                 pokemon = evolvedBasePokemon,
                 level = levelToPreserve,
                 currentExp = currentExpToPreserve,
                 nature = natureToPreserve
             )
-            
-
+            Log.d("evolution test", "Created evolved PartyPokemon: ${evolvedPartyPokemon.name} (ID: ${evolvedPartyPokemon.id})")
+            Log.d("evolution test", "Evolved PartyPokemon level: ${evolvedPartyPokemon.level}, EXP: ${evolvedPartyPokemon.currentExp}")
+            Log.d("evolution test", "Evolved PartyPokemon nature: ${evolvedPartyPokemon.nature.name}")
+            Log.d("evolution test", "Evolved PartyPokemon movesData count: ${evolvedPartyPokemon.movesData.size}")
             
             // 5. Replace the old Pokemon with the evolved one
+            Log.d("evolution test", "Step 5: Replacing Pokemon in party...")
             val currentParty = getParty().toMutableList()
             val pokemonIndex = currentParty.indexOfFirst { it.id == pokemonId }
-            if (pokemonIndex != -1) {
-                currentParty[pokemonIndex] = evolvedPartyPokemon
-                saveParty(currentParty)
-                return Result.success(evolvedPartyPokemon)
-            } else {
+            if (pokemonIndex == -1) {
+                Log.e("evolution test", "ERROR: Failed to find Pokemon index in party for replacement")
                 return Result.failure(Exception("Failed to replace Pokemon in party"))
             }
+            Log.d("evolution test", "Found Pokemon at index: $pokemonIndex")
+            
+            currentParty[pokemonIndex] = evolvedPartyPokemon
+            Log.d("evolution test", "Replaced Pokemon at index $pokemonIndex")
+            
+            saveParty(currentParty)
+            Log.d("evolution test", "Saved updated party to storage")
+            
+            Log.d("evolution test", "=== EVOLUTION PROCESS COMPLETED SUCCESSFULLY ===")
+            return Result.success(evolvedPartyPokemon)
             
         } catch (e: Exception) {
+            Log.e("evolution test", "ERROR in executeEvolution: ${e.message}")
+            Log.e("evolution test", "Stack trace: ${e.stackTraceToString()}")
             Result.failure(e)
         }
     }
@@ -215,10 +250,12 @@ class PartyManager(context: Context) {
      * @return Pokemon if found, null otherwise
      */
     private fun findPokemonById(pokemonId: Int): Pokemon? {
+        Log.d("evolution test", "findPokemonById: Searching for Pokemon with ID: $pokemonId")
         return try {
             val inputStream = context.assets.open("pokemons.json")
             val jsonString = inputStream.bufferedReader().use { it.readText() }
             val jsonArray = org.json.JSONArray(jsonString)
+            Log.d("evolution test", "findPokemonById: Loaded pokemons.json, total Pokemon: ${jsonArray.length()}")
             
             for (i in 0 until jsonArray.length()) {
                 val pokemon = jsonArray.getJSONObject(i)
@@ -226,6 +263,7 @@ class PartyManager(context: Context) {
                 val currentName = pokemon.getString("name")
                 
                 if (currentId == pokemonId) {
+                    Log.d("evolution test", "findPokemonById: Found Pokemon! ID: $currentId, Name: $currentName")
                     // Parse the Pokemon data
                     val name = pokemon.getString("name")
                     val types = mutableListOf<TypeSlot>()
@@ -331,9 +369,12 @@ class PartyManager(context: Context) {
                 }
             }
             
-            null
+            Log.d("evolution test", "findPokemonById: Pokemon with ID $pokemonId not found in pokemons.json")
+            return null
             
         } catch (e: Exception) {
+            Log.e("evolution test", "findPokemonById: Error reading pokemons.json: ${e.message}")
+            Log.e("evolution test", "findPokemonById: Stack trace: ${e.stackTraceToString()}")
             null
         }
     }

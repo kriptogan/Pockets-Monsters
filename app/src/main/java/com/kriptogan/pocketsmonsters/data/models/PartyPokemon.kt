@@ -118,12 +118,15 @@ data class PartyPokemon(
                         if (pokemon.has("evolution")) {
                             val evolution = pokemon.getJSONObject("evolution")
                             
-                            // Handle level field - it can be null for special evolutions
-                            val level = if (evolution.has("level") && !evolution.isNull("level")) {
-                                evolution.getInt("level")
-                            } else {
-                                null
-                            }
+                                                         // Handle level field - it can be null for special evolutions
+                             // Convert Pokemon game level to D&D level using ceil(level/5) formula
+                             val level = if (evolution.has("level") && !evolution.isNull("level")) {
+                                 val pokemonGameLevel = evolution.getInt("level")
+                                 val dndLevel = kotlin.math.ceil(pokemonGameLevel / 5.0).toInt()
+                                 dndLevel
+                             } else {
+                                 null
+                             }
                             val evolutionId = evolution.getInt("evolutionId")
                             
                             return EvolutionDetails(
@@ -443,35 +446,63 @@ data class PartyPokemon(
      * @return Pair of (message, updated Pokemon instance)
      */
     private fun levelUp(newLevel: Int, newExp: Int): Pair<String, PartyPokemon> {
+        Log.d("evolution test", "=== LEVEL UP PROCESS STARTED ===")
+        Log.d("evolution test", "Pokemon: ${this.name} (ID: ${this.id})")
+        Log.d("evolution test", "Current level: ${this.level} -> New level: $newLevel")
+        Log.d("evolution test", "Current EXP: ${this.currentExp} -> New EXP: $newExp")
+        Log.d("evolution test", "Current proficiency: ${this.proficiency}")
+        
         val newProficiency = calculateProficiencyBonus(newLevel)
+        Log.d("evolution test", "New proficiency bonus: $newProficiency")
         
         // Check if evolution level is reached
         // Evolution level is already in D&D level format, or null for special evolutions
+        Log.d("evolution test", "Checking evolution requirements...")
+        Log.d("evolution test", "Evolution data: ${if (evolution != null) "Present" else "None"}")
+        
         val evolutionMessage = if (evolution != null) {
             if (evolution.level != null) {
                 // Level-based evolution
                 val evolutionDnDLevel = evolution.level
+                Log.d("evolution test", "Level-based evolution: Required level = $evolutionDnDLevel")
+                Log.d("evolution test", "Current level ($newLevel) >= Evolution level ($evolutionDnDLevel): ${newLevel >= evolutionDnDLevel}")
+                
                 if (newLevel >= evolutionDnDLevel) {
+                    Log.d("evolution test", "EVOLUTION LEVEL REACHED! Pokemon can now evolve!")
                     "Reached evolution!"
                 } else {
+                    Log.d("evolution test", "Level up achieved, but evolution level not yet reached")
                     "Level Up!"
                 }
             } else {
                 // Special evolution (stone, trade, happiness, etc.) - no automatic evolution
+                Log.d("evolution test", "Special evolution type detected (level = null)")
+                Log.d("evolution test", "Evolution requires special method (stone, trade, happiness, etc.)")
                 "Level Up!"
             }
         } else {
+            Log.d("evolution test", "No evolution data available for this Pokemon")
             "Level Up!"
         }
         
+        Log.d("evolution test", "Evolution message: $evolutionMessage")
+        
+        Log.d("evolution test", "Creating updated Pokemon with new level and EXP...")
         val updatedPokemon = this.copy(
             level = newLevel,
             currentExp = newExp,
             proficiency = newProficiency
         )
+        Log.d("evolution test", "Updated Pokemon created: ${updatedPokemon.name} (Level: ${updatedPokemon.level}, EXP: ${updatedPokemon.currentExp}, Proficiency: ${updatedPokemon.proficiency})")
         
         // Recalculate available moves and clean up current move set
+        Log.d("evolution test", "Recalculating available moves for new level...")
         val finalPokemon = updatedPokemon.recalculateAvailableMoves()
+        Log.d("evolution test", "Final Pokemon moves recalculated: ${finalPokemon.availableMoves.size} available moves")
+        Log.d("evolution test", "Final Pokemon current move set: ${finalPokemon.currentMoveSet.size} moves")
+        
+        Log.d("evolution test", "=== LEVEL UP PROCESS COMPLETED ===")
+        Log.d("evolution test", "Returning: $evolutionMessage for ${finalPokemon.name}")
         
         return evolutionMessage to finalPokemon
     }
@@ -483,16 +514,31 @@ data class PartyPokemon(
      * @return Updated Pokemon instance
      */
     private fun levelDown(newLevel: Int, newExp: Int): PartyPokemon {
-        val newProficiency = calculateProficiencyBonus(newLevel)
+        Log.d("evolution test", "=== LEVEL DOWN PROCESS STARTED ===")
+        Log.d("evolution test", "Pokemon: ${this.name} (ID: ${this.id})")
+        Log.d("evolution test", "Current level: ${this.level} -> New level: $newLevel")
+        Log.d("evolution test", "Current EXP: ${this.currentExp} -> New EXP: $newExp")
+        Log.d("evolution test", "Current proficiency: ${this.proficiency}")
         
+        val newProficiency = calculateProficiencyBonus(newLevel)
+        Log.d("evolution test", "New proficiency bonus: $newProficiency")
+        
+        Log.d("evolution test", "Creating updated Pokemon with new level and EXP...")
         val updatedPokemon = this.copy(
             level = newLevel,
             currentExp = newExp,
             proficiency = newProficiency
         )
+        Log.d("evolution test", "Updated Pokemon created: ${updatedPokemon.name} (Level: ${updatedPokemon.level}, EXP: ${updatedPokemon.currentExp}, Proficiency: ${updatedPokemon.proficiency})")
         
         // Recalculate available moves and clean up current move set
+        Log.d("evolution test", "Recalculating available moves for new level...")
         val finalPokemon = updatedPokemon.recalculateAvailableMoves()
+        Log.d("evolution test", "Final Pokemon moves recalculated: ${finalPokemon.availableMoves.size} available moves")
+        Log.d("evolution test", "Final Pokemon current move set: ${finalPokemon.currentMoveSet.size} moves")
+        
+        Log.d("evolution test", "=== LEVEL DOWN PROCESS COMPLETED ===")
+        Log.d("evolution test", "Returning updated Pokemon: ${finalPokemon.name}")
         
         return finalPokemon
     }
