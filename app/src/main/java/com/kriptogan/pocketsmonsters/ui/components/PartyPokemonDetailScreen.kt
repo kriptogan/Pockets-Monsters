@@ -703,7 +703,7 @@ fun PartyPokemonDetailScreen(
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Available Moves
+            // Moves Management
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -713,70 +713,81 @@ fun PartyPokemonDetailScreen(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
-                        text = "Current Move Set (${currentMoveSet.size}/4)",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        text = "Moves Management",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 16.dp)
                     )
                     
-                    Spacer(modifier = Modifier.height(16.dp))
+                                         // 1. Free Moves
+                     Text(
+                         text = "Free Moves",
+                         style = MaterialTheme.typography.titleMedium,
+                         fontWeight = FontWeight.Bold,
+                         color = Color(0xFF4CAF50),
+                         modifier = Modifier.padding(bottom = 8.dp)
+                     )
                     
-                    // Display current moves
-                    if (currentMoveSet.isNotEmpty()) {
-                        currentMoveSet.forEach { moveName ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = moveName.replaceFirstChar { it.uppercase() },
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.Medium
-                                )
-                                
-                                                                 IconButton(
-                                     onClick = {
-                                         currentMoveSet.remove(moveName)
-                                         // Save the updated move set to local datastore
-                                         val updatedPokemon = currentPokemon.copy(currentMoveSet = currentMoveSet.toList())
-                                         partyManager.updatePartyPokemon(updatedPokemon)
-                                     },
-                                    modifier = Modifier.size(32.dp)
+                    if (currentPokemon.movesData.isNotEmpty()) {
+                        val freeMoves = currentPokemon.movesData.filter { it.tier == 0 }
+                        if (freeMoves.isNotEmpty()) {
+                            freeMoves.forEach { moveData ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 4.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = "Remove move",
-                                        tint = Color(0xFFD32F2F),
-                                        modifier = Modifier.size(16.dp)
-                                    )
+                                    Column {
+                                        Text(
+                                            text = moveData.name.replaceFirstChar { it.uppercase() },
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                        Text(
+                                            text = "Tier ${moveData.tier} • ${moveData.type} • ${moveData.damage_class}",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
                                 }
                             }
+                        } else {
+                            Text(
+                                text = "No free moves available",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                            )
                         }
                     } else {
                         Text(
-                            text = "No moves selected",
+                            text = "No moves data available",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
                         )
                     }
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
-                                         Text(
-                         text = "Available Moves (Level ${currentPokemon.level}) - ${currentPokemon.availableMoves.size} moves",
-                         style = MaterialTheme.typography.titleMedium,
-                         fontWeight = FontWeight.Bold
-                     )
+                    // 2. Prepared Moves (Selected 4 moves, excluding tier 0)
+                    val preparedMoves = currentMoveSet.filter { moveName ->
+                        val moveData = currentPokemon.movesData.find { it.name == moveName }
+                        moveData?.tier != 0 // Exclude tier 0 moves
+                    }
                     
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Prepared Moves (${preparedMoves.size}/4)",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF2196F3),
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
                     
-                                                              // Test recalculateAvailableMoves function
-                     val testRecalculated = currentPokemon.recalculateAvailableMoves()
-                                         
-                                         if (currentPokemon.availableMoves.isNotEmpty()) {
-                         currentPokemon.availableMoves.forEach { move ->
+                    if (preparedMoves.isNotEmpty()) {
+                        preparedMoves.forEach { moveName ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -786,66 +797,160 @@ fun PartyPokemonDetailScreen(
                             ) {
                                 Column {
                                     Text(
-                                        text = move.name.replaceFirstChar { it.uppercase() },
+                                        text = moveName.replaceFirstChar { it.uppercase() },
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.Medium
                                     )
-                                    Text(
-                                        text = "Learned at Level ${move.levelLearnedAt}",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
+                                    // Find move data to show tier and type
+                                    val moveData = currentPokemon.movesData.find { it.name == moveName }
+                                    if (moveData != null) {
+                                        Text(
+                                            text = "Tier ${moveData.tier} • ${moveData.type} • ${moveData.damage_class}",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
                                 }
                                 
+                                                                 IconButton(
+                                     onClick = {
+                                         currentMoveSet.remove(moveName)
+                                         val updatedPokemon = currentPokemon.copy(currentMoveSet = currentMoveSet.toList())
+                                         partyManager.updatePartyPokemon(updatedPokemon)
+                                         // Update local state to refresh UI immediately
+                                         currentPokemon = updatedPokemon
+                                         refreshTrigger++
+                                     },
+                                     modifier = Modifier.size(32.dp)
+                                 ) {
+                                     Icon(
+                                         imageVector = Icons.Default.Delete,
+                                         contentDescription = "Remove move",
+                                         tint = Color(0xFFD32F2F),
+                                         modifier = Modifier.size(16.dp)
+                                     )
+                                 }
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = "No moves prepared",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                                         // 3. Known Moves (Available moves excluding tier 0)
+                     Text(
+                         text = "Known Moves",
+                         style = MaterialTheme.typography.titleMedium,
+                         fontWeight = FontWeight.Bold,
+                         color = Color(0xFFFF9800),
+                         modifier = Modifier.padding(bottom = 8.dp)
+                     )
+                    
+                    if (currentPokemon.availableMoves.isNotEmpty()) {
+                        val knownMoves = currentPokemon.availableMoves.filter { move ->
+                            val moveData = currentPokemon.movesData.find { it.name == move.name }
+                            moveData?.tier != 0 // Exclude tier 0 moves
+                        }
+                        
+                        if (knownMoves.isNotEmpty()) {
+                            knownMoves.forEach { move ->
                                 Row(
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 4.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    if (currentMoveSet.contains(move.name)) {
-                                        // Show remove button for moves in current set
-                                        IconButton(
-                                                                                         onClick = {
-                                                 currentMoveSet.remove(move.name)
-                                                 // Save the updated move set to local datastore
-                                                 val updatedPokemon = currentPokemon.copy(currentMoveSet = currentMoveSet.toList())
-                                                 partyManager.updatePartyPokemon(updatedPokemon)
-                                             },
-                                            modifier = Modifier.size(32.dp)
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.Delete,
-                                                contentDescription = "Remove move",
-                                                tint = Color(0xFFD32F2F),
-                                                modifier = Modifier.size(16.dp)
+                                    Column {
+                                        Text(
+                                            text = move.name.replaceFirstChar { it.uppercase() },
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                        val moveData = currentPokemon.movesData.find { it.name == move.name }
+                                        if (moveData != null) {
+                                            Text(
+                                                text = "Tier ${moveData.tier} • ${moveData.type} • ${moveData.damage_class} • Level ${move.levelLearnedAt}",
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
-                                        }
-                                    } else if (currentMoveSet.size < 4) {
-                                        // Show add button for available moves
-                                        IconButton(
-                                                                                         onClick = {
-                                                 currentMoveSet.add(move.name)
-                                                 // Save the updated move set to local datastore
-                                                 val updatedPokemon = currentPokemon.copy(currentMoveSet = currentMoveSet.toList())
-                                                 partyManager.updatePartyPokemon(updatedPokemon)
-                                             },
-                                            modifier = Modifier.size(32.dp)
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.Add,
-                                                contentDescription = "Add move",
-                                                tint = Color(0xFF4CAF50),
-                                                modifier = Modifier.size(16.dp)
+                                        } else {
+                                            Text(
+                                                text = "Level ${move.levelLearnedAt}",
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
                                         }
                                     }
+                                    
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                                                                 if (currentMoveSet.contains(move.name)) {
+                                             // Show remove button for moves in current set
+                                             IconButton(
+                                                 onClick = {
+                                                     currentMoveSet.remove(move.name)
+                                                     val updatedPokemon = currentPokemon.copy(currentMoveSet = currentMoveSet.toList())
+                                                     partyManager.updatePartyPokemon(updatedPokemon)
+                                                     // Update local state to refresh UI immediately
+                                                     currentPokemon = updatedPokemon
+                                                     refreshTrigger++
+                                                 },
+                                                 modifier = Modifier.size(32.dp)
+                                             ) {
+                                                 Icon(
+                                                     imageVector = Icons.Default.Delete,
+                                                     contentDescription = "Remove move",
+                                                     tint = Color(0xFFD32F2F),
+                                                     modifier = Modifier.size(16.dp)
+                                                 )
+                                             }
+                                                                                  } else if (preparedMoves.size < 4) {
+                                              // Show add button for available moves (excluding tier 0 moves from count)
+                                             IconButton(
+                                                 onClick = {
+                                                     currentMoveSet.add(move.name)
+                                                     val updatedPokemon = currentPokemon.copy(currentMoveSet = currentMoveSet.toList())
+                                                     partyManager.updatePartyPokemon(updatedPokemon)
+                                                     // Update local state to refresh UI immediately
+                                                     currentPokemon = updatedPokemon
+                                                     refreshTrigger++
+                                                 },
+                                                 modifier = Modifier.size(32.dp)
+                                             ) {
+                                                 Icon(
+                                                     imageVector = Icons.Default.Add,
+                                                     contentDescription = "Add move",
+                                                     tint = Color(0xFF4CAF50),
+                                                     modifier = Modifier.size(16.dp)
+                                                 )
+                                             }
+                                         }
+                                    }
                                 }
                             }
+                        } else {
+                            Text(
+                                text = "No known moves available at this level",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                            )
                         }
                     } else {
                         Text(
                             text = "No moves available at this level",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
                         )
                     }
                 }

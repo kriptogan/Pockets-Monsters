@@ -822,14 +822,14 @@
   {
     "id": 43,
     "name": "leer",
-    "tier": 2,
+    "tier": 0,
     "tier_reason": "Minor stat change",
     "power": 0,
     "pp": 30,
     "accuracy": 100,
     "type": "normal",
-    "damage_class": "status",
-    "description": "Reduces the foe's DEFENSE.",
+    "damage_class": "Special status",
+    "description": "On a failed special defense save. Reduces the affected character's defense and special defense modifiers by 1 for 10 rounds.",
     "effect": "Lowers Defense by 1",
     "stat_changes": [
       {
@@ -873,14 +873,14 @@
   {
     "id": 45,
     "name": "growl",
-    "tier": 2,
+    "tier": 0,
     "tier_reason": "Minor stat change",
     "power": 0,
     "pp": 40,
     "accuracy": 100,
     "type": "normal",
-    "damage_class": "status",
-    "description": "Reduces the foe's ATTACK.",
+    "damage_class": "physical status",
+    "description": "On a failed defense save, Reduces the target's attack modifier by 1 for 10 rounds.",
     "effect": "Lowers Attack by 1",
     "stat_changes": [
       {
@@ -1028,7 +1028,7 @@
     "accuracy": 100,
     "type": "fire",
     "damage_class": "special",
-    "description": "The foe is attacked with small flames. The foe may suffer a burn.",
+    "description": "1D4 fire damage. On a failed special defense save, the target is also inflicted with a burn for 2 rounds.",
     "effect": "No special effects",
     "stat_changes": [],
     "ailment": null,
@@ -2294,14 +2294,14 @@
   {
     "id": 108,
     "name": "smokescreen",
-    "tier": 2,
+    "tier": 1,
     "tier_reason": "Minor stat change",
     "power": 0,
     "pp": 20,
     "accuracy": 100,
     "type": "normal",
-    "damage_class": "status",
-    "description": "Lowers the foe's accuracy.",
+    "damage_class": "physical status",
+    "description": "On a failed defense save, Reduces the affected character's physical and special hit chance by 3 while in the effected area.",
     "effect": "Lowers Accuracy by 1",
     "stat_changes": [
       {
