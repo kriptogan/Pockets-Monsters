@@ -45,7 +45,7 @@ Also, we need a button to pass a round. It will lower all rows by 1 round. If a 
 
 When adding to the lis or passing a round, recalculate effects
 
-29. A clickable level X next to the name, align right.
+V 29. A clickable level X next to the name, align right.
 
 Clicking it will open a dialog with the current exp, and exp for next level.
 Input to type exp value and a gain button. Support negative numbers, to a minimum level 1.

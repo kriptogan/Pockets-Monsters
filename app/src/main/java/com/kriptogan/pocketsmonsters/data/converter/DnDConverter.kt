@@ -16,9 +16,9 @@ class DnDConverter {
      * Convert a Pokémon to D&D view with converted stats
      */
     fun convertPokemonToDnD(pokemon: Pokemon): DnDView {
-        Log.d(TAG, "=== Starting conversion for ${pokemon.name} ===")
+        /*Log.d(TAG, "=== Starting conversion for ${pokemon.name} ===")
         Log.d(TAG, "Pokemon ID: ${pokemon.id}")
-        Log.d(TAG, "Pokemon Weight: ${pokemon.weight} (raw value)")
+        Log.d(TAG, "Pokemon Weight: ${pokemon.weight} (raw value)")*/
         
         val convertedStats = convertStats(pokemon.stats)
         val modifiers = calculateModifiers(convertedStats)
@@ -31,14 +31,14 @@ class DnDConverter {
         // Group moves by D&D level
         val movesByDnDLevel = groupMovesByDnDLevel(pokemon.levelUpMoves)
         
-        Log.d(TAG, "=== Final Results for ${pokemon.name} ===")
+        /*Log.d(TAG, "=== Final Results for ${pokemon.name} ===")
         Log.d(TAG, "Movement: $movement feet")
         Log.d(TAG, "AC: $ac")
         Log.d(TAG, "Initiative: $initiative")
         Log.d(TAG, "Hit Dice: $hitDice")
         Log.d(TAG, "Converted Stats: $convertedStats")
         Log.d(TAG, "Modifiers: $modifiers")
-        Log.d(TAG, "Moves by D&D Level: $movesByDnDLevel")
+        Log.d(TAG, "Moves by D&D Level: $movesByDnDLevel")*/
         
         return DnDView(
             pokemon = pokemon,
@@ -56,7 +56,7 @@ class DnDConverter {
      * Convert Pokémon stats using formula: (Base Stat ÷ 10) + 5, rounded down
      */
     private fun convertStats(stats: List<Stat>): Map<String, Int> {
-        Log.d(TAG, "=== Converting Stats ===")
+        /*Log.d(TAG, "=== Converting Stats ===")*/
         return stats.associate { stat ->
             val statName = when(stat.stat.name) {
                 "attack" -> "Attack"
@@ -75,7 +75,7 @@ class DnDConverter {
                 "hp" -> "floor(${stat.baseStat} ÷ 3) = floor(${stat.baseStat / 3.0}) = $convertedValue"
                 else -> "floor((${stat.baseStat} ÷ 10) + 5) = floor(${stat.baseStat / 10.0 + 5}) = $convertedValue"
             }
-            Log.d(TAG, "${stat.stat.name}: ${stat.baseStat} → $convertedValue (formula: $formula)")
+            /*Log.d(TAG, "${stat.stat.name}: ${stat.baseStat} → $convertedValue (formula: $formula)")*/
             statName to convertedValue
         }
     }
@@ -84,10 +84,10 @@ class DnDConverter {
      * Calculate D&D modifiers: floor((Stat - 10) ÷ 2)
      */
     private fun calculateModifiers(convertedStats: Map<String, Int>): Map<String, Int> {
-        Log.d(TAG, "=== Calculating Modifiers ===")
+        /*Log.d(TAG, "=== Calculating Modifiers ===")*/
         return convertedStats.mapValues { (statName, value) ->
             val modifier = floor((value - 10) / 2.0).toInt()
-            Log.d(TAG, "$statName: $value → $modifier (formula: floor(($value - 10) ÷ 2) = floor(${(value - 10) / 2.0}) = $modifier)")
+            /*Log.d(TAG, "$statName: $value → $modifier (formula: floor(($value - 10) ÷ 2) = floor(${(value - 10) / 2.0}) = $modifier)")*/
             modifier
         }
     }
@@ -102,8 +102,8 @@ class DnDConverter {
             hp <= 150 -> "d10"
             else -> "d12"
         }
-        Log.d(TAG, "=== Hit Dice Calculation ===")
-        Log.d(TAG, "HP: $hp → Hit Dice: $hitDice")
+        /*Log.d(TAG, "=== Hit Dice Calculation ===")
+        Log.d(TAG, "HP: $hp → Hit Dice: $hitDice")*/
         return hitDice
     }
     
@@ -111,20 +111,20 @@ class DnDConverter {
      * Calculate movement using the complex weight-based formula from rules
      */
     private fun calculateMovement(stats: List<Stat>, weight: Int): Int {
-        Log.d(TAG, "=== Movement Calculation ===")
+        /*Log.d(TAG, "=== Movement Calculation ===")
         Log.d(TAG, "Input - Weight: $weight (API value), Stats: ${stats.map { "${it.stat.name}: ${it.baseStat}" }}")
-        
+        */
         // Convert weight from API value to kilograms (division by 10)
         // PokéAPI provides weight in a format where division by 10 gives us kg
         val weightInKg = weight / 10
-        Log.d(TAG, "Weight Conversion: $weight ÷ 10 = $weightInKg kg")
+        /*Log.d(TAG, "Weight Conversion: $weight ÷ 10 = $weightInKg kg")*/
         
         val speedStat = stats.find { it.stat.name == "speed" }?.baseStat ?: 0
-        Log.d(TAG, "Speed Stat Found: $speedStat")
+        /*Log.d(TAG, "Speed Stat Found: $speedStat")*/
         
         // Step 1: Base Score
         val baseScore = floor(speedStat / 10.0 + 5).toInt()
-        Log.d(TAG, "Step 1 - Base Score: floor($speedStat ÷ 10 + 5) = floor(${speedStat / 10.0 + 5}) = $baseScore")
+        /*Log.d(TAG, "Step 1 - Base Score: floor($speedStat ÷ 10 + 5) = floor(${speedStat / 10.0 + 5}) = $baseScore")*/
         
         // Step 2: Weight Modifier (using correct ranges)
         val weightModifier = when {
@@ -134,22 +134,22 @@ class DnDConverter {
             weightInKg < 300 -> -2     // 150-299.9 kg: -2
             else -> -3                 // ≥ 300 kg: -3
         }
-        Log.d(TAG, "Step 2 - Weight Modifier: Weight $weightInKg kg falls in range → Modifier: $weightModifier")
+        /*Log.d(TAG, "Step 2 - Weight Modifier: Weight $weightInKg kg falls in range → Modifier: $weightModifier")*/
         
         // Step 3: Adjusted Movement Score
         val adjustedScore = maxOf(1, baseScore + weightModifier)
-        Log.d(TAG, "Step 3 - Adjusted Score: $baseScore + $weightModifier = ${baseScore + weightModifier} → maxOf(1, ${baseScore + weightModifier}) = $adjustedScore")
+        /*Log.d(TAG, "Step 3 - Adjusted Score: $baseScore + $weightModifier = ${baseScore + weightModifier} → maxOf(1, ${baseScore + weightModifier}) = $adjustedScore")*/
         
         // Step 4: Convert to Feet
         val rawMovementInFeet = adjustedScore * 2.5
-        Log.d(TAG, "Step 4 - Raw Movement: $adjustedScore × 2.5 = $rawMovementInFeet feet")
+        /*Log.d(TAG, "Step 4 - Raw Movement: $adjustedScore × 2.5 = $rawMovementInFeet feet")*/
         
         // Step 5: Round to Nearest 5
         val movementInFeet = roundToNearest5(rawMovementInFeet)
-        Log.d(TAG, "Step 5 - Rounded Movement: roundToNearest5($rawMovementInFeet) = $movementInFeet feet")
+        /*Log.d(TAG, "Step 5 - Rounded Movement: roundToNearest5($rawMovementInFeet) = $movementInFeet feet")*/
         
         val finalResult = movementInFeet.toInt()
-        Log.d(TAG, "Final Movement Result: $finalResult feet")
+        /*Log.d(TAG, "Final Movement Result: $finalResult feet")*/
         
         return finalResult
     }
@@ -158,17 +158,17 @@ class DnDConverter {
      * Round to nearest 5 as specified in the rules
      */
     private fun roundToNearest5(value: Double): Double {
-        Log.d(TAG, "=== Rounding to Nearest 5 ===")
-        Log.d(TAG, "Input value: $value")
+        /*Log.d(TAG, "=== Rounding to Nearest 5 ===")*/
+       /* Log.d(TAG, "Input value: $value")*/
         
         val dividedBy5 = value / 5.0
-        Log.d(TAG, "Divided by 5: $value ÷ 5 = $dividedBy5")
+        /*Log.d(TAG, "Divided by 5: $value ÷ 5 = $dividedBy5")*/
         
         val rounded = round(dividedBy5)
-        Log.d(TAG, "Rounded: round($dividedBy5) = $rounded")
+        /*Log.d(TAG, "Rounded: round($dividedBy5) = $rounded")*/
         
         val result = rounded * 5.0
-        Log.d(TAG, "Final rounded value: $result")
+        /*Log.d(TAG, "Final rounded value: $result")*/
         return result
     }
     
@@ -176,19 +176,19 @@ class DnDConverter {
      * Group moves by D&D level using formula: ceil(Pokemon Level ÷ 5)
      */
     private fun groupMovesByDnDLevel(levelUpMoves: List<LevelUpMove>): Map<Int, List<String>> {
-        Log.d(TAG, "=== Grouping Moves by D&D Level ===")
+       /* Log.d(TAG, "=== Grouping Moves by D&D Level ===")*/
         
         val groupedMoves = levelUpMoves.groupBy { move ->
             val dndLevel = ceil(move.levelLearnedAt / 5.0).toInt()
-            Log.d(TAG, "Move: ${move.name}, Pokemon Level: ${move.levelLearnedAt} → D&D Level: ceil(${move.levelLearnedAt} ÷ 5) = ceil(${move.levelLearnedAt / 5.0}) = $dndLevel")
+            /*Log.d(TAG, "Move: ${move.name}, Pokemon Level: ${move.levelLearnedAt} → D&D Level: ceil(${move.levelLearnedAt} ÷ 5) = ceil(${move.levelLearnedAt / 5.0}) = $dndLevel")*/
             dndLevel
         }.mapValues { (dndLevel, moves) ->
             val moveNames = moves.map { it.name }
-            Log.d(TAG, "D&D Level $dndLevel: ${moveNames.joinToString(", ")}")
+            /*Log.d(TAG, "D&D Level $dndLevel: ${moveNames.joinToString(", ")}")*/
             moveNames
         }
         
-        Log.d(TAG, "Final grouped moves: $groupedMoves")
+        /*Log.d(TAG, "Final grouped moves: $groupedMoves")*/
         return groupedMoves
     }
 }

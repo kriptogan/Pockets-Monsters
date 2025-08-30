@@ -50,7 +50,6 @@ class PartyManager(context: Context) {
             
             migratedParty
         } catch (e: Exception) {
-            Log.e(TAG, "Error loading party: ${e.message}")
             emptyList()
         }
     }
@@ -71,14 +70,17 @@ class PartyManager(context: Context) {
         
         try {
             val partyPokemon = createPartyPokemon(pokemon)
+            
+            // Log the final PartyPokemon object as JSON string
+            val jsonString = gson.toJson(partyPokemon)
+            android.util.Log.d("evolution test", "New PartyPokemon created and saved: $jsonString")
+            
             val newParty = currentParty + partyPokemon
             saveParty(newParty)
             
-            Log.d(TAG, "Added ${pokemon.name} to party. Party size: ${newParty.size}")
             return Result.success(partyPokemon)
             
         } catch (e: Exception) {
-            Log.e(TAG, "Error adding Pokemon to party: ${e.message}")
             return Result.failure(e)
         }
     }
@@ -95,7 +97,6 @@ class PartyManager(context: Context) {
         }
         
         saveParty(newParty)
-        Log.d(TAG, "Removed Pokemon $pokemonId from party. Party size: ${newParty.size}")
         return Result.success(Unit)
     }
     
@@ -114,7 +115,6 @@ class PartyManager(context: Context) {
         newParty[index] = updatedPokemon
         saveParty(newParty)
         
-        Log.d(TAG, "Updated ${updatedPokemon.name} in party")
         return Result.success(Unit)
     }
     
@@ -136,7 +136,6 @@ class PartyManager(context: Context) {
         newParty[index] = updatedPokemon
         saveParty(newParty)
         
-        Log.d(TAG, "Updated ${pokemon.name} HP to $newHP")
         return Result.success(Unit)
     }
     
@@ -168,8 +167,6 @@ class PartyManager(context: Context) {
      */
     fun executeEvolution(pokemonId: Int): Result<PartyPokemon> {
         return try {
-            android.util.Log.d(TAG, "Evolution started for Pokemon ID: $pokemonId")
-            
             // 1. Find the current Pokemon in the party
             val currentPokemon = getParty().find { it.id == pokemonId }
                 ?: return Result.failure(Exception("Pokemon not found in party"))
@@ -179,8 +176,6 @@ class PartyManager(context: Context) {
             val levelToPreserve = currentPokemon.level
             val currentExpToPreserve = currentPokemon.currentExp
             
-            android.util.Log.d(TAG, "Preserving: Nature=${natureToPreserve.name}, Level=$levelToPreserve, Exp=$currentExpToPreserve")
-            
             // 3. Search for the evolution form in pokemons.json
             val evolutionData = currentPokemon.evolution
                 ?: return Result.failure(Exception("No evolution data found"))
@@ -188,17 +183,7 @@ class PartyManager(context: Context) {
             val evolvedBasePokemon = findPokemonById(evolutionData.evolutionId)
                 ?: return Result.failure(Exception("Evolution form not found in pokemons.json"))
             
-            android.util.Log.d(TAG, "=== Evolution Data Found ===")
-            android.util.Log.d(TAG, "Evolution data: $evolutionData")
-            android.util.Log.d(TAG, "Evolution level: ${evolutionData.level}")
-            android.util.Log.d(TAG, "Evolution ID: ${evolutionData.evolutionId}")
-            
-            android.util.Log.d(TAG, "=== Evolved Base Pokemon Found ===")
-            android.util.Log.d(TAG, "Found evolution form: ${evolvedBasePokemon.name}")
-            android.util.Log.d(TAG, "Evolution form stats: ${evolvedBasePokemon.stats.map { "${it.stat.name}=${it.baseStat}" }}")
-            android.util.Log.d(TAG, "Evolution form height: ${evolvedBasePokemon.height}, weight: ${evolvedBasePokemon.weight}")
-            android.util.Log.d(TAG, "Evolution form levelUpMoves count: ${evolvedBasePokemon.levelUpMoves.size}")
-            android.util.Log.d(TAG, "Evolution form levelUpMoves: ${evolvedBasePokemon.levelUpMoves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
+
             
             // 4. Create new PartyPokemon with evolved form but preserved values
             val evolvedPartyPokemon = createPartyPokemon(
@@ -208,7 +193,9 @@ class PartyManager(context: Context) {
                 nature = natureToPreserve
             )
             
-            android.util.Log.d(TAG, "Created evolved PartyPokemon: maxHP=${evolvedPartyPokemon.maxHP}, currentDnDStats=${evolvedPartyPokemon.currentDnDStats}")
+            // Log the evolved PartyPokemon object as JSON string
+            val evolvedJsonString = gson.toJson(evolvedPartyPokemon)
+            android.util.Log.d("evolution test", "Evolved PartyPokemon created: $evolvedJsonString")
             
             // 5. Replace the old Pokemon with the evolved one
             val currentParty = getParty().toMutableList()
@@ -216,14 +203,12 @@ class PartyManager(context: Context) {
             if (pokemonIndex != -1) {
                 currentParty[pokemonIndex] = evolvedPartyPokemon
                 saveParty(currentParty)
-                android.util.Log.d(TAG, "Evolution completed successfully!")
                 return Result.success(evolvedPartyPokemon)
             } else {
                 return Result.failure(Exception("Failed to replace Pokemon in party"))
             }
             
         } catch (e: Exception) {
-            android.util.Log.e(TAG, "Evolution failed", e)
             Result.failure(e)
         }
     }
@@ -234,33 +219,18 @@ class PartyManager(context: Context) {
      * @return Pokemon if found, null otherwise
      */
     private fun findPokemonById(pokemonId: Int): Pokemon? {
-        android.util.Log.d(TAG, "=== findPokemonById called ===")
-        android.util.Log.d(TAG, "Looking for Pokemon with ID: $pokemonId")
-        
         return try {
-            android.util.Log.d(TAG, "Opening pokemons.json from assets...")
             val inputStream = context.assets.open("pokemons.json")
-            android.util.Log.d(TAG, "Reading pokemons.json content...")
             val jsonString = inputStream.bufferedReader().use { it.readText() }
-            android.util.Log.d(TAG, "JSON content length: ${jsonString.length} characters")
-            
-            android.util.Log.d(TAG, "Parsing JSON array...")
             val jsonArray = org.json.JSONArray(jsonString)
-            android.util.Log.d(TAG, "JSON array length: ${jsonArray.length()} Pokemon entries")
             
             for (i in 0 until jsonArray.length()) {
                 val pokemon = jsonArray.getJSONObject(i)
                 val currentId = pokemon.getInt("id")
                 val currentName = pokemon.getString("name")
                 
-                android.util.Log.d(TAG, "Checking Pokemon $i: ID=$currentId, name=$currentName")
-                
                 if (currentId == pokemonId) {
-                    android.util.Log.d(TAG, "*** FOUND TARGET POKEMON! ***")
-                    android.util.Log.d(TAG, "Target Pokemon: $currentName (ID: $currentId)")
-                    
                     // Parse the Pokemon data
-                    android.util.Log.d(TAG, "Parsing Pokemon data for: $currentName")
                     val name = pokemon.getString("name")
                     val types = mutableListOf<TypeSlot>()
                     val stats = mutableListOf<Stat>()
@@ -268,42 +238,30 @@ class PartyManager(context: Context) {
                     val abilities = mutableListOf<AbilitySlot>()
                     
                     // Parse types
-                    android.util.Log.d(TAG, "Parsing types...")
                     if (pokemon.has("types")) {
                         val typesArray = pokemon.getJSONArray("types")
-                        android.util.Log.d(TAG, "Types array length: ${typesArray.length()}")
                         for (j in 0 until typesArray.length()) {
                             val type = typesArray.getJSONObject(j)
                             val slot = type.getInt("slot")
                             val typeName = type.getJSONObject("type").getString("name")
-                            android.util.Log.d(TAG, "Type $j: slot=$slot, name=$typeName")
                             types.add(TypeSlot(slot, TypeInfo(typeName, "")))
                         }
-                    } else {
-                        android.util.Log.d(TAG, "No types field found")
                     }
                     
                     // Parse stats
-                    android.util.Log.d(TAG, "Parsing stats...")
                     if (pokemon.has("stats")) {
                         val statsArray = pokemon.getJSONArray("stats")
-                        android.util.Log.d(TAG, "Stats array length: ${statsArray.length()}")
                         for (j in 0 until statsArray.length()) {
                             val stat = statsArray.getJSONObject(j)
                             val baseStat = stat.getInt("base_stat")
                             val statName = stat.getJSONObject("stat").getString("name")
-                            android.util.Log.d(TAG, "Stat $j: $statName = $baseStat")
                             stats.add(Stat(baseStat, 0, StatInfo(statName, "")))
                         }
-                    } else {
-                        android.util.Log.d(TAG, "No stats field found")
                     }
                     
                     // Parse moves
-                    android.util.Log.d(TAG, "=== Parsing moves ===")
                     if (pokemon.has("level_up_moves")) {
                         val movesArray = pokemon.getJSONArray("level_up_moves")
-                        android.util.Log.d(TAG, "level_up_moves array length: ${movesArray.length()}")
                         
                         for (j in 0 until movesArray.length()) {
                             try {
@@ -320,7 +278,6 @@ class PartyManager(context: Context) {
                                             .getJSONObject("level_learned_at")
                                             .getInt("level")
                                     } catch (e: Exception) {
-                                        android.util.Log.w(TAG, "Could not parse level_learned_at for move $j, using default level 1")
                                         1
                                     }
                                 }
@@ -332,54 +289,35 @@ class PartyManager(context: Context) {
                                     try {
                                         move.getJSONObject("move").getString("name")
                                     } catch (e: Exception) {
-                                        android.util.Log.w(TAG, "Could not parse move name for move $j, using default name 'unknown'")
                                         "unknown"
                                     }
                                 }
                                 
-                                android.util.Log.d(TAG, "Move $j: $moveName (Lv$levelLearnedAt)")
                                 moves.add(LevelUpMove(moveName, levelLearnedAt, "red-blue"))
                             } catch (moveError: Exception) {
-                                android.util.Log.e(TAG, "Error parsing move $j: ${moveError.message}")
-                                android.util.Log.e(TAG, "Move JSON: ${movesArray.getJSONObject(j)}")
+                                // Error parsing move, continue to next one
                             }
                         }
-                    } else {
-                        android.util.Log.d(TAG, "No level_up_moves field found")
                     }
                     
-                    android.util.Log.d(TAG, "Final moves count: ${moves.size}")
-                    android.util.Log.d(TAG, "Final moves: ${moves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
-                    
                     // Parse abilities
-                    android.util.Log.d(TAG, "Parsing abilities...")
                     if (pokemon.has("abilities")) {
                         val abilitiesArray = pokemon.getJSONArray("abilities")
-                        android.util.Log.d(TAG, "Abilities array length: ${abilitiesArray.length()}")
                         for (j in 0 until abilitiesArray.length()) {
                             val ability = abilitiesArray.getJSONObject(j)
                             val slot = ability.getInt("slot")
                             val abilityName = ability.getJSONObject("ability").getString("name")
-                            android.util.Log.d(TAG, "Ability $j: slot=$slot, name=$abilityName")
                             abilities.add(AbilitySlot(Ability(abilityName), false, slot))
                         }
-                    } else {
-                        android.util.Log.d(TAG, "No abilities field found")
                     }
                     
                     // Parse height and weight
-                    android.util.Log.d(TAG, "Parsing height and weight...")
                     val height = if (pokemon.has("height")) pokemon.getInt("height") else 1
                     val weight = if (pokemon.has("weight")) pokemon.getInt("weight") else 1
                     val baseExperience = if (pokemon.has("base_experience")) pokemon.getInt("base_experience") else 0
                     val spritePath = if (pokemon.has("sprites") && pokemon.getJSONObject("sprites").has("front_default")) {
                         pokemon.getJSONObject("sprites").getString("front_default")
                     } else ""
-                    
-                    android.util.Log.d(TAG, "Height: $height, Weight: $weight, Base Exp: $baseExperience")
-                    android.util.Log.d(TAG, "Sprite path: $spritePath")
-                    
-                    android.util.Log.d(TAG, "Creating Pokemon object...")
                     val pokemonObject = Pokemon(
                         id = pokemonId,
                         name = name,
@@ -393,20 +331,13 @@ class PartyManager(context: Context) {
                         spritePath = spritePath
                     )
                     
-                    android.util.Log.d(TAG, "*** Pokemon object created successfully! ***")
-                    android.util.Log.d(TAG, "Final Pokemon: ${pokemonObject.name}, Types: ${pokemonObject.types.map { it.type.name }}, Moves: ${pokemonObject.levelUpMoves.size}")
-                    
                     return pokemonObject
                 }
             }
             
-            android.util.Log.d(TAG, "Pokemon with ID $pokemonId not found in pokemons.json")
             null
             
         } catch (e: Exception) {
-            android.util.Log.e(TAG, "*** ERROR in findPokemonById ***", e)
-            android.util.Log.e(TAG, "Error details: ${e.message}")
-            android.util.Log.e(TAG, "Stack trace: ${e.stackTraceToString()}")
             null
         }
     }
@@ -425,16 +356,11 @@ class PartyManager(context: Context) {
         currentExp: Int,
         nature: Nature
     ): PartyPokemon {
-        android.util.Log.d(TAG, "=== Creating PartyPokemon for ${pokemon.name} ===")
-        android.util.Log.d(TAG, "Input parameters: level=$level, currentExp=$currentExp, nature=${nature.name}")
-        
         // Convert to D&D stats using DnDConverter
         val dndView = dndConverter.convertPokemonToDnD(pokemon)
-        android.util.Log.d(TAG, "DnD conversion for ${pokemon.name}: convertedStats=${dndView.convertedStats}")
         
         // Calculate proficiency bonus for the specified level
         val proficiency = calculateProficiencyBonus(level)
-        android.util.Log.d(TAG, "Proficiency bonus for level $level: $proficiency")
         
         // Calculate HP based on level and base stats using proper DnD conversion
         val baseHP = pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 10
@@ -449,42 +375,27 @@ class PartyManager(context: Context) {
         }
         val maxHP = adjustedBaseHP
         
-        android.util.Log.d(TAG, "HP calculation: baseHP=$baseHP, adjustedBaseHP=$adjustedBaseHP, hitDiceValue=$hitDiceValue, level=$level, maxHP=$maxHP")
-        
         // Generate size and weight variations (5% variation)
         val sizeVariation = Random.nextDouble(-0.05, 0.06) // -5% to +5%
         val weightVariation = Random.nextDouble(-0.05, 0.06) // -5% to +5%
         val actualSize = maxOf(1, (pokemon.height * (1 + sizeVariation)).toInt())
         val actualWeight = maxOf(1, (pokemon.weight * (1 + weightVariation)).toInt())
         
-        android.util.Log.d(TAG, "Size/Weight calculation: baseHeight=${pokemon.height}, baseWeight=${pokemon.weight}, actualSize=$actualSize, actualWeight=$actualWeight")
-        
         // Keep base DnD stats without nature modifiers - they will be applied during calculations
         val currentDnDStats = dndView.convertedStats.toMutableMap()
-        android.util.Log.d(TAG, "Base DnD stats (no nature modifiers): $currentDnDStats")
         
         // Search for evolution data for the evolved form
         val evolutionData = PartyPokemon.findEvolutionData(context, pokemon.id)
-        android.util.Log.d(TAG, "Evolution data found: $evolutionData")
-        
-        android.util.Log.d("lvlup process", "=== Creating PartyPokemon ===")
-        android.util.Log.d("lvlup process", "Base Pokemon levelUpMoves count: ${pokemon.levelUpMoves.size}")
-        android.util.Log.d("lvlup process", "Base Pokemon levelUpMoves: ${pokemon.levelUpMoves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
-        android.util.Log.d("lvlup process", "Creating for level: $level")
         
         // Level is already the D&D level, no conversion needed
         val currentDnDLevel = level
-        android.util.Log.d("lvlup process", "Current D&D level: $currentDnDLevel (level is already D&D level)")
         
         // Filter moves based on D&D level conversion
         val availableMoves = pokemon.levelUpMoves.filter { move ->
             val moveDnDLevel = kotlin.math.ceil(move.levelLearnedAt / 5.0).toInt()
             val isAvailable = moveDnDLevel <= currentDnDLevel
-            android.util.Log.d("lvlup process", "Move ${move.name}: Pokemon Lv${move.levelLearnedAt} → D&D Lv$moveDnDLevel, available=$isAvailable")
             isAvailable
         }
-        
-        android.util.Log.d("lvlup process", "Filtered availableMoves count: ${availableMoves.size}")
         
         val partyPokemon = PartyPokemon(
             id = pokemon.id,
@@ -508,9 +419,6 @@ class PartyManager(context: Context) {
             movementSpeed = 30, // This will be recalculated by the Pokemon
             evolution = evolutionData
         )
-        
-        android.util.Log.d(TAG, "=== PartyPokemon created successfully ===")
-        android.util.Log.d(TAG, "Final PartyPokemon: id=${partyPokemon.id}, name=${partyPokemon.name}, level=${partyPokemon.level}, maxHP=${partyPokemon.maxHP}, currentDnDStats=${partyPokemon.currentDnDStats}")
         
         return partyPokemon
     }
@@ -548,19 +456,21 @@ class PartyManager(context: Context) {
      * Create a new PartyPokemon from base Pokemon
      */
     private fun createPartyPokemon(pokemon: Pokemon): PartyPokemon {
-        android.util.Log.d(TAG, "=== Creating initial PartyPokemon for ${pokemon.name} ===")
-        android.util.Log.d(TAG, "Input parameters: level=1, currentExp=0, random nature")
+        // Log the passed Pokemon parameter
+        val pokemonJson = gson.toJson(pokemon)
+        android.util.Log.d("evolution test", "createPartyPokemon called with Pokemon: $pokemonJson")
         
         // Convert to D&D stats
         val dndView = dndConverter.convertPokemonToDnD(pokemon)
-        android.util.Log.d(TAG, "DnD conversion for ${pokemon.name}: convertedStats=${dndView.convertedStats}")
+        
+        // Log the DnD conversion result
+        val dndViewJson = gson.toJson(dndView)
+        android.util.Log.d("evolution test", "DnD conversion result: $dndViewJson")
         
         // Calculate HP based on current level (level 1) using new rules
         val baseHP = pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0
         val adjustedBaseHP = kotlin.math.floor(baseHP / 3.0).toInt() // New rule: floor(Base HP ÷ 3)
         val maxHP = adjustedBaseHP // For level 1, HP equals adjusted base HP
-        
-        android.util.Log.d(TAG, "HP calculation: baseHP=$baseHP, adjustedBaseHP=$adjustedBaseHP, maxHP=$maxHP")
         
         // Generate size and weight variations (5% variation)
         val sizeVariation = Random.nextDouble(-0.05, 0.06) // -5% to +5%
@@ -568,16 +478,12 @@ class PartyManager(context: Context) {
         val actualSize = maxOf(1, (pokemon.height * (1 + sizeVariation)).toInt())
         val actualWeight = maxOf(1, (pokemon.weight * (1 + weightVariation)).toInt())
         
-        android.util.Log.d(TAG, "Size/Weight calculation: baseHeight=${pokemon.height}, baseWeight=${pokemon.weight}, actualSize=$actualSize, actualWeight=$actualWeight")
-        
         // Level 1 is already the D&D level, no conversion needed
         val currentDnDLevel = 1
-        android.util.Log.d("lvlup process", "Creating level 1 Pokemon - D&D level: $currentDnDLevel")
         
         val availableMoves = pokemon.levelUpMoves.filter { move ->
             val moveDnDLevel = kotlin.math.ceil(move.levelLearnedAt / 5.0).toInt()
             val isAvailable = moveDnDLevel <= currentDnDLevel
-            android.util.Log.d("lvlup process", "Move ${move.name}: Pokemon Lv${move.levelLearnedAt} → D&D Lv$moveDnDLevel, available=$isAvailable")
             isAvailable
         }
         
@@ -587,15 +493,12 @@ class PartyManager(context: Context) {
         
         // Assign a random nature
         val randomNature = getRandomNature()
-        android.util.Log.d(TAG, "Random nature assigned: ${randomNature.name}")
         
         // Keep base DnD stats without nature modifiers - they will be applied during calculations
         val currentDnDStats = dndView.convertedStats.toMutableMap()
-        android.util.Log.d(TAG, "Base DnD stats (no nature modifiers): $currentDnDStats")
         
         // Search for evolution data
         val evolutionData = PartyPokemon.findEvolutionData(context, pokemon.id)
-        android.util.Log.d(TAG, "Evolution data found: $evolutionData")
         
         val partyPokemon = PartyPokemon(
             id = pokemon.id,
@@ -625,9 +528,6 @@ class PartyManager(context: Context) {
             // Evolution data
             evolution = evolutionData
         )
-        
-        android.util.Log.d(TAG, "=== Initial PartyPokemon created successfully ===")
-        android.util.Log.d(TAG, "Final PartyPokemon: id=${partyPokemon.id}, name=${partyPokemon.name}, level=${partyPokemon.level}, maxHP=${partyPokemon.maxHP}, currentDnDStats=${partyPokemon.currentDnDStats}")
         
         return partyPokemon
     }

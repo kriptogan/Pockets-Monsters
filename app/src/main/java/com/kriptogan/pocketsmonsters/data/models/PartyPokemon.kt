@@ -106,26 +106,77 @@ data class PartyPokemon(
          * @return EvolutionDetails if found, null otherwise
          */
         fun findEvolutionData(context: android.content.Context, pokemonId: Int): EvolutionDetails? {
+            android.util.Log.d("evolution test - find", "=== findEvolutionData called ===")
+            android.util.Log.d("evolution test - find", "Searching for Pokemon ID: $pokemonId")
+            
             return try {
+                android.util.Log.d("evolution test - find", "Opening pokemons.json from assets...")
                 val inputStream = context.assets.open("pokemons.json")
+                android.util.Log.d("evolution test - find", "Successfully opened pokemons.json")
+                
                 val jsonString = inputStream.bufferedReader().use { it.readText() }
+                android.util.Log.d("evolution test - find", "Read JSON string, length: ${jsonString.length}")
+                
                 val jsonArray = org.json.JSONArray(jsonString)
+                android.util.Log.d("evolution test - find", "Parsed JSON array, total Pokemon: ${jsonArray.length()}")
 
+                android.util.Log.d("evolution test - find", "Starting search through Pokemon array...")
                 for (i in 0 until jsonArray.length()) {
                     val pokemon = jsonArray.getJSONObject(i)
-                    if (pokemon.getInt("id") == pokemonId) {
+                    val currentId = pokemon.getInt("id")
+                    val currentName = pokemon.getString("name")
+                    
+                    android.util.Log.d("evolution test - find", "Checking Pokemon [$i]: ID=$currentId, Name=$currentName")
+                    
+                    if (currentId == pokemonId) {
+                        android.util.Log.d("evolution test - find", "Found matching Pokemon! ID=$currentId, Name=$currentName")
+                        
                         if (pokemon.has("evolution")) {
+                            android.util.Log.d("evolution test - find", "Pokemon has evolution data")
                             val evolution = pokemon.getJSONObject("evolution")
-                            return EvolutionDetails(
-                                level = evolution.getInt("level"),
-                                evolutionId = evolution.getInt("evolutionId")
+                            
+                            // Log evolution object content
+                            val evolutionKeys = evolution.keys()
+                            val evolutionContent = StringBuilder()
+                            while (evolutionKeys.hasNext()) {
+                                val key = evolutionKeys.next()
+                                val value = evolution.get(key)
+                                evolutionContent.append("$key=$value, ")
+                            }
+                            android.util.Log.d("evolution test - find", "Evolution object content: $evolutionContent")
+                            
+                                                         // Handle level field - it can be null for special evolutions
+                             val level = if (evolution.has("level") && !evolution.isNull("level")) {
+                                 evolution.getInt("level")
+                             } else {
+                                 null
+                             }
+                             val evolutionId = evolution.getInt("evolutionId")
+                             android.util.Log.d("evolution test - find", "Parsed evolution data - Level: $level, Evolution ID: $evolutionId")
+                            
+                            val evolutionDetails = EvolutionDetails(
+                                level = level,
+                                evolutionId = evolutionId
                             )
-                        }
+                            android.util.Log.d("evolution test - find", "Created EvolutionDetails object: $evolutionDetails")
+                            android.util.Log.d("evolution test - find", "=== findEvolutionData SUCCESS ===")
+                            return evolutionDetails
+                                                 } else {
+                             android.util.Log.d("evolution test - find", "Pokemon found but NO evolution data present")
+                             android.util.Log.d("evolution test - find", "Available keys: ${pokemon.keys().asSequence().toList()}")
+                         }
                         break
                     }
                 }
+                
+                android.util.Log.d("evolution test - find", "Pokemon with ID $pokemonId NOT found in pokemons.json")
+                android.util.Log.d("evolution test - find", "=== findEvolutionData FAILED - Pokemon not found ===")
                 null
+                
             } catch (e: Exception) {
+                android.util.Log.e("evolution test - find", "ERROR in findEvolutionData: ${e.message}")
+                android.util.Log.e("evolution test - find", "Stack trace: ${e.stackTraceToString()}")
+                android.util.Log.d("evolution test - find", "=== findEvolutionData FAILED - Exception ===")
                 e.printStackTrace()
                 null
             }
@@ -138,33 +189,22 @@ data class PartyPokemon(
      * @return Pair of (message, updated Pokemon instance)
      */
     fun gainExp(expAmount: Int): Pair<String, PartyPokemon> {
-        Log.d("lvlup process", "=== gainExp called ===")
-        Log.d("lvlup process", "Current level: $level, current exp: $currentExp")
-        Log.d("lvlup process", "Exp amount to add: $expAmount")
-        
         val newCurrentExp = currentExp + expAmount
         val newLevel = calculateLevelFromExp(newCurrentExp)
-        
-        Log.d("lvlup process", "New exp: $newCurrentExp, new level: $newLevel")
         
         return when {
             newLevel > level -> {
                 // Level up occurred
-                Log.d("lvlup process", "Level up detected! Calling levelUp function")
                 val (message, updatedPokemon) = levelUp(newLevel, newCurrentExp)
-                Log.d("lvlup process", "Level up result - message: $message, new level: ${updatedPokemon.level}, availableMoves: ${updatedPokemon.availableMoves.size}")
                 message to updatedPokemon
             }
             newLevel < level -> {
                 // Level down occurred
-                Log.d("lvlup process", "Level down detected! Calling levelDown function")
                 val updatedPokemon = levelDown(newLevel, newCurrentExp)
-                Log.d("lvlup process", "Level down result - new level: ${updatedPokemon.level}, availableMoves: ${updatedPokemon.availableMoves.size}")
                 "Level Down!" to updatedPokemon
             }
             else -> {
                 // No level change, just update experience
-                Log.d("lvlup process", "No level change, just updating experience")
                 val updatedPokemon = this.copy(currentExp = newCurrentExp)
                 "Experience updated" to updatedPokemon
             }
@@ -259,13 +299,13 @@ data class PartyPokemon(
      * Log current DnD stats for debugging evolution
      */
     fun logCurrentDnDStats() {
-        Log.d("PartyPokemon", "Current DnD stats for $name: $currentDnDStats")
+       /* Log.d("PartyPokemon", "Current DnD stats for $name: $currentDnDStats")
         Log.d("PartyPokemon", "Stats breakdown for $name:")
         currentDnDStats.forEach { (statName, value) ->
             val modifier = floor((value - 10) / 2.0).toInt()
             val modifierText = if (modifier >= 0) "+$modifier" else "$modifier"
             Log.d("PartyPokemon", "  $statName: $value (modifier: $modifierText)")
-        }
+        }*/
     }
     
     /**
@@ -362,46 +402,25 @@ data class PartyPokemon(
      * @return Updated PartyPokemon with recalculated moves
      */
     fun recalculateAvailableMoves(): PartyPokemon {
-        Log.d("lvlup process", "=== recalculateAvailableMoves called ===")
-        Log.d("lvlup process", "Current level: $level")
-        Log.d("lvlup process", "Base Pokemon levelUpMoves count: ${basePokemon.levelUpMoves.size}")
-        Log.d("lvlup process", "Base Pokemon levelUpMoves: ${basePokemon.levelUpMoves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
-        
         // Convert current level to D&D level for proper comparison
         val currentDnDLevel = level
-        Log.d("lvlup process", "Current D&D level: $currentDnDLevel (from Pokemon level $level)")
-        Log.d("lvlup process", "D&D level calculation: ceil($level / 5.0) = ceil(${level / 5.0}) = $currentDnDLevel")
         
         // Filter moves based on D&D level conversion
         val newAvailableMoves = basePokemon.levelUpMoves.filter { move ->
             val moveDnDLevel = kotlin.math.ceil(move.levelLearnedAt / 5.0).toInt()
             val isAvailable = moveDnDLevel <= currentDnDLevel
-            Log.d("lvlup process", "Move ${move.name}: Pokemon Lv${move.levelLearnedAt} → D&D Lv$moveDnDLevel, available=$isAvailable")
-            Log.d("lvlup process", "  Move D&D calculation: ceil(${move.levelLearnedAt} / 5.0) = ceil(${move.levelLearnedAt / 5.0}) = $moveDnDLevel")
-            Log.d("lvlup process", "  Comparison: $moveDnDLevel <= $currentDnDLevel = $isAvailable")
             isAvailable
         }
-        
-        Log.d("lvlup process", "Filtered available moves for D&D level $currentDnDLevel (Pokemon level $level): ${newAvailableMoves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
-        Log.d("lvlup process", "Total moves available: ${newAvailableMoves.size}")
         
         // Remove moves from currentMoveSet that are no longer available
         val cleanedCurrentMoveSet = currentMoveSet.filter { moveName ->
             newAvailableMoves.any { it.name == moveName }
         }
         
-        Log.d("lvlup process", "Current move set before cleanup: $currentMoveSet")
-        Log.d("lvlup process", "Current move set after cleanup: $cleanedCurrentMoveSet")
-        
-        Log.d("lvlup process", "Recalculated moves for $name (Pokemon Level $level, D&D Level $currentDnDLevel): available=${newAvailableMoves.size}, currentSet=${cleanedCurrentMoveSet.size}")
-        
         val result = this.copy(
             availableMoves = newAvailableMoves,
             currentMoveSet = cleanedCurrentMoveSet
         )
-        
-        Log.d("lvlup process", "Result Pokemon availableMoves count: ${result.availableMoves.size}")
-        Log.d("lvlup process", "Result Pokemon availableMoves: ${result.availableMoves.map { it.name }}")
         
         return result
     }
@@ -413,27 +432,26 @@ data class PartyPokemon(
      * @return Pair of (message, updated Pokemon instance)
      */
     private fun levelUp(newLevel: Int, newExp: Int): Pair<String, PartyPokemon> {
-        Log.d("lvlup process", "=== private levelUp called ===")
-        Log.d("lvlup process", "Old level: $level, new level: $newLevel")
-        
         val newProficiency = calculateProficiencyBonus(newLevel)
-        Log.d("lvlup process", "New proficiency: $newProficiency")
         
         // Check if evolution level is reached
-        // Convert Pokemon game level to DnD level: ceil(level/5)
+        // Evolution level is already in D&D level format, or null for special evolutions
         val evolutionMessage = if (evolution != null) {
-            val evolutionDnDLevel = kotlin.math.ceil(evolution.level / 5.0).toInt()
-            Log.d("lvlup process", "Evolution check for $name: level=$newLevel, evolutionDnDLevel=$evolutionDnDLevel")
-            if (newLevel >= evolutionDnDLevel) {
-                "Reached evolution!"
+            if (evolution.level != null) {
+                // Level-based evolution
+                val evolutionDnDLevel = evolution.level
+                if (newLevel >= evolutionDnDLevel) {
+                    "Reached evolution!"
+                } else {
+                    "Level Up!"
+                }
             } else {
+                // Special evolution (stone, trade, happiness, etc.) - no automatic evolution
                 "Level Up!"
             }
         } else {
             "Level Up!"
         }
-        
-        Log.d("lvlup process", "Evolution message: $evolutionMessage")
         
         val updatedPokemon = this.copy(
             level = newLevel,
@@ -441,12 +459,8 @@ data class PartyPokemon(
             proficiency = newProficiency
         )
         
-        Log.d("lvlup process", "Updated Pokemon before recalculateAvailableMoves - level: ${updatedPokemon.level}, availableMoves: ${updatedPokemon.availableMoves.size}")
-        
         // Recalculate available moves and clean up current move set
         val finalPokemon = updatedPokemon.recalculateAvailableMoves()
-        
-        Log.d("lvlup process", "Final Pokemon after recalculateAvailableMoves - level: ${finalPokemon.level}, availableMoves: ${finalPokemon.availableMoves.size}")
         
         return evolutionMessage to finalPokemon
     }
@@ -458,11 +472,7 @@ data class PartyPokemon(
      * @return Updated Pokemon instance
      */
     private fun levelDown(newLevel: Int, newExp: Int): PartyPokemon {
-        Log.d("lvlup process", "=== private levelDown called ===")
-        Log.d("lvlup process", "Old level: $level, new level: $newLevel")
-        
         val newProficiency = calculateProficiencyBonus(newLevel)
-        Log.d("lvlup process", "New proficiency: $newProficiency")
         
         val updatedPokemon = this.copy(
             level = newLevel,
@@ -470,12 +480,8 @@ data class PartyPokemon(
             proficiency = newProficiency
         )
         
-        Log.d("lvlup process", "Updated Pokemon before recalculateAvailableMoves - level: ${updatedPokemon.level}, availableMoves: ${updatedPokemon.availableMoves.size}")
-        
         // Recalculate available moves and clean up current move set
         val finalPokemon = updatedPokemon.recalculateAvailableMoves()
-        
-        Log.d("lvlup process", "Final Pokemon after recalculateAvailableMoves - level: ${finalPokemon.level}, availableMoves: ${finalPokemon.availableMoves.size}")
         
         return finalPokemon
     }
@@ -509,8 +515,9 @@ enum class Condition(val displayName: String, val description: String) {
 
 /**
  * Represents evolution details for a Pokemon
+ * level can be null for special evolutions (stone, trade, happiness, etc.)
  */
 data class EvolutionDetails(
-    val level: Int,
+    val level: Int?,
     val evolutionId: Int
 )

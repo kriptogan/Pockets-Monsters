@@ -14,6 +14,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -771,15 +772,8 @@ fun PartyPokemonDetailScreen(
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
-                                         // Debug: Log available moves and base Pokemon info
-                                         android.util.Log.d("lvlup process", "=== UI Display Debug ===")
-                                         android.util.Log.d("lvlup process", "Displaying available moves: ${currentPokemon.availableMoves.map { it.name }}")
-                                         android.util.Log.d("lvlup process", "Base Pokemon levelUpMoves: ${currentPokemon.basePokemon.levelUpMoves.map { "${it.name} (Lv${it.levelLearnedAt})" }}")
-                                         android.util.Log.d("lvlup process", "Current level: ${currentPokemon.level}")
-                                         
-                                         // Test recalculateAvailableMoves function
-                                         val testRecalculated = currentPokemon.recalculateAvailableMoves()
-                                         android.util.Log.d("lvlup process", "Test recalculated moves: ${testRecalculated.availableMoves.map { it.name }}")
+                                                              // Test recalculateAvailableMoves function
+                     val testRecalculated = currentPokemon.recalculateAvailableMoves()
                                          
                                          if (currentPokemon.availableMoves.isNotEmpty()) {
                          currentPokemon.availableMoves.forEach { move ->
@@ -1397,6 +1391,11 @@ fun PartyPokemonDetailScreen(
         
         // Experience Dialog
         if (showExpDialog) {
+            // Log evolution property when exp management screen opens
+            LaunchedEffect(Unit) {
+                android.util.Log.d("evolution test", "Pokemon: ${currentPokemon.name}, Evolution: ${currentPokemon.evolution}, Evolution level: ${currentPokemon.evolution?.level}")
+            }
+            
             AlertDialog(
                 onDismissRequest = { 
                     showExpDialog = false
@@ -1504,43 +1503,31 @@ fun PartyPokemonDetailScreen(
                                     singleLine = true
                                 )
                                 
-                                Button(
-                                    onClick = {
-                                        val expAmount = expInput.toIntOrNull() ?: 0
-                                        if (expAmount != 0) {
-                                            android.util.Log.d("PartyPokemonDetailScreen", "Before gainExp: level=${currentPokemon.level}, availableMoves=${currentPokemon.availableMoves.size}")
-                                            val (message, updatedPokemon) = currentPokemon.gainExp(expAmount)
-                                            
-                                            // Update the party with the new Pokemon instance
-                                            partyManager.updatePartyPokemon(updatedPokemon)
-                                            
-                                            // Debug logging before update
-                                            android.util.Log.d("lvlup process", "=== UI Update Process ===")
-                                            android.util.Log.d("lvlup process", "Before update - currentPokemon level: ${currentPokemon.level}, availableMoves: ${currentPokemon.availableMoves.size}")
-                                            android.util.Log.d("lvlup process", "Before update - currentPokemon availableMoves: ${currentPokemon.availableMoves.map { it.name }}")
-                                            
-                                            // Update local state to reflect changes immediately
-                                            currentExp = updatedPokemon.currentExp
-                                            currentLevel = updatedPokemon.level
-                                            currentPokemon = updatedPokemon
-                                            currentMoveSet = updatedPokemon.currentMoveSet.toMutableList()
-                                            
-                                            // Force UI refresh
-                                            refreshTrigger++
-                                            
-                                            // Debug logging after update
-                                            android.util.Log.d("lvlup process", "After update - currentPokemon level: ${currentPokemon.level}, availableMoves: ${currentPokemon.availableMoves.size}")
-                                            android.util.Log.d("lvlup process", "After update - currentPokemon availableMoves: ${currentPokemon.availableMoves.map { it.name }}")
-                                            android.util.Log.d("lvlup process", "Updated Pokemon: level=${updatedPokemon.level}, availableMoves=${updatedPokemon.availableMoves.size}, currentMoveSet=${updatedPokemon.currentMoveSet.size}")
-                                            android.util.Log.d("lvlup process", "Available moves: ${updatedPokemon.availableMoves.map { it.name }}")
-                                            
-                                            // Capture the level change message
-                                            levelChangeMessage = message
-                                            
-                                            // Clear input
-                                            expInput = ""
-                                        }
-                                    },
+                                                                 Button(
+                                     onClick = {
+                                         val expAmount = expInput.toIntOrNull() ?: 0
+                                         if (expAmount != 0) {
+                                             val (message, updatedPokemon) = currentPokemon.gainExp(expAmount)
+                                             
+                                             // Update the party with the new Pokemon instance
+                                             partyManager.updatePartyPokemon(updatedPokemon)
+                                             
+                                             // Update local state to reflect changes immediately
+                                             currentExp = updatedPokemon.currentExp
+                                             currentLevel = updatedPokemon.level
+                                             currentPokemon = updatedPokemon
+                                             currentMoveSet = updatedPokemon.currentMoveSet.toMutableList()
+                                             
+                                             // Force UI refresh
+                                             refreshTrigger++
+                                             
+                                             // Capture the level change message
+                                             levelChangeMessage = message
+                                             
+                                             // Clear input
+                                             expInput = ""
+                                         }
+                                     },
                                     enabled = expInput.isNotEmpty() && expInput.toIntOrNull() != null
                                 ) {
                                     Text("Gain")
@@ -1599,16 +1586,46 @@ fun PartyPokemonDetailScreen(
                                             modifier = Modifier.fillMaxWidth()
                                         )
                                         
-                                                                                 // Automatically show evolution dialog when evolution is available
-                                         if (levelChangeMessage!!.contains("Reached evolution")) {
-                                             LaunchedEffect(Unit) {
-                                                 showEvolutionDialog = true
-                                                 // Close the experience dialog since we're showing evolution directly
-                                                 showExpDialog = false
-                                             }
-                                         }
+                                        // Automatically show evolution dialog when evolution is available
+                                        if (levelChangeMessage!!.contains("Reached evolution")) {
+                                            LaunchedEffect(Unit) {
+                                                showEvolutionDialog = true
+                                                // Close the experience dialog since we're showing evolution directly
+                                                showExpDialog = false
+                                            }
+                                        }
                                     }
                                 }
+                            }
+                            
+                            // Evolution button for special evolutions (null level) - always visible at bottom
+                            if (currentPokemon.evolution?.level == null && currentPokemon.evolution != null) {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                
+                                Button(
+                                    onClick = {
+                                        showExpDialog = false
+                                        showEvolutionDialog = true
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.tertiary
+                                    )
+                                ) {
+                                    Text(
+                                        text = "Evolve ${currentPokemon.name}",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                                
+                                Text(
+                                    text = "Special evolution available (stone, trade, happiness, etc.)",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
                             }
                         }
                     }
@@ -1637,12 +1654,41 @@ fun PartyPokemonDetailScreen(
                      )
                  },
                  text = { 
-                     Text(
-                         text = "Pokemon reached evolution!",
-                         style = MaterialTheme.typography.bodyLarge,
-                         color = Color(0xFF1A1A1A),
-                         textAlign = TextAlign.Center
-                     )
+                     Column(
+                         modifier = Modifier.fillMaxWidth(),
+                         horizontalAlignment = Alignment.CenterHorizontally,
+                         verticalArrangement = Arrangement.spacedBy(8.dp)
+                     ) {
+                         if (currentPokemon.evolution?.level != null) {
+                             Text(
+                                 text = "${currentPokemon.name} reached evolution level!",
+                                 style = MaterialTheme.typography.bodyLarge,
+                                 color = Color(0xFF1A1A1A),
+                                 textAlign = TextAlign.Center
+                             )
+                         } else {
+                             Text(
+                                 text = "Special evolution available for ${currentPokemon.name}!",
+                                 style = MaterialTheme.typography.bodyLarge,
+                                 color = Color(0xFF1A1A1A),
+                                 textAlign = TextAlign.Center
+                             )
+                             
+                             Text(
+                                 text = "This evolution requires a special method (stone, trade, happiness, etc.)",
+                                 style = MaterialTheme.typography.bodyMedium,
+                                 color = Color(0xFF666666),
+                                 textAlign = TextAlign.Center
+                             )
+                         }
+                         
+                         Text(
+                             text = "Are you sure you want to evolve ${currentPokemon.name}?",
+                             style = MaterialTheme.typography.bodyMedium,
+                             color = Color(0xFF1A1A1A),
+                             textAlign = TextAlign.Center
+                         )
+                     }
                  },
                                    confirmButton = {
                       Button(
@@ -1672,11 +1718,10 @@ fun PartyPokemonDetailScreen(
                                               currentConditions = evolvedPokemon.conditions.toMutableList()
                                               refreshTrigger++
                                           }
-                                      } else {
-                                          // Evolution failed - show error and return to normal view
-                                          val error = result.exceptionOrNull()?.message ?: "Evolution failed"
-                                          android.util.Log.e("Evolution", "Failed: $error")
-                                      }
+                                                                             } else {
+                                           // Evolution failed - show error and return to normal view
+                                           val error = result.exceptionOrNull()?.message ?: "Evolution failed"
+                                       }
                                       
                                       // Hide evolution progress screen
                                       isEvolutionInProgress = false
@@ -1687,7 +1732,9 @@ fun PartyPokemonDetailScreen(
                               containerColor = Color(0xFF9C27B0)
                           )
                       ) {
-                          Text("Confirm Evolution")
+                          Text(
+                              if (currentPokemon.evolution?.level != null) "Confirm Evolution" else "Evolve Now"
+                          )
                       }
                   },
                  dismissButton = {
