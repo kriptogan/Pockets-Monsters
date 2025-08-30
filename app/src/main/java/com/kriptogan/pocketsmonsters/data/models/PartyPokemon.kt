@@ -26,6 +26,7 @@ data class PartyPokemon(
     // Move management
     val availableMoves: List<LevelUpMove>, // Based on current level
     val currentMoveSet: List<String> = emptyList(), // Selected 4 moves
+    val movesData: List<MoveData> = emptyList(), // Full move data from moves_database.json
     
     // D&D stats
     val convertedDnDStats: Map<String, Int>, // Base converted stats
@@ -105,7 +106,7 @@ data class PartyPokemon(
          * @param pokemonId The ID of the Pokemon to search for
          * @return EvolutionDetails if found, null otherwise
          */
-                fun findEvolutionData(context: android.content.Context, pokemonId: Int): EvolutionDetails? {
+        fun findEvolutionData(context: android.content.Context, pokemonId: Int): EvolutionDetails? {
             return try {
                 val inputStream = context.assets.open("pokemons.json")
                 val jsonString = inputStream.bufferedReader().use { it.readText() }
@@ -138,6 +139,57 @@ data class PartyPokemon(
             } catch (e: Exception) {
                 e.printStackTrace()
                 null
+            }
+        }
+        
+        /**
+         * Search for moves in moves_database.json file
+         * @param context Android context to access assets
+         * @param moves List of LevelUpMove to search for
+         * @return List of MoveData with full move information
+         */
+        fun findMoves(context: android.content.Context, moves: List<LevelUpMove>): List<MoveData> {
+            return try {
+                val inputStream = context.assets.open("moves_database.json")
+                val jsonString = inputStream.bufferedReader().use { it.readText() }
+                val jsonArray = org.json.JSONArray(jsonString)
+                
+                val foundMoves = mutableListOf<MoveData>()
+                
+                for (i in 0 until jsonArray.length()) {
+                    val moveJson = jsonArray.getJSONObject(i)
+                    val moveName = moveJson.getString("name")
+                    
+                    // Check if this move exists in our moves list
+                    if (moves.any { it.name == moveName }) {
+                        val moveData = MoveData(
+                            name = moveName,
+                            tier = moveJson.getInt("tier"),
+                            power = if (moveJson.has("power") && !moveJson.isNull("power")) moveJson.getInt("power") else null,
+                            accuracy = if (moveJson.has("accuracy") && !moveJson.isNull("accuracy")) moveJson.getInt("accuracy") else null,
+                            type = moveJson.getString("type"),
+                            damage_class = moveJson.getString("damage_class"),
+                            description = moveJson.getString("description"),
+                            effect = moveJson.getString("effect"),
+                            stat_changes = if (moveJson.has("stat_changes") && !moveJson.isNull("stat_changes")) {
+                                val statChangesArray = moveJson.getJSONArray("stat_changes")
+                                val statChangesList = mutableListOf<Any>()
+                                for (j in 0 until statChangesArray.length()) {
+                                    statChangesList.add(statChangesArray.get(j))
+                                }
+                                statChangesList
+                            } else {
+                                emptyList()
+                            }
+                        )
+                        foundMoves.add(moveData)
+                    }
+                }
+                
+                foundMoves
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emptyList()
             }
         }
     }
@@ -479,4 +531,19 @@ enum class Condition(val displayName: String, val description: String) {
 data class EvolutionDetails(
     val level: Int?,
     val evolutionId: Int
+)
+
+/**
+ * Represents move data from moves_database.json
+ */
+data class MoveData(
+    val name: String,
+    val tier: Int,
+    val power: Int?,
+    val accuracy: Int?,
+    val type: String,
+    val damage_class: String,
+    val description: String,
+    val effect: String,
+    val stat_changes: List<Any> // This can be empty list or contain stat change objects
 )

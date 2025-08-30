@@ -393,6 +393,12 @@ class PartyManager(context: Context) {
             isAvailable
         }
         
+        // Get moves data from moves_database.json
+        val movesData = PartyPokemon.findMoves(context, pokemon.levelUpMoves)
+        
+        // Log the movesData property
+        Log.d("MovesData", "Moves data for ${pokemon.name}: ${movesData.size} moves found")
+        
         val partyPokemon = PartyPokemon(
             id = pokemon.id,
             name = pokemon.name,
@@ -410,6 +416,7 @@ class PartyManager(context: Context) {
             actualSize = actualSize,
             actualWeight = actualWeight,
             availableMoves = availableMoves,
+            movesData = movesData,
             convertedDnDStats = dndView.convertedStats,
             currentDnDStats = currentDnDStats,
             movementSpeed = 30, // This will be recalculated by the Pokemon
@@ -488,6 +495,12 @@ class PartyManager(context: Context) {
         // Search for evolution data
         val evolutionData = PartyPokemon.findEvolutionData(context, pokemon.id)
         
+        // Get moves data from moves_database.json
+        val movesData = PartyPokemon.findMoves(context, pokemon.levelUpMoves)
+        
+        // Log the movesData property
+        Log.d("PartyManager", "Moves data for ${pokemon.name}: ${movesData.size} moves found")
+        
         val partyPokemon = PartyPokemon(
             id = pokemon.id,
             name = pokemon.name,
@@ -499,6 +512,7 @@ class PartyManager(context: Context) {
             actualWeight = actualWeight,
             availableMoves = availableMoves,
             currentMoveSet = availableMoves.take(4).map { it.name },
+            movesData = movesData,
             convertedDnDStats = dndView.convertedStats,
             currentDnDStats = currentDnDStats,
             weaknesses = weaknesses,
