@@ -876,13 +876,13 @@ fun PartyPokemonDetailScreen(
                                         val moveData = currentPokemon.movesData.find { it.name == move.name }
                                         if (moveData != null) {
                                             Text(
-                                                text = "Tier ${moveData.tier} • ${moveData.type} • ${moveData.damage_class} • Level ${move.levelLearnedAt}",
+                                                text = "Tier ${moveData.tier} • ${moveData.type} • ${moveData.damage_class}",
                                                 style = MaterialTheme.typography.bodySmall,
                                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
                                         } else {
                                             Text(
-                                                text = "Level ${move.levelLearnedAt}",
+                                                text = "Move data not available",
                                                 style = MaterialTheme.typography.bodySmall,
                                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
