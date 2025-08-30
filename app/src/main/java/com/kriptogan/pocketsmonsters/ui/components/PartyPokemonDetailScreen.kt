@@ -1391,11 +1391,7 @@ fun PartyPokemonDetailScreen(
         
         // Experience Dialog
         if (showExpDialog) {
-            // Log evolution property when exp management screen opens
-            LaunchedEffect(Unit) {
-                android.util.Log.d("evolution test", "Pokemon: ${currentPokemon.name}, Evolution: ${currentPokemon.evolution}, Evolution level: ${currentPokemon.evolution?.level}")
-            }
-            
+                        
             AlertDialog(
                 onDismissRequest = { 
                     showExpDialog = false

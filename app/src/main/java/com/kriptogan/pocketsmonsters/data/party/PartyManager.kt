@@ -71,9 +71,7 @@ class PartyManager(context: Context) {
         try {
             val partyPokemon = createPartyPokemon(pokemon)
             
-            // Log the final PartyPokemon object as JSON string
-            val jsonString = gson.toJson(partyPokemon)
-            android.util.Log.d("evolution test", "New PartyPokemon created and saved: $jsonString")
+
             
             val newParty = currentParty + partyPokemon
             saveParty(newParty)
@@ -193,9 +191,7 @@ class PartyManager(context: Context) {
                 nature = natureToPreserve
             )
             
-            // Log the evolved PartyPokemon object as JSON string
-            val evolvedJsonString = gson.toJson(evolvedPartyPokemon)
-            android.util.Log.d("evolution test", "Evolved PartyPokemon created: $evolvedJsonString")
+
             
             // 5. Replace the old Pokemon with the evolved one
             val currentParty = getParty().toMutableList()
@@ -456,16 +452,8 @@ class PartyManager(context: Context) {
      * Create a new PartyPokemon from base Pokemon
      */
     private fun createPartyPokemon(pokemon: Pokemon): PartyPokemon {
-        // Log the passed Pokemon parameter
-        val pokemonJson = gson.toJson(pokemon)
-        android.util.Log.d("evolution test", "createPartyPokemon called with Pokemon: $pokemonJson")
-        
         // Convert to D&D stats
         val dndView = dndConverter.convertPokemonToDnD(pokemon)
-        
-        // Log the DnD conversion result
-        val dndViewJson = gson.toJson(dndView)
-        android.util.Log.d("evolution test", "DnD conversion result: $dndViewJson")
         
         // Calculate HP based on current level (level 1) using new rules
         val baseHP = pokemon.stats.find { it.stat.name == "hp" }?.baseStat ?: 0

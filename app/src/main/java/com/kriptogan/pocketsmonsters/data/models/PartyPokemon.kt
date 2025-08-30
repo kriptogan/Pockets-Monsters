@@ -105,78 +105,37 @@ data class PartyPokemon(
          * @param pokemonId The ID of the Pokemon to search for
          * @return EvolutionDetails if found, null otherwise
          */
-        fun findEvolutionData(context: android.content.Context, pokemonId: Int): EvolutionDetails? {
-            android.util.Log.d("evolution test - find", "=== findEvolutionData called ===")
-            android.util.Log.d("evolution test - find", "Searching for Pokemon ID: $pokemonId")
-            
+                fun findEvolutionData(context: android.content.Context, pokemonId: Int): EvolutionDetails? {
             return try {
-                android.util.Log.d("evolution test - find", "Opening pokemons.json from assets...")
                 val inputStream = context.assets.open("pokemons.json")
-                android.util.Log.d("evolution test - find", "Successfully opened pokemons.json")
-                
                 val jsonString = inputStream.bufferedReader().use { it.readText() }
-                android.util.Log.d("evolution test - find", "Read JSON string, length: ${jsonString.length}")
-                
                 val jsonArray = org.json.JSONArray(jsonString)
-                android.util.Log.d("evolution test - find", "Parsed JSON array, total Pokemon: ${jsonArray.length()}")
 
-                android.util.Log.d("evolution test - find", "Starting search through Pokemon array...")
                 for (i in 0 until jsonArray.length()) {
                     val pokemon = jsonArray.getJSONObject(i)
-                    val currentId = pokemon.getInt("id")
-                    val currentName = pokemon.getString("name")
-                    
-                    android.util.Log.d("evolution test - find", "Checking Pokemon [$i]: ID=$currentId, Name=$currentName")
-                    
-                    if (currentId == pokemonId) {
-                        android.util.Log.d("evolution test - find", "Found matching Pokemon! ID=$currentId, Name=$currentName")
-                        
+                    if (pokemon.getInt("id") == pokemonId) {
                         if (pokemon.has("evolution")) {
-                            android.util.Log.d("evolution test - find", "Pokemon has evolution data")
                             val evolution = pokemon.getJSONObject("evolution")
                             
-                            // Log evolution object content
-                            val evolutionKeys = evolution.keys()
-                            val evolutionContent = StringBuilder()
-                            while (evolutionKeys.hasNext()) {
-                                val key = evolutionKeys.next()
-                                val value = evolution.get(key)
-                                evolutionContent.append("$key=$value, ")
+                            // Handle level field - it can be null for special evolutions
+                            val level = if (evolution.has("level") && !evolution.isNull("level")) {
+                                evolution.getInt("level")
+                            } else {
+                                null
                             }
-                            android.util.Log.d("evolution test - find", "Evolution object content: $evolutionContent")
+                            val evolutionId = evolution.getInt("evolutionId")
                             
-                                                         // Handle level field - it can be null for special evolutions
-                             val level = if (evolution.has("level") && !evolution.isNull("level")) {
-                                 evolution.getInt("level")
-                             } else {
-                                 null
-                             }
-                             val evolutionId = evolution.getInt("evolutionId")
-                             android.util.Log.d("evolution test - find", "Parsed evolution data - Level: $level, Evolution ID: $evolutionId")
-                            
-                            val evolutionDetails = EvolutionDetails(
+                            return EvolutionDetails(
                                 level = level,
                                 evolutionId = evolutionId
                             )
-                            android.util.Log.d("evolution test - find", "Created EvolutionDetails object: $evolutionDetails")
-                            android.util.Log.d("evolution test - find", "=== findEvolutionData SUCCESS ===")
-                            return evolutionDetails
-                                                 } else {
-                             android.util.Log.d("evolution test - find", "Pokemon found but NO evolution data present")
-                             android.util.Log.d("evolution test - find", "Available keys: ${pokemon.keys().asSequence().toList()}")
-                         }
+                        }
                         break
                     }
                 }
-                
-                android.util.Log.d("evolution test - find", "Pokemon with ID $pokemonId NOT found in pokemons.json")
-                android.util.Log.d("evolution test - find", "=== findEvolutionData FAILED - Pokemon not found ===")
                 null
                 
             } catch (e: Exception) {
-                android.util.Log.e("evolution test - find", "ERROR in findEvolutionData: ${e.message}")
-                android.util.Log.e("evolution test - find", "Stack trace: ${e.stackTraceToString()}")
-                android.util.Log.d("evolution test - find", "=== findEvolutionData FAILED - Exception ===")
                 e.printStackTrace()
                 null
             }
