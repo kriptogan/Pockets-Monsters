@@ -719,12 +719,103 @@ fun PartyPokemonDetailScreen(
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    Text(
-                        text = "Energy Slots: ${currentPokemon.currentEnergySlots.joinToString(", ")}",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
+                    // Energy Slots Visual Display - 2x5 Grid
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        // First row (slots 1-7)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            currentPokemon.currentEnergySlots.take(7).forEachIndexed { index, value ->
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    // Tier label
+                                    Text(
+                                        text = "T-${index + 1}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF666666),
+                                        modifier = Modifier.padding(bottom = 4.dp)
+                                    )
+                                    
+                                    // Energy slot square
+                                    Box(
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .background(
+                                                color = Color(0xFFFF9800), // Orange color
+                                                shape = RoundedCornerShape(8.dp)
+                                            )
+                                            .border(
+                                                width = 2.dp,
+                                                color = Color(0xFFE65100), // Darker orange border
+                                                shape = RoundedCornerShape(8.dp)
+                                            ),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            text = if (value == -1) "—" else value.toString(),
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.White,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Second row (slots 8-9)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            currentPokemon.currentEnergySlots.drop(7).forEachIndexed { index, value ->
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    // Tier label
+                                    Text(
+                                        text = "T-${index + 8}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF666666),
+                                        modifier = Modifier.padding(bottom = 4.dp)
+                                    )
+                                    
+                                    // Energy slot square
+                                    Box(
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .background(
+                                                color = Color(0xFFFF9800), // Orange color
+                                                shape = RoundedCornerShape(8.dp)
+                                            )
+                                            .border(
+                                                width = 2.dp,
+                                                color = Color(0xFFE65100), // Darker orange border
+                                                shape = RoundedCornerShape(8.dp)
+                                            ),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            text = if (value == -1) "—" else value.toString(),
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.White,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
                     
                                          // 1. Free Moves
                      Text(
