@@ -732,40 +732,43 @@ fun PartyPokemonDetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             currentPokemon.currentEnergySlots.take(7).forEachIndexed { index, value ->
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    // Tier label
-                                    Text(
-                                        text = "T-${index + 1}",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(0xFF666666),
-                                        modifier = Modifier.padding(bottom = 4.dp)
-                                    )
-                                    
-                                    // Energy slot square
-                                    Box(
-                                        modifier = Modifier
-                                            .size(40.dp)
-                                            .background(
-                                                color = Color(0xFFFF9800), // Orange color
-                                                shape = RoundedCornerShape(8.dp)
-                                            )
-                                            .border(
-                                                width = 2.dp,
-                                                color = Color(0xFFE65100), // Darker orange border
-                                                shape = RoundedCornerShape(8.dp)
-                                            ),
-                                        contentAlignment = Alignment.Center
+                                // Only show if value is not -1
+                                if (value != -1) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
+                                        // Tier label
                                         Text(
-                                            text = if (value == -1) "—" else value.toString(),
-                                            style = MaterialTheme.typography.titleMedium,
+                                            text = "T-${index + 1}",
+                                            style = MaterialTheme.typography.bodySmall,
                                             fontWeight = FontWeight.Bold,
-                                            color = Color.White,
-                                            textAlign = TextAlign.Center
+                                            color = Color(0xFF666666),
+                                            modifier = Modifier.padding(bottom = 4.dp)
                                         )
+                                        
+                                        // Energy slot square
+                                        Box(
+                                            modifier = Modifier
+                                                .size(40.dp)
+                                                .background(
+                                                    color = Color(0xFFFF9800), // Orange color
+                                                    shape = RoundedCornerShape(8.dp)
+                                                )
+                                                .border(
+                                                    width = 2.dp,
+                                                    color = Color(0xFFE65100), // Darker orange border
+                                                    shape = RoundedCornerShape(8.dp)
+                                                ),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = value.toString(),
+                                                style = MaterialTheme.typography.titleMedium,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color.White,
+                                                textAlign = TextAlign.Center
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -777,40 +780,43 @@ fun PartyPokemonDetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             currentPokemon.currentEnergySlots.drop(7).forEachIndexed { index, value ->
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    // Tier label
-                                    Text(
-                                        text = "T-${index + 8}",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(0xFF666666),
-                                        modifier = Modifier.padding(bottom = 4.dp)
-                                    )
-                                    
-                                    // Energy slot square
-                                    Box(
-                                        modifier = Modifier
-                                            .size(40.dp)
-                                            .background(
-                                                color = Color(0xFFFF9800), // Orange color
-                                                shape = RoundedCornerShape(8.dp)
-                                            )
-                                            .border(
-                                                width = 2.dp,
-                                                color = Color(0xFFE65100), // Darker orange border
-                                                shape = RoundedCornerShape(8.dp)
-                                            ),
-                                        contentAlignment = Alignment.Center
+                                // Only show if value is not -1
+                                if (value != -1) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
+                                        // Tier label
                                         Text(
-                                            text = if (value == -1) "—" else value.toString(),
-                                            style = MaterialTheme.typography.titleMedium,
+                                            text = "T-${index + 8}",
+                                            style = MaterialTheme.typography.bodySmall,
                                             fontWeight = FontWeight.Bold,
-                                            color = Color.White,
-                                            textAlign = TextAlign.Center
+                                            color = Color(0xFF666666),
+                                            modifier = Modifier.padding(bottom = 4.dp)
                                         )
+                                        
+                                        // Energy slot square
+                                        Box(
+                                            modifier = Modifier
+                                                .size(40.dp)
+                                                .background(
+                                                    color = Color(0xFFFF9800), // Orange color
+                                                    shape = RoundedCornerShape(8.dp)
+                                                )
+                                                .border(
+                                                    width = 2.dp,
+                                                    color = Color(0xFFE65100), // Darker orange border
+                                                    shape = RoundedCornerShape(8.dp)
+                                                ),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = value.toString(),
+                                                style = MaterialTheme.typography.titleMedium,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color.White,
+                                                textAlign = TextAlign.Center
+                                            )
+                                        }
                                     }
                                 }
                             }
