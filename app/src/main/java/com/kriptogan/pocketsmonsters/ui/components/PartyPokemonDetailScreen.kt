@@ -758,7 +758,29 @@ fun PartyPokemonDetailScreen(
                                                     width = 2.dp,
                                                     color = Color(0xFFE65100), // Darker orange border
                                                     shape = RoundedCornerShape(8.dp)
-                                                ),
+                                                )
+                                                .clickable {
+                                                    // Get the current energy slots list
+                                                    val currentSlots = currentPokemon.currentEnergySlots.toMutableList()
+                                                    val maxSlots = currentPokemon.energySlots.toMutableList()
+                                                    
+                                                    // Update the specific slot
+                                                    if (currentSlots[index] > 0) {
+                                                        // Decrease by 1, minimum 0
+                                                        currentSlots[index] = currentSlots[index] - 1
+                                                    } else {
+                                                        // Reset to max value for this tier
+                                                        currentSlots[index] = maxSlots[index]
+                                                    }
+                                                    
+                                                    // Update the Pokemon with new current energy slots
+                                                    val updatedPokemon = currentPokemon.copy(currentEnergySlots = currentSlots)
+                                                    partyManager.updatePartyPokemon(updatedPokemon)
+                                                    
+                                                    // Update local state to refresh UI immediately
+                                                    currentPokemon = updatedPokemon
+                                                    refreshTrigger++
+                                                },
                                             contentAlignment = Alignment.Center
                                         ) {
                                             Text(
@@ -806,7 +828,32 @@ fun PartyPokemonDetailScreen(
                                                     width = 2.dp,
                                                     color = Color(0xFFE65100), // Darker orange border
                                                     shape = RoundedCornerShape(8.dp)
-                                                ),
+                                                )
+                                                .clickable {
+                                                    // Get the current energy slots list
+                                                    val currentSlots = currentPokemon.currentEnergySlots.toMutableList()
+                                                    val maxSlots = currentPokemon.energySlots.toMutableList()
+                                                    
+                                                    // Calculate the actual index in the full list (index + 7 for second row)
+                                                    val actualIndex = index + 7
+                                                    
+                                                    // Update the specific slot
+                                                    if (currentSlots[actualIndex] > 0) {
+                                                        // Decrease by 1, minimum 0
+                                                        currentSlots[actualIndex] = currentSlots[actualIndex] - 1
+                                                    } else {
+                                                        // Reset to max value for this tier
+                                                        currentSlots[actualIndex] = maxSlots[actualIndex]
+                                                    }
+                                                    
+                                                    // Update the Pokemon with new current energy slots
+                                                    val updatedPokemon = currentPokemon.copy(currentEnergySlots = currentSlots)
+                                                    partyManager.updatePartyPokemon(updatedPokemon)
+                                                    
+                                                    // Update local state to refresh UI immediately
+                                                    currentPokemon = updatedPokemon
+                                                    refreshTrigger++
+                                                },
                                             contentAlignment = Alignment.Center
                                         ) {
                                             Text(
@@ -1609,8 +1656,8 @@ fun PartyPokemonDetailScreen(
                 },
                 text = { 
                     Column {
-                                                 Text(
-                             text = "This will restore ${currentPokemon.name}'s HP to maximum (${maxHP}).",
+                        Text(
+                            text = "This will restore ${currentPokemon.name}'s HP to maximum (${maxHP}) and reset all energy slots to their maximum available values.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color(0xFF1A1A1A)
                         )
@@ -1633,11 +1680,20 @@ fun PartyPokemonDetailScreen(
                 confirmButton = {
                     TextButton(
                         onClick = {
-                                                         // Set current HP to max HP
-                             val result = partyManager.updatePartyPokemonHP(currentPokemon.id, maxHP)
+                            // Set current HP to max HP
+                            val result = partyManager.updatePartyPokemonHP(currentPokemon.id, maxHP)
                             if (result.isSuccess) {
                                 currentHP = maxHP
                             }
+                            
+                            // Reset all current energy slots to their maximum available values
+                            val updatedPokemon = currentPokemon.resetCurrentEnergySlots()
+                            partyManager.updatePartyPokemon(updatedPokemon)
+                            
+                            // Update local state to refresh UI immediately
+                            currentPokemon = updatedPokemon
+                            refreshTrigger++
+                            
                             showFullRestDialog = false
                         }
                     ) {
