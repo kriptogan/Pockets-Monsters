@@ -79,6 +79,8 @@ fun PartyPokemonDetailScreen(
       var showNatureSelectionDialog by remember { mutableStateOf(false) }
       var showFullRestDialog by remember { mutableStateOf(false) }
       var showExpDialog by remember { mutableStateOf(false) }
+      var showMoveDescriptionDialog by remember { mutableStateOf(false) }
+      var selectedMoveData by remember { mutableStateOf<com.kriptogan.pocketsmonsters.data.models.MoveData?>(null) }
       
      // Local state for current HP and max HP to make UI reactive
      var currentHP by remember { mutableStateOf(partyPokemon.currentHP) }
@@ -733,10 +735,10 @@ fun PartyPokemonDetailScreen(
                          modifier = Modifier.padding(bottom = 8.dp)
                      )
                     
-                    if (currentPokemon.movesData.isNotEmpty()) {
-                        val freeMoves = currentPokemon.movesData.filter { it.tier == 0 }
-                        if (freeMoves.isNotEmpty()) {
-                            freeMoves.forEach { moveData ->
+                                         if (currentPokemon.movesData.isNotEmpty()) {
+                         val freeMoves = currentPokemon.movesData.filter { it.tier == 0 }.sortedBy { it.tier }
+                         if (freeMoves.isNotEmpty()) {
+                             freeMoves.forEach { moveData ->
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -744,12 +746,16 @@ fun PartyPokemonDetailScreen(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Column {
-                                        Text(
-                                            text = moveData.name.replaceFirstChar { it.uppercase() },
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            fontWeight = FontWeight.Medium
-                                        )
+                                                                         Column {
+                                         Text(
+                                             text = moveData.name.replaceFirstChar { it.uppercase() },
+                                             style = MaterialTheme.typography.bodyMedium,
+                                             fontWeight = FontWeight.Medium,
+                                             modifier = Modifier.clickable {
+                                                 selectedMoveData = moveData
+                                                 showMoveDescriptionDialog = true
+                                             }
+                                         )
                                         Text(
                                             text = "Tier ${moveData.tier} • ${moveData.type} • ${moveData.damage_class}",
                                             style = MaterialTheme.typography.bodySmall,
@@ -791,8 +797,11 @@ fun PartyPokemonDetailScreen(
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     
-                    if (preparedMoves.isNotEmpty()) {
-                        preparedMoves.forEach { moveName ->
+                                         if (preparedMoves.isNotEmpty()) {
+                         preparedMoves.sortedBy { moveName ->
+                             val moveData = currentPokemon.movesData.find { it.name == moveName }
+                             moveData?.tier ?: Int.MAX_VALUE
+                         }.forEach { moveName ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -800,12 +809,19 @@ fun PartyPokemonDetailScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Column {
-                                    Text(
-                                        text = moveName.replaceFirstChar { it.uppercase() },
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        fontWeight = FontWeight.Medium
-                                    )
+                                                                 Column {
+                                     Text(
+                                         text = moveName.replaceFirstChar { it.uppercase() },
+                                         style = MaterialTheme.typography.bodyMedium,
+                                         fontWeight = FontWeight.Medium,
+                                         modifier = Modifier.clickable {
+                                             val moveData = currentPokemon.movesData.find { it.name == moveName }
+                                             if (moveData != null) {
+                                                 selectedMoveData = moveData
+                                                 showMoveDescriptionDialog = true
+                                             }
+                                         }
+                                     )
                                     // Find move data to show tier and type
                                     val moveData = currentPokemon.movesData.find { it.name == moveName }
                                     if (moveData != null) {
@@ -863,8 +879,11 @@ fun PartyPokemonDetailScreen(
                             moveData?.tier != 0 // Exclude tier 0 moves
                         }
                         
-                        if (knownMoves.isNotEmpty()) {
-                            knownMoves.forEach { move ->
+                                                 if (knownMoves.isNotEmpty()) {
+                             knownMoves.sortedBy { move ->
+                                 val moveData = currentPokemon.movesData.find { it.name == move.name }
+                                 moveData?.tier ?: Int.MAX_VALUE
+                             }.forEach { move ->
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -872,12 +891,19 @@ fun PartyPokemonDetailScreen(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Column {
-                                        Text(
-                                            text = move.name.replaceFirstChar { it.uppercase() },
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            fontWeight = FontWeight.Medium
-                                        )
+                                                                         Column {
+                                         Text(
+                                             text = move.name.replaceFirstChar { it.uppercase() },
+                                             style = MaterialTheme.typography.bodyMedium,
+                                             fontWeight = FontWeight.Medium,
+                                             modifier = Modifier.clickable {
+                                                 val moveData = currentPokemon.movesData.find { it.name == move.name }
+                                                 if (moveData != null) {
+                                                     selectedMoveData = moveData
+                                                     showMoveDescriptionDialog = true
+                                                 }
+                                             }
+                                         )
                                         val moveData = currentPokemon.movesData.find { it.name == move.name }
                                         if (moveData != null) {
                                             Text(
@@ -1880,6 +1906,17 @@ fun PartyPokemonDetailScreen(
                  }
              )
          }
+         
+         // Move Description Dialog
+         if (showMoveDescriptionDialog) {
+             MoveDescriptionDialog(
+                 moveData = selectedMoveData,
+                 onDismiss = {
+                     showMoveDescriptionDialog = false
+                     selectedMoveData = null
+                 }
+             )
+         }
      }
 
 /**
@@ -2310,5 +2347,101 @@ fun NatureSelectionItem(
                 )
             }
         }
+    }
+}
+
+// Move Description Dialog
+@Composable
+fun MoveDescriptionDialog(
+    moveData: com.kriptogan.pocketsmonsters.data.models.MoveData?,
+    onDismiss: () -> Unit
+) {
+    if (moveData != null) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { 
+                Text(
+                    text = moveData.name.replaceFirstChar { it.uppercase() },
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            },
+            text = { 
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Move description
+                    Text(
+                        text = moveData.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(0xFF1A1A1A)
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    // Move details
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Tier:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF666666)
+                        )
+                        Text(
+                            text = "${moveData.tier}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Type:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF666666)
+                        )
+                        Text(
+                            text = moveData.type.replaceFirstChar { it.uppercase() },
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = getTypeColor(moveData.type)
+                        )
+                    }
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Damage Class:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF666666)
+                        )
+                        Text(
+                            text = moveData.damage_class.replaceFirstChar { it.uppercase() },
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = onDismiss) {
+                    Text("Close")
+                }
+            }
+        )
     }
 }
