@@ -87,6 +87,17 @@ fun PartyPokemonDetailScreen(
      var currentHP by remember { mutableStateOf(partyPokemon.currentHP) }
      var maxHP by remember { mutableStateOf(partyPokemon.maxHP) }
      
+     // Refresh data from PartyManager when screen becomes active
+     LaunchedEffect(partyPokemon.id) {
+         val updatedPokemon = partyManager.getParty().find { it.id == partyPokemon.id }
+         if (updatedPokemon != null) {
+             currentHP = updatedPokemon.currentHP
+             maxHP = updatedPokemon.maxHP
+             currentMoveSet = updatedPokemon.currentMoveSet.toMutableList()
+             currentStatusEffects = (updatedPokemon.currentStatusEffects ?: emptyList()).toMutableList()
+         }
+     }
+     
      // Local state for current experience and level to make UI reactive
      var currentExp by remember { mutableStateOf(partyPokemon.currentExp) }
      var currentLevel by remember { mutableStateOf(partyPokemon.level) }
