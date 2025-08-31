@@ -1156,7 +1156,7 @@ fun PartyPokemonDetailScreen(
                         TextButton(
                             onClick = { showStatusEffectDialog = true }
                         ) {
-                            Text("Manage")
+                            Text("Add")
                         }
                     }
                     
