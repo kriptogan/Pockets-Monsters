@@ -38,6 +38,7 @@ import com.kriptogan.pocketsmonsters.data.models.Nature
 import com.kriptogan.pocketsmonsters.data.party.PartyManager
 import androidx.compose.ui.graphics.Color
 import com.kriptogan.pocketsmonsters.data.converter.DnDConverter
+import android.util.Log
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -1147,11 +1148,37 @@ fun PartyPokemonDetailScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Status Effects",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
+                        TextButton(
+                            onClick = {
+                                Log.d("StatusEffect", "Before count down - currentStatusEffects: $currentStatusEffects")
+                                
+                                // Decrease count of all status effects by 1
+                                val updatedStatusEffects = currentStatusEffects.mapNotNull { statusEffect ->
+                                    val newCount = statusEffect.count - 1
+                                    Log.d("StatusEffect", "Processing ${statusEffect.name}: ${statusEffect.count} -> $newCount")
+                                    if (newCount > 0) {
+                                        statusEffect.copy(count = newCount)
+                                    } else {
+                                        Log.d("StatusEffect", "Removing ${statusEffect.name} (count reached 0)")
+                                        null // Remove if count reaches 0
+                                    }
+                                }
+                                
+                                Log.d("StatusEffect", "Updated status effects: $updatedStatusEffects")
+                                
+                                // Update the state by creating a new list to trigger recomposition
+                                currentStatusEffects = updatedStatusEffects.toMutableList()
+                                
+                                Log.d("StatusEffect", "After updating local state: $currentStatusEffects")
+                                
+                                val updatedPokemon = currentPokemon.copy(currentStatusEffects = currentStatusEffects.toList())
+                                partyManager.updatePartyPokemon(updatedPokemon)
+                                
+                                Log.d("StatusEffect", "Updated pokemon status effects: ${updatedPokemon.currentStatusEffects}")
+                            }
+                        ) {
+                            Text("Count a round")
+                        }
                         
                         TextButton(
                             onClick = { showStatusEffectDialog = true }
@@ -1193,7 +1220,10 @@ fun PartyPokemonDetailScreen(
                                 
                                 IconButton(
                                     onClick = {
-                                        currentStatusEffects.remove(statusEffect)
+                                        // Remove the status effect and update state to trigger recomposition
+                                        val updatedStatusEffects = currentStatusEffects.filter { it != statusEffect }
+                                        currentStatusEffects = updatedStatusEffects.toMutableList()
+                                        
                                         // Save the updated status effects to local datastore
                                         val updatedPokemon = currentPokemon.copy(currentStatusEffects = currentStatusEffects.toList())
                                         partyManager.updatePartyPokemon(updatedPokemon)
@@ -1203,6 +1233,7 @@ fun PartyPokemonDetailScreen(
                                     Icon(
                                         imageVector = Icons.Default.Delete,
                                         contentDescription = "Remove status effect",
+                                        tint = MaterialTheme.colorScheme.error,
                                         modifier = Modifier.size(16.dp)
                                     )
                                 }
