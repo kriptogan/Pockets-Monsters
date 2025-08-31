@@ -641,7 +641,7 @@ fun PartyPokemonDetailScreen(
                           StatGridItem(
                               label = "ATTACK",
                               value = "${dndView.convertedStats["Attack"] ?: 0}",
-                              statModifier = "${dndView.modifiers["Attack"] ?: 0}",
+                              statModifier = "${(dndView.modifiers["Attack"] ?: 0) + if (currentPokemon.nature.increasedStat == "Attack") 2 else if (currentPokemon.nature.decreasedStat == "Attack") -2 else 0}",
                               color = Color(0xFFF44336),
                               isProficient = currentPokemon.nature.increasedStat == "Attack",
                               isDeficient = currentPokemon.nature.decreasedStat == "Attack",
@@ -652,7 +652,7 @@ fun PartyPokemonDetailScreen(
                           StatGridItem(
                               label = "SP.ATTACK",
                               value = "${dndView.convertedStats["Sp.Atk"] ?: 0}",
-                              statModifier = "${dndView.modifiers["Sp.Atk"] ?: 0}",
+                              statModifier = "${(dndView.modifiers["Sp.Atk"] ?: 0) + if (currentPokemon.nature.increasedStat == "Sp.Atk" || currentPokemon.nature.increasedStat == "Sp. Atk") 2 else if (currentPokemon.nature.decreasedStat == "Sp.Atk" || currentPokemon.nature.decreasedStat == "Sp. Atk") -2 else 0}",
                               color = Color(0xFF9C27B0),
                               isProficient = currentPokemon.nature.increasedStat == "Sp.Atk" || currentPokemon.nature.increasedStat == "Sp. Atk",
                               isDeficient = currentPokemon.nature.decreasedStat == "Sp.Atk" || currentPokemon.nature.decreasedStat == "Sp. Atk",
@@ -663,7 +663,7 @@ fun PartyPokemonDetailScreen(
                           StatGridItem(
                               label = "SPEED",
                               value = "${dndView.convertedStats["Speed"] ?: 0}",
-                              statModifier = "${dndView.modifiers["Speed"] ?: 0}",
+                              statModifier = "${(dndView.modifiers["Speed"] ?: 0) + if (currentPokemon.nature.increasedStat == "Speed") 2 else if (currentPokemon.nature.decreasedStat == "Speed") -2 else 0}",
                               color = Color(0xFF4CAF50),
                               isProficient = currentPokemon.nature.increasedStat == "Speed",
                               isDeficient = currentPokemon.nature.decreasedStat == "Speed",
@@ -682,7 +682,7 @@ fun PartyPokemonDetailScreen(
                           StatGridItem(
                               label = "DEFENSE",
                               value = "${dndView.convertedStats["Defense"] ?: 0}",
-                              statModifier = "${dndView.modifiers["Defense"] ?: 0}",
+                              statModifier = "${(dndView.modifiers["Defense"] ?: 0) + if (currentPokemon.nature.increasedStat == "Defense") 2 else if (currentPokemon.nature.decreasedStat == "Defense") -2 else 0}",
                               color = Color(0xFF795548),
                               isProficient = currentPokemon.nature.increasedStat == "Defense",
                               isDeficient = currentPokemon.nature.decreasedStat == "Defense",
@@ -693,7 +693,7 @@ fun PartyPokemonDetailScreen(
                           StatGridItem(
                               label = "SP.DEFENSE",
                               value = "${dndView.convertedStats["Sp.Def"] ?: 0}",
-                              statModifier = "${dndView.modifiers["Sp.Def"] ?: 0}",
+                              statModifier = "${(dndView.modifiers["Sp.Def"] ?: 0) + if (currentPokemon.nature.increasedStat == "Sp.Def" || currentPokemon.nature.increasedStat == "Sp. Def") 2 else if (currentPokemon.nature.decreasedStat == "Sp.Def" || currentPokemon.nature.decreasedStat == "Sp. Def") -2 else 0}",
                               color = Color(0xFF00BCD4),
                               isProficient = currentPokemon.nature.increasedStat == "Sp.Def" || currentPokemon.nature.increasedStat == "Sp. Def",
                               isDeficient = currentPokemon.nature.decreasedStat == "Sp.Def" || currentPokemon.nature.decreasedStat == "Sp. Def",
@@ -1905,45 +1905,18 @@ private fun StatGridItem(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Label with arrow indicator
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Show up arrow for proficient stats
-            if (isProficient) {
-                Icon(
-                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowUp,
-                    contentDescription = "Proficient",
-                    tint = Color.Red,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-            }
-            
-            // Show down arrow for deficient stats
-            if (isDeficient) {
-                Icon(
-                    imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Deficient",
-                    tint = Color.Blue,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-            }
-            
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Bold,
-                color = when {
-                    isProficient -> Color.Red
-                    isDeficient -> Color.Blue
-                    else -> Color(0xFF666666)
-                },
-                textAlign = TextAlign.Center
-            )
-        }
+        // Label without arrow indicator
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Bold,
+            color = when {
+                isProficient -> Color.Red
+                isDeficient -> Color.Blue
+                else -> Color(0xFF666666)
+            },
+            textAlign = TextAlign.Center
+        )
         
         Spacer(modifier = Modifier.height(4.dp))
         
@@ -1952,19 +1925,23 @@ private fun StatGridItem(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
         ) {
-            // Show modifier first, then value in parentheses
-            if (statModifier.isNotEmpty()) {
-                Text(
-                    text = when {
-                        statModifier.toIntOrNull() ?: 0 > 0 -> "+${statModifier}"
-                        statModifier.toIntOrNull() ?: 0 < 0 -> "${statModifier}"
-                        else -> "+0"
-                    },
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1A1A1A),
-                    textAlign = TextAlign.Center
-                )
+                         // Show modifier first, then value in parentheses
+             if (statModifier.isNotEmpty()) {
+                 Text(
+                     text = when {
+                         statModifier.toIntOrNull() ?: 0 > 0 -> "+${statModifier}"
+                         statModifier.toIntOrNull() ?: 0 < 0 -> "${statModifier}"
+                         else -> "+0"
+                     },
+                     style = MaterialTheme.typography.titleLarge,
+                     fontWeight = FontWeight.Bold,
+                     color = when {
+                         isProficient -> Color.Red
+                         isDeficient -> Color.Blue
+                         else -> Color(0xFF1A1A1A)
+                     },
+                     textAlign = TextAlign.Center
+                 )
                 
                 Text(
                     text = "(${value})",
