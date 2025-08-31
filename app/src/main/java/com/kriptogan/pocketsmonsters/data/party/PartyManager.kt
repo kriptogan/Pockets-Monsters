@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.kriptogan.pocketsmonsters.data.converter.DnDConverter
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.data.models.PartyPokemon
-import com.kriptogan.pocketsmonsters.data.models.Condition
+import com.kriptogan.pocketsmonsters.data.models.StatusEffect
 import com.kriptogan.pocketsmonsters.data.models.Nature
 import com.kriptogan.pocketsmonsters.data.models.TypeSlot
 import com.kriptogan.pocketsmonsters.data.models.TypeInfo
@@ -451,7 +451,7 @@ class PartyManager(context: Context) {
             nature = nature,
             proficiency = proficiency,
             currentMoveSet = emptyList(),
-            conditions = emptyList(),
+            currentStatusEffects = emptyList(),
             weaknesses = calculateWeaknesses(pokemon.types.map { it.type.name }),
             resistances = calculateResistances(pokemon.types.map { it.type.name }),
             actualSize = actualSize,
@@ -558,7 +558,7 @@ class PartyManager(context: Context) {
             currentDnDStats = currentDnDStats,
             weaknesses = weaknesses,
             resistances = resistances,
-            conditions = emptyList(),
+            currentStatusEffects = emptyList(),
             nature = randomNature,
             // Experience properties with default values
             currentExp = 0,

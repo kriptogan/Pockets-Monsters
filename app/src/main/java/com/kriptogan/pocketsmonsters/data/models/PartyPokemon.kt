@@ -36,8 +36,8 @@ data class PartyPokemon(
     val weaknesses: List<String>,
     val resistances: List<String>,
     
-    // Status conditions
-    val conditions: List<Condition> = emptyList(),
+    // Status effects
+    val currentStatusEffects: List<StatusEffect>? = null,
     
     // Nature (randomly assigned when added to party)
     val nature: Nature = Nature("Hardy", null, null, "Neutral nature"),
@@ -622,28 +622,13 @@ data class PartyPokemon(
 
 
 /**
- * Represents status conditions that can affect a Pokemon
+ * Represents a status effect with text description and count
  */
-enum class Condition(val displayName: String, val description: String) {
-    POISONED("Poisoned", "Takes damage over time"),
-    PARALYZED("Paralyzed", "May not act, reduced speed"),
-    BURNED("Burned", "Takes damage over time, reduced attack"),
-    FROZEN("Frozen", "Cannot act until thawed"),
-    ASLEEP("Asleep", "Cannot act until awakened"),
-    CONFUSED("Confused", "May attack self or miss"),
-    BOUND("Bound", "Cannot move, takes damage"),
-    BLINDED("Blinded", "Disadvantage on attacks"),
-    DEAFENED("Deafened", "Cannot hear, may miss verbal cues"),
-    EXHAUSTED("Exhausted", "Disadvantage on ability checks"),
-    FRIGHTENED("Frightened", "Disadvantage on attacks and ability checks"),
-    INCAPACITATED("Incapacitated", "Cannot take actions or reactions"),
-    INVISIBLE("Invisible", "Advantage on attacks, others have disadvantage"),
-    PETRIFIED("Petrified", "Turned to stone, cannot act"),
-    PRONE("Prone", "Disadvantage on attacks, others have advantage"),
-    RESTRAINED("Restrained", "Speed 0, disadvantage on attacks"),
-    STUNNED("Stunned", "Cannot act, others have advantage"),
-    UNCONSCIOUS("Unconscious", "Cannot act, others have advantage")
-}
+data class StatusEffect(
+    val name: String,
+    val text: String,
+    val count: Int
+)
 
 /**
  * Represents evolution details for a Pokemon

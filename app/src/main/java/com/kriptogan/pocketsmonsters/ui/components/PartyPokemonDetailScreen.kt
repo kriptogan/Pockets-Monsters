@@ -33,7 +33,7 @@ import androidx.activity.compose.BackHandler
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kriptogan.pocketsmonsters.data.models.PartyPokemon
-import com.kriptogan.pocketsmonsters.data.models.Condition
+import com.kriptogan.pocketsmonsters.data.models.StatusEffect
 import com.kriptogan.pocketsmonsters.data.models.Nature
 import com.kriptogan.pocketsmonsters.data.party.PartyManager
 import androidx.compose.ui.graphics.Color
@@ -71,9 +71,9 @@ fun PartyPokemonDetailScreen(
     val coroutineScope = rememberCoroutineScope()
     
          var currentMoveSet by remember { mutableStateOf(partyPokemon.currentMoveSet.toMutableList()) }
-     var currentConditions by remember { mutableStateOf(partyPokemon.conditions.toMutableList()) }
+     var currentStatusEffects by remember { mutableStateOf((partyPokemon.currentStatusEffects ?: emptyList()).toMutableList()) }
      var showMoveSelectionDialog by remember { mutableStateOf(false) }
-     var showConditionDialog by remember { mutableStateOf(false) }
+     var showStatusEffectDialog by remember { mutableStateOf(false) }
           var showMaxHPDialog by remember { mutableStateOf(false) }
       var showNatureDescriptionDialog by remember { mutableStateOf(false) }
       var showNatureSelectionDialog by remember { mutableStateOf(false) }
@@ -1133,7 +1133,7 @@ fun PartyPokemonDetailScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
             
-            // Conditions
+            // Status Effects
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -1148,13 +1148,13 @@ fun PartyPokemonDetailScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Status Conditions",
+                            text = "Status Effects",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
                         
                         TextButton(
-                            onClick = { showConditionDialog = true }
+                            onClick = { showStatusEffectDialog = true }
                         ) {
                             Text("Manage")
                         }
@@ -1162,8 +1162,8 @@ fun PartyPokemonDetailScreen(
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
-                    if (currentConditions.isNotEmpty()) {
-                        currentConditions.forEach { condition ->
+                    if (currentStatusEffects.isNotEmpty()) {
+                        currentStatusEffects.forEach { statusEffect ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -1173,13 +1173,19 @@ fun PartyPokemonDetailScreen(
                             ) {
                                 Column {
                                     Text(
-                                        text = condition.displayName,
+                                        text = statusEffect.name,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                    Text(
+                                        text = statusEffect.text,
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.Medium,
                                         color = MaterialTheme.colorScheme.error
                                     )
                                     Text(
-                                        text = condition.description,
+                                        text = "Count: ${statusEffect.count}",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -1187,16 +1193,16 @@ fun PartyPokemonDetailScreen(
                                 
                                 IconButton(
                                     onClick = {
-                                                                                 currentConditions.remove(condition)
-                                         // Save the updated conditions to local datastore
-                                         val updatedPokemon = currentPokemon.copy(conditions = currentConditions.toList())
-                                         partyManager.updatePartyPokemon(updatedPokemon)
+                                        currentStatusEffects.remove(statusEffect)
+                                        // Save the updated status effects to local datastore
+                                        val updatedPokemon = currentPokemon.copy(currentStatusEffects = currentStatusEffects.toList())
+                                        partyManager.updatePartyPokemon(updatedPokemon)
                                     },
                                     modifier = Modifier.size(32.dp)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Delete,
-                                        contentDescription = "Remove condition",
+                                        contentDescription = "Remove status effect",
                                         modifier = Modifier.size(16.dp)
                                     )
                                 }
@@ -1204,7 +1210,7 @@ fun PartyPokemonDetailScreen(
                         }
                     } else {
                         Text(
-                            text = "No conditions",
+                            text = "No status effects",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -1389,61 +1395,78 @@ fun PartyPokemonDetailScreen(
             )
         }
         
-        // Condition Management Dialog
-        if (showConditionDialog) {
+        // Status Effect Management Dialog
+        if (showStatusEffectDialog) {
+            var statusEffectName by remember { mutableStateOf("") }
+            var statusEffectText by remember { mutableStateOf("") }
+            var statusEffectCount by remember { mutableStateOf(1) }
+            
             AlertDialog(
-                onDismissRequest = { showConditionDialog = false },
-                title = { Text("Add Status Condition") },
+                onDismissRequest = { showStatusEffectDialog = false },
+                title = { Text("Add Status Effect") },
                 text = { 
                     Column {
-                        Text("Select a status condition to add to this Pokemon:")
+                        Text("Add a new status effect to this Pokemon:")
                         Spacer(modifier = Modifier.height(16.dp))
                         
-                        // Show available conditions that aren't already applied
-                        val availableConditions = Condition.values().filter { condition ->
-                            !currentConditions.contains(condition)
-                        }
+                        OutlinedTextField(
+                            value = statusEffectName,
+                            onValueChange = { statusEffectName = it },
+                            label = { Text("Status Effect Name") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
                         
-                        if (availableConditions.isNotEmpty()) {
-                            availableConditions.forEach { condition ->
-                                TextButton(
-                                    onClick = {
-                                                                                 currentConditions.add(condition)
-                                         // Save the updated conditions to local datastore
-                                         val updatedPokemon = currentPokemon.copy(conditions = currentConditions.toList())
-                                        partyManager.updatePartyPokemon(updatedPokemon)
-                                        showConditionDialog = false
-                                    },
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Column(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalAlignment = Alignment.Start
-                                    ) {
-                                        Text(
-                                            text = condition.displayName,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            fontWeight = FontWeight.Medium
-                                        )
-                                        Text(
-                                            text = condition.description,
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                    }
-                                }
-                            }
-                        } else {
-                            Text(
-                                text = "All conditions are already applied",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        
+                        OutlinedTextField(
+                            value = statusEffectText,
+                            onValueChange = { statusEffectText = it },
+                            label = { Text("Status Effect Text") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        
+                        Spacer(modifier = Modifier.height(8.dp))
+                        
+                        OutlinedTextField(
+                            value = statusEffectCount.toString(),
+                            onValueChange = { 
+                                val count = it.toIntOrNull() ?: 1
+                                statusEffectCount = if (count > 0) count else 1
+                            },
+                            label = { Text("Count") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
                 },
                 confirmButton = {
-                    TextButton(onClick = { showConditionDialog = false }) {
+                    TextButton(
+                        onClick = {
+                            if (statusEffectName.isNotBlank() && statusEffectText.isNotBlank()) {
+                                val newStatusEffect = StatusEffect(
+                                    name = statusEffectName.trim(),
+                                    text = statusEffectText.trim(),
+                                    count = statusEffectCount
+                                )
+                                currentStatusEffects.add(newStatusEffect)
+                                
+                                // Save the updated status effects to local datastore
+                                val updatedPokemon = currentPokemon.copy(currentStatusEffects = currentStatusEffects.toList())
+                                partyManager.updatePartyPokemon(updatedPokemon)
+                                
+                                showStatusEffectDialog = false
+                                statusEffectName = ""
+                                statusEffectText = ""
+                                statusEffectCount = 1
+                            }
+                        },
+                        enabled = statusEffectName.isNotBlank() && statusEffectText.isNotBlank()
+                    ) {
+                        Text("Add")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showStatusEffectDialog = false }) {
                         Text("Cancel")
                     }
                 }
@@ -2030,7 +2053,7 @@ fun PartyPokemonDetailScreen(
                                               currentExp = evolvedPokemon.currentExp
                                               currentLevel = evolvedPokemon.level
                                               currentMoveSet = evolvedPokemon.currentMoveSet.toMutableList()
-                                              currentConditions = evolvedPokemon.conditions.toMutableList()
+                                              currentStatusEffects = (evolvedPokemon.currentStatusEffects ?: emptyList()).toMutableList()
                                               refreshTrigger++
                                           }
                                                                              } else {
