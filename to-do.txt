@@ -75,6 +75,6 @@ V 32. weaknesses and resistance
 
 34. swip left and right in pokemon details show the next pokemon detail (party and search list)
 V 35. pressing nature name: instead of showing bonuses will allow you to change for another nature
-36. Order moves by tiers
+V 36. Order moves by tiers
 V 37. Redesign utilities
-38. clicking a move name will show in dialog that moves description text.
+V 38. clicking a move name will show in dialog that moves description text.

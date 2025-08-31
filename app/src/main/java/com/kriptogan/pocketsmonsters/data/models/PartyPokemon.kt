@@ -52,6 +52,12 @@ data class PartyPokemon(
     // D&D derived stats (calculated from currentDnDStats and actualWeight)
     val movementSpeed: Int = 30,
     
+    // Energy slots (maximum available slots for each tier based on level)
+    val energySlots: List<Int> = listOf(-1, -1, -1, -1, -1, -1, -1, -1, -1), // 1st through 9th level slots
+    
+    // Current energy slots (how many slots are currently available for each tier)
+    val currentEnergySlots: List<Int> = listOf(-1, -1, -1, -1, -1, -1, -1, -1, -1), // 1st through 9th level slots
+    
     // Metadata
     val addedToPartyAt: Long = System.currentTimeMillis(),
     
@@ -195,6 +201,65 @@ data class PartyPokemon(
                 emptyList()
             }
         }
+        
+        /**
+         * Calculate energy slots for a given D&D level according to Wizard spell slot progression
+         * @param dndLevel The D&D level (1-20)
+         * @return List of energy slots (-1 for unavailable tiers, Int for available slots)
+         */
+        fun calculateEnergySlots(dndLevel: Int): List<Int> {
+            return when (dndLevel) {
+                1 -> listOf(2, -1, -1, -1, -1, -1, -1, -1, -1)
+                2 -> listOf(3, -1, -1, -1, -1, -1, -1, -1, -1)
+                3 -> listOf(4, 2, -1, -1, -1, -1, -1, -1, -1)
+                4 -> listOf(4, 3, -1, -1, -1, -1, -1, -1, -1)
+                5 -> listOf(4, 3, 2, -1, -1, -1, -1, -1, -1)
+                6 -> listOf(4, 3, 3, -1, -1, -1, -1, -1, -1)
+                7 -> listOf(4, 3, 3, 1, -1, -1, -1, -1, -1)
+                8 -> listOf(4, 3, 3, 2, -1, -1, -1, -1, -1)
+                9 -> listOf(4, 3, 3, 3, 1, -1, -1, -1, -1)
+                10 -> listOf(4, 3, 3, 3, 2, -1, -1, -1, -1)
+                11 -> listOf(4, 3, 3, 3, 2, 1, -1, -1, -1)
+                12 -> listOf(4, 3, 3, 3, 2, 1, -1, -1, -1)
+                13 -> listOf(4, 3, 3, 3, 2, 1, 1, -1, -1)
+                14 -> listOf(4, 3, 3, 3, 2, 1, 1, -1, -1)
+                15 -> listOf(4, 3, 3, 3, 2, 1, 1, 1, -1)
+                16 -> listOf(4, 3, 3, 3, 2, 1, 1, 1, -1)
+                17 -> listOf(4, 3, 3, 3, 2, 1, 1, 1, 1)
+                18 -> listOf(4, 3, 3, 3, 3, 1, 1, 1, 1)
+                19 -> listOf(4, 3, 3, 3, 3, 2, 1, 1, 1)
+                20 -> listOf(4, 3, 3, 3, 3, 2, 2, 1, 1)
+                else -> if (dndLevel > 20) {
+                    listOf(4, 3, 3, 3, 3, 2, 2, 1, 1) // Cap at level 20
+                } else {
+                    listOf(-1, -1, -1, -1, -1, -1, -1, -1, -1) // Level 0 or below
+                }
+            }
+        }
+    }
+    
+    /**
+     * Set energy slots based on current Pokemon level using D&D Wizard spell slot progression
+     * @return Updated PartyPokemon with calculated energy slots
+     */
+    fun setEnergySlots(): PartyPokemon {
+        val calculatedEnergySlots = calculateEnergySlots(level)
+        val calculatedCurrentEnergySlots = calculatedEnergySlots // Start with same values as max slots
+        
+        return this.copy(
+            energySlots = calculatedEnergySlots,
+            currentEnergySlots = calculatedCurrentEnergySlots
+        )
+    }
+    
+    /**
+     * Reset current energy slots to match the maximum available slots
+     * @return Updated PartyPokemon with reset current energy slots
+     */
+    fun resetCurrentEnergySlots(): PartyPokemon {
+        return this.copy(
+            currentEnergySlots = energySlots
+        )
     }
     
     /**
@@ -501,10 +566,15 @@ data class PartyPokemon(
         Log.d("evolution test", "Final Pokemon moves recalculated: ${finalPokemon.availableMoves.size} available moves")
         Log.d("evolution test", "Final Pokemon current move set: ${finalPokemon.currentMoveSet.size} moves")
         
-        Log.d("evolution test", "=== LEVEL UP PROCESS COMPLETED ===")
-        Log.d("evolution test", "Returning: $evolutionMessage for ${finalPokemon.name}")
+        // Update energy slots for new level
+        Log.d("evolution test", "Updating energy slots for new level...")
+        val pokemonWithEnergySlots = finalPokemon.setEnergySlots().resetCurrentEnergySlots()
+        Log.d("evolution test", "Energy slots updated for level ${pokemonWithEnergySlots.level}")
         
-        return evolutionMessage to finalPokemon
+        Log.d("evolution test", "=== LEVEL UP PROCESS COMPLETED ===")
+        Log.d("evolution test", "Returning: $evolutionMessage for ${pokemonWithEnergySlots.name}")
+        
+        return evolutionMessage to pokemonWithEnergySlots
     }
     
     /**
@@ -537,10 +607,15 @@ data class PartyPokemon(
         Log.d("evolution test", "Final Pokemon moves recalculated: ${finalPokemon.availableMoves.size} available moves")
         Log.d("evolution test", "Final Pokemon current move set: ${finalPokemon.currentMoveSet.size} moves")
         
-        Log.d("evolution test", "=== LEVEL DOWN PROCESS COMPLETED ===")
-        Log.d("evolution test", "Returning updated Pokemon: ${finalPokemon.name}")
+        // Update energy slots for new level
+        Log.d("evolution test", "Updating energy slots for new level...")
+        val pokemonWithEnergySlots = finalPokemon.setEnergySlots().resetCurrentEnergySlots()
+        Log.d("evolution test", "Energy slots updated for level ${pokemonWithEnergySlots.level}")
         
-        return finalPokemon
+        Log.d("evolution test", "=== LEVEL DOWN PROCESS COMPLETED ===")
+        Log.d("evolution test", "Returning updated Pokemon: ${pokemonWithEnergySlots.name}")
+        
+        return pokemonWithEnergySlots
     }
 }
 

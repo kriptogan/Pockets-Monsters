@@ -464,7 +464,7 @@ class PartyManager(context: Context) {
             evolution = evolutionData
         )
         
-        return partyPokemon
+        return partyPokemon.setEnergySlots().resetCurrentEnergySlots()
     }
     
     /**
@@ -572,7 +572,7 @@ class PartyManager(context: Context) {
             evolution = evolutionData
         )
         
-        return partyPokemon
+        return partyPokemon.setEnergySlots().resetCurrentEnergySlots()
     }
     
     /**

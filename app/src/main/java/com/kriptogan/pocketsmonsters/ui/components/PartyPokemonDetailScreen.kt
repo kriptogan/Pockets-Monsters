@@ -720,7 +720,7 @@ fun PartyPokemonDetailScreen(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
-                        text = "Moves Management",
+                        text = "Energy Slots: ${currentPokemon.currentEnergySlots.joinToString(", ")}",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(bottom = 16.dp)
