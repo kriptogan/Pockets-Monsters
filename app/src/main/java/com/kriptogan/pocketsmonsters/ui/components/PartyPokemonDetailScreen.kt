@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -12,6 +14,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.material3.ButtonDefaults
@@ -31,6 +34,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kriptogan.pocketsmonsters.data.models.PartyPokemon
 import com.kriptogan.pocketsmonsters.data.models.Condition
+import com.kriptogan.pocketsmonsters.data.models.Nature
 import com.kriptogan.pocketsmonsters.data.party.PartyManager
 import androidx.compose.ui.graphics.Color
 import com.kriptogan.pocketsmonsters.data.converter.DnDConverter
@@ -72,6 +76,7 @@ fun PartyPokemonDetailScreen(
      var showConditionDialog by remember { mutableStateOf(false) }
           var showMaxHPDialog by remember { mutableStateOf(false) }
       var showNatureDescriptionDialog by remember { mutableStateOf(false) }
+      var showNatureSelectionDialog by remember { mutableStateOf(false) }
       var showFullRestDialog by remember { mutableStateOf(false) }
       var showExpDialog by remember { mutableStateOf(false) }
       
@@ -1430,10 +1435,40 @@ fun PartyPokemonDetailScreen(
                     }
                 },
                 confirmButton = {
-                    TextButton(onClick = { showNatureDescriptionDialog = false }) {
-                        Text("Close")
+                    Row {
+                        TextButton(onClick = { showNatureDescriptionDialog = false }) {
+                            Text("Close")
+                        }
+                        TextButton(onClick = { 
+                            showNatureDescriptionDialog = false
+                            showNatureSelectionDialog = true
+                        }) {
+                            Text("Change Nature")
+                        }
                     }
                 }
+            )
+        }
+        
+        // Nature Selection Dialog
+        if (showNatureSelectionDialog) {
+            NatureSelectionDialog(
+                currentNature = currentPokemon.nature,
+                onNatureSelected = { selectedNature ->
+                    // Update the Pokemon's nature
+                    val updatedPokemon = currentPokemon.copy(nature = selectedNature)
+                    currentPokemon = updatedPokemon
+                    
+                    // Save to party manager
+                    coroutineScope.launch {
+                        withContext(Dispatchers.IO) {
+                            partyManager.updatePartyPokemon(updatedPokemon)
+                        }
+                    }
+                    
+                    showNatureSelectionDialog = false
+                },
+                onDismiss = { showNatureSelectionDialog = false }
             )
         }
         
@@ -2128,5 +2163,175 @@ private fun getTypeEffectiveness(attackingType: String, defendingType: String): 
             else -> 1.0
         }
         else -> 1.0
+    }
+}
+
+@Composable
+fun NatureSelectionDialog(
+    currentNature: Nature,
+    onNatureSelected: (Nature) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val natures = listOf(
+        Nature("Hardy", null, null, "Neutral nature"),
+        Nature("Lonely", "Attack", "Defense", "Loves to eat"),
+        Nature("Brave", "Attack", "Speed", "Often dozes off"),
+        Nature("Adamant", "Attack", "Sp. Atk", "Sturdy body"),
+        Nature("Naughty", "Attack", "Sp. Def", "Likes to fight"),
+        Nature("Bold", "Defense", "Attack", "Proud of its power"),
+        Nature("Docile", null, null, "Sturdy body"),
+        Nature("Relaxed", "Defense", "Speed", "Likes to relax"),
+        Nature("Impish", "Defense", "Sp. Atk", "Proud of its power"),
+        Nature("Lax", "Defense", "Sp. Def", "Loves to eat"),
+        Nature("Timid", "Speed", "Attack", "Likes to run"),
+        Nature("Hasty", "Speed", "Defense", "Somewhat of a clown"),
+        Nature("Serious", null, null, "Strong willed"),
+        Nature("Jolly", "Speed", "Sp. Atk", "Good perseverance"),
+        Nature("Naive", "Speed", "Sp. Def", "Likes to thrash about"),
+        Nature("Modest", "Sp. Atk", "Attack", "Loves to eat"),
+        Nature("Mild", "Sp. Atk", "Defense", "Proud of its power"),
+        Nature("Quiet", "Sp. Atk", "Speed", "Sturdy body"),
+        Nature("Bashful", null, null, "Somewhat stubborn"),
+        Nature("Rash", "Sp. Atk", "Sp. Def", "Likes to run"),
+        Nature("Calm", "Sp. Def", "Attack", "Strong willed"),
+        Nature("Gentle", "Sp. Def", "Defense", "Loves to eat"),
+        Nature("Careful", "Sp. Def", "Sp. Atk", "Often lost in thought"),
+        Nature("Quirky", null, null, "Mischievous"),
+        Nature("Sassy", "Sp. Def", "Speed", "Somewhat vain")
+    )
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = "Select Nature",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+        },
+        text = {
+            LazyColumn(
+                modifier = Modifier.heightIn(max = 400.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(natures) { nature ->
+                    NatureSelectionItem(
+                        nature = nature,
+                        isSelected = nature.name == currentNature.name,
+                        onClick = { onNatureSelected(nature) }
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+fun NatureSelectionItem(
+    nature: Nature,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        colors = CardDefaults.cardColors(
+            containerColor = if (isSelected) 
+                MaterialTheme.colorScheme.primaryContainer 
+            else 
+                MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isSelected) 4.dp else 1.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = nature.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isSelected) 
+                        MaterialTheme.colorScheme.onPrimaryContainer 
+                    else 
+                        MaterialTheme.colorScheme.onSurface
+                )
+                
+                if (nature.increasedStat != null && nature.decreasedStat != null) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowUp,
+                                contentDescription = "Increased",
+                                tint = Color.Red,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Text(
+                                text = nature.increasedStat,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.Red,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                        
+                        Text(
+                            text = "|",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color(0xFF666666)
+                        )
+                        
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowDown,
+                                contentDescription = "Decreased",
+                                tint = Color.Blue,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Text(
+                                text = nature.decreasedStat,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.Blue,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                } else {
+                    Text(
+                        text = "No stat effects",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color(0xFF666666),
+                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                    )
+                }
+            }
+            
+            if (isSelected) {
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.Check,
+                    contentDescription = "Selected",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
     }
 }

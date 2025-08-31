@@ -74,6 +74,6 @@ V 32. weaknesses and resistance
     full rest will reset to max
 
 34. swip left and right in pokemon details show the next pokemon detail (party and search list)
-35. pressing nature name: instead of showing bonuses will allow you to change for another nature
+V 35. pressing nature name: instead of showing bonuses will allow you to change for another nature
 36. Order moves by tiers
-37. Redesign utilities
+V 37. Redesign utilities
