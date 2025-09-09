@@ -19,6 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.random.Random
+import kotlinx.coroutines.delay
 import com.kriptogan.pocketsmonsters.data.encounter.EncounterManager
 import com.kriptogan.pocketsmonsters.data.models.EncounterCreature
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
@@ -39,6 +41,11 @@ fun EncounterScreen(
     var selectedPokemon by remember { mutableStateOf<Pokemon?>(null) }
     val repository = remember { NetworkModule.createPokemonRepository(context) }
     val coroutineScope = rememberCoroutineScope()
+    
+    // Dice rolling state
+    var currentRoll by remember { mutableStateOf<Int?>(null) }
+    var isRolling by remember { mutableStateOf(false) }
+    var currentDiceType by remember { mutableStateOf<String?>(null) }
     
     // Function to load Pokemon by ID
     fun loadPokemonById(pokemonId: Int) {
@@ -63,6 +70,30 @@ fun EncounterScreen(
     // Function to close Pokemon details
     fun closePokemonDetails() {
         selectedPokemon = null
+    }
+    
+    // Function to roll dice
+    fun rollDice(diceType: String, sides: Int) {
+        if (!isRolling) {
+            isRolling = true
+            currentDiceType = diceType
+            
+            coroutineScope.launch {
+                // Simulate rolling animation
+                repeat(10) {
+                    val randomResult = Random.nextInt(1, sides + 1)
+                    currentRoll = randomResult
+                    delay(100)
+                }
+                
+                // Final result
+                val finalResult = Random.nextInt(1, sides + 1)
+                currentRoll = finalResult
+                
+                // Reset rolling state
+                isRolling = false
+            }
+        }
     }
     
     if (selectedPokemon != null) {
@@ -218,14 +249,14 @@ fun EncounterScreen(
                             color = Color.Gray,
                             shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
                         )
-                        .clickable { /* TODO: Roll d4 */ },
+                        .clickable(enabled = !isRolling) { rollDice("d4", 4) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "d4",
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = if (isRolling) Color.Gray else Color.Black
                     )
                 }
                 
@@ -238,14 +269,14 @@ fun EncounterScreen(
                             color = Color.Gray,
                             shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
                         )
-                        .clickable { /* TODO: Roll d6 */ },
+                        .clickable(enabled = !isRolling) { rollDice("d6", 6) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "d6",
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = if (isRolling) Color.Gray else Color.Black
                     )
                 }
                 
@@ -258,14 +289,14 @@ fun EncounterScreen(
                             color = Color.Gray,
                             shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
                         )
-                        .clickable { /* TODO: Roll d8 */ },
+                        .clickable(enabled = !isRolling) { rollDice("d8", 8) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "d8",
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = if (isRolling) Color.Gray else Color.Black
                     )
                 }
                 
@@ -278,14 +309,14 @@ fun EncounterScreen(
                             color = Color.Gray,
                             shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
                         )
-                        .clickable { /* TODO: Roll d10 */ },
+                        .clickable(enabled = !isRolling) { rollDice("d10", 10) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "d10",
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = if (isRolling) Color.Gray else Color.Black
                     )
                 }
                 
@@ -298,14 +329,14 @@ fun EncounterScreen(
                             color = Color.Gray,
                             shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
                         )
-                        .clickable { /* TODO: Roll d12 */ },
+                        .clickable(enabled = !isRolling) { rollDice("d12", 12) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "d12",
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = if (isRolling) Color.Gray else Color.Black
                     )
                 }
                 
@@ -318,18 +349,18 @@ fun EncounterScreen(
                             color = Color.Gray,
                             shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
                         )
-                        .clickable { /* TODO: Roll d20 */ },
+                        .clickable(enabled = !isRolling) { rollDice("d20", 20) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "d20",
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = if (isRolling) Color.Gray else Color.Black
                     )
                 }
                 
-                // X button
+                // X button (shows result)
                 Box(
                     modifier = Modifier
                         .size(48.dp)
@@ -337,16 +368,31 @@ fun EncounterScreen(
                             width = 1.dp,
                             color = Color.Gray,
                             shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
-                        )
-                        .clickable { /* TODO: Custom roll */ },
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "X",
-                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
+                    if (isRolling) {
+                        Text(
+                            text = "?",
+                            style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Gray
+                        )
+                    } else if (currentRoll != null) {
+                        Text(
+                            text = currentRoll.toString(),
+                            style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFD32F2F)
+                        )
+                    } else {
+                        Text(
+                            text = "X",
+                            style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                    }
                 }
             }
         }
