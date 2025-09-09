@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -50,6 +51,16 @@ fun EncounterRow(
                     modifier = Modifier.size(20.dp)
                 )
             }
+            
+            // Info icon
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = "Information",
+                tint = Color(0xFF666666),
+                modifier = Modifier
+                    .width(15.dp)
+                    .size(16.dp)
+            )
             
             // Name field
             OutlinedTextField(

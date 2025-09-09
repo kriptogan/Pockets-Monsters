@@ -62,6 +62,14 @@ fun EncounterScreen(
                     fontWeight = FontWeight.Bold
                 )
                 
+                // Info column header (for information icon)
+                Text(
+                    text = "",
+                    modifier = Modifier.width(15.dp),
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                
                 // Name column
                 Text(
                     text = "Name",
