@@ -28,6 +28,7 @@ import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.data.models.EncounterCreature
 import com.kriptogan.pocketsmonsters.data.party.PartyManager
 import com.kriptogan.pocketsmonsters.data.encounter.EncounterManager
+import kotlin.random.Random
 
 @Composable
 fun PokemonDetailScreen(
@@ -523,11 +524,17 @@ fun PokemonDetailScreen(
         Button(
             onClick = {
                 val encounterManager = EncounterManager(context)
+                
+                // Calculate initiative: random roll (1-20) + initiative modifier
+                val initiativeRoll = Random.nextInt(1, 21) // 1-20
+                val initiativeModifier = dndView.modifiers["Speed"] ?: 0
+                val calculatedInitiative = initiativeRoll + initiativeModifier
+                
                 val newCreature = EncounterCreature(
                     id = System.currentTimeMillis().toInt(),
                     pokemonId = pokemon.id.toInt(),
                     name = pokemon.name.replaceFirstChar { it.uppercase() },
-                    initiative = dndView.initiative.toString(),
+                    initiative = calculatedInitiative.toString(),
                     ac = dndView.ac.toString(),
                     maxHp = (dndView.convertedStats["HP"] ?: 0).toString(),
                     currentHp = (dndView.convertedStats["HP"] ?: 0).toString()
