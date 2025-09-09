@@ -47,6 +47,20 @@ fun EncounterScreen(
     var isRolling by remember { mutableStateOf(false) }
     var currentDiceType by remember { mutableStateOf<String?>(null) }
     
+    // Sorting state
+    var isSortedByInitiative by remember { mutableStateOf(false) }
+    
+    // Computed list - sorted by initiative if enabled
+    val sortedCreatures = remember(creatures, isSortedByInitiative) {
+        if (isSortedByInitiative) {
+            creatures.sortedByDescending { creature ->
+                creature.initiative.toIntOrNull() ?: 0
+            }
+        } else {
+            creatures
+        }
+    }
+    
     // Function to load Pokemon by ID
     fun loadPokemonById(pokemonId: Int) {
         coroutineScope.launch {
@@ -70,6 +84,11 @@ fun EncounterScreen(
     // Function to close Pokemon details
     fun closePokemonDetails() {
         selectedPokemon = null
+    }
+    
+    // Function to toggle initiative sorting
+    fun toggleInitiativeSorting() {
+        isSortedByInitiative = !isSortedByInitiative
     }
     
     // Function to roll dice
@@ -157,12 +176,15 @@ fun EncounterScreen(
                     fontWeight = FontWeight.Bold
                 )
                 
-                // Initiative column
+                // Initiative column (clickable to sort)
                 Text(
-                    text = "Init",
-                    modifier = Modifier.width(45.dp),
+                    text = if (isSortedByInitiative) "Init ↓" else "Init",
+                    modifier = Modifier
+                        .width(45.dp)
+                        .clickable { toggleInitiativeSorting() },
                     style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = if (isSortedByInitiative) Color(0xFF4CAF50) else Color.Unspecified
                 )
                 
                 // AC column
@@ -198,7 +220,7 @@ fun EncounterScreen(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            items(creatures) { creature ->
+            items(sortedCreatures) { creature ->
                 EncounterRow(
                     creature = creature,
                     onUpdate = { encounterManager.updateCreature(it) },
