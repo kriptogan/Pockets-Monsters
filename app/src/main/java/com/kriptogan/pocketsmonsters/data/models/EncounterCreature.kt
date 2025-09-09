@@ -9,7 +9,7 @@ data class EncounterCreature(
     val currentHp: String = ""
 ) {
     fun updateName(newName: String): EncounterCreature {
-        return copy(name = newName.trim())
+        return copy(name = newName.trimStart())
     }
     
     fun updateInitiative(newInitiative: String): EncounterCreature {
