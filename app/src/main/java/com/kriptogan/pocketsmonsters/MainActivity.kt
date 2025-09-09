@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kriptogan.pocketsmonsters.ui.components.PokedexContainer
-import com.kriptogan.pocketsmonsters.ui.navigation.BottomNavigation
 import com.kriptogan.pocketsmonsters.ui.screens.PokedexScreen
 import com.kriptogan.pocketsmonsters.ui.screens.UtilitiesScreen
 import com.kriptogan.pocketsmonsters.ui.screens.WeaknessesScreen
@@ -25,6 +24,8 @@ import com.kriptogan.pocketsmonsters.ui.screens.NaturesScreen
 import com.kriptogan.pocketsmonsters.ui.screens.EnergySlotsScreen
 import com.kriptogan.pocketsmonsters.ui.screens.MyPartyScreen
 import com.kriptogan.pocketsmonsters.ui.screens.DiceRollingScreen
+import com.kriptogan.pocketsmonsters.ui.screens.InventoryScreen
+import com.kriptogan.pocketsmonsters.ui.screens.EncounterScreen
 import com.kriptogan.pocketsmonsters.ui.theme.PocketsMonstersTheme
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonScreen
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonViewModel
@@ -177,6 +178,16 @@ fun MainScreen(
                 MyPartyScreen(
                     modifier = Modifier,
                     mainViewModel = viewModel // Pass the main ViewModel to observe party state
+                )
+            }
+            "inventory" -> {
+                InventoryScreen(
+                    modifier = Modifier
+                )
+            }
+            "encounter" -> {
+                EncounterScreen(
+                    modifier = Modifier
                 )
             }
         }

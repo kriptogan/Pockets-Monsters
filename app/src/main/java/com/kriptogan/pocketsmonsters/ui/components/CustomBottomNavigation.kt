@@ -7,6 +7,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -51,6 +53,20 @@ fun CustomBottomNavigation(
             icon = Icons.Default.Favorite,
             isSelected = currentRoute == "my_party",
             onClick = { onNavigate("my_party") }
+        )
+        
+        // Inventory Tab - Face icon
+        CustomNavigationButton(
+            icon = Icons.Default.Face,
+            isSelected = currentRoute == "inventory",
+            onClick = { onNavigate("inventory") }
+        )
+        
+        // Encounter Tab - Place icon
+        CustomNavigationButton(
+            icon = Icons.Default.Place,
+            isSelected = currentRoute == "encounter",
+            onClick = { onNavigate("encounter") }
         )
     }
 }

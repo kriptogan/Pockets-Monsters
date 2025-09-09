@@ -28,7 +28,7 @@ V 26. Exp gain
 V 27. Try to place the types inside the image at the bottom, one above the other.
 V * Move ac to the old card
 
-28. Effects $ Conditions:
+V28. Effects $ Conditions:
 User adds an effect or condition.
 Effect -> select property (movespeed, ac, attack, def, sp.atk, sp.def, speed), a manipulation value (-2,-1,+1,+2,etc.), and number of turns.
 Add the effect to the list.
@@ -70,7 +70,7 @@ V 31. Instead of party information, show the nature and description of nature.
 
 V 32. weaknesses and resistance
 
-33. show available energy slots by tiers. allow option to lower and rais. 
+V33. show available energy slots by tiers. allow option to lower and rais. 
     full rest will reset to max
 
 34. swip left and right in pokemon details show the next pokemon detail (party and search list)
