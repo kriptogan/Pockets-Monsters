@@ -92,10 +92,8 @@ fun InventoryItemCard(
                     Icon(
                         imageVector = Icons.Default.PlayArrow,
                         contentDescription = "Use",
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(20.dp)
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Use")
                 }
                 
                 // Edit button
@@ -106,10 +104,8 @@ fun InventoryItemCard(
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit",
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(20.dp)
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Edit")
                 }
                 
                 // Delete button
@@ -123,10 +119,8 @@ fun InventoryItemCard(
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = "Delete",
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(20.dp)
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Delete")
                 }
             }
         }
