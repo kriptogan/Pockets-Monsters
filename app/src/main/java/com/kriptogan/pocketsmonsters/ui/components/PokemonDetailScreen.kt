@@ -25,7 +25,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kriptogan.pocketsmonsters.data.converter.DnDConverter
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
+import com.kriptogan.pocketsmonsters.data.models.EncounterCreature
 import com.kriptogan.pocketsmonsters.data.party.PartyManager
+import com.kriptogan.pocketsmonsters.data.encounter.EncounterManager
 
 @Composable
 fun PokemonDetailScreen(
@@ -510,6 +512,46 @@ fun PokemonDetailScreen(
                     partySize.value >= 6 -> "Party is Full"
                     else -> "Add to Party"
                 },
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // 5.1. Add to Encounter Button
+        Button(
+            onClick = {
+                val encounterManager = EncounterManager(context)
+                val newCreature = EncounterCreature(
+                    id = System.currentTimeMillis().toInt(),
+                    pokemonId = pokemon.id.toInt(),
+                    name = pokemon.name.replaceFirstChar { it.uppercase() },
+                    initiative = dndView.initiative.toString(),
+                    ac = dndView.ac.toString(),
+                    maxHp = (dndView.convertedStats["HP"] ?: 0).toString(),
+                    currentHp = (dndView.convertedStats["HP"] ?: 0).toString()
+                )
+                encounterManager.addCreature(newCreature)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF4CAF50)
+            ),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
+            )
+            
+            Spacer(modifier = Modifier.width(8.dp))
+            
+            Text(
+                text = "Add to Encounter",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )

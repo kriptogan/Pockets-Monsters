@@ -22,9 +22,16 @@ class EncounterManager(private val context: Context) {
     }
     
     fun addCreature() {
-        val newCreature = EncounterCreature(id = UUID.randomUUID().toString())
+        val newCreature = EncounterCreature(id = System.currentTimeMillis().toInt())
         val currentList = _creatures.value.toMutableList()
         currentList.add(newCreature)
+        _creatures.value = currentList
+        saveEncounter()
+    }
+    
+    fun addCreature(creature: EncounterCreature) {
+        val currentList = _creatures.value.toMutableList()
+        currentList.add(creature)
         _creatures.value = currentList
         saveEncounter()
     }
@@ -39,7 +46,7 @@ class EncounterManager(private val context: Context) {
         }
     }
     
-    fun removeCreature(creatureId: String) {
+    fun removeCreature(creatureId: Int) {
         val currentList = _creatures.value.toMutableList()
         currentList.removeAll { it.id == creatureId }
         _creatures.value = currentList
@@ -56,7 +63,8 @@ class EncounterManager(private val context: Context) {
                 for (i in 0 until jsonArray.length()) {
                     val jsonObject = jsonArray.getJSONObject(i)
                     val creature = EncounterCreature(
-                        id = jsonObject.getString("id"),
+                        id = jsonObject.getInt("id"),
+                        pokemonId = jsonObject.getInt("pokemonId"),
                         name = jsonObject.getString("name"),
                         initiative = jsonObject.getString("initiative"),
                         ac = jsonObject.getString("ac"),
@@ -79,6 +87,7 @@ class EncounterManager(private val context: Context) {
         _creatures.value.forEach { creature ->
             val jsonObject = JSONObject().apply {
                 put("id", creature.id)
+                put("pokemonId", creature.pokemonId)
                 put("name", creature.name)
                 put("initiative", creature.initiative)
                 put("ac", creature.ac)

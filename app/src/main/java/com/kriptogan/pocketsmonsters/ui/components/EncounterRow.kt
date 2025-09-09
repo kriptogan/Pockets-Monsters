@@ -19,7 +19,7 @@ import com.kriptogan.pocketsmonsters.data.models.EncounterCreature
 fun EncounterRow(
     creature: EncounterCreature,
     onUpdate: (EncounterCreature) -> Unit,
-    onRemove: (String) -> Unit,
+    onRemove: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var showDeleteConfirmation by remember { mutableStateOf(false) }

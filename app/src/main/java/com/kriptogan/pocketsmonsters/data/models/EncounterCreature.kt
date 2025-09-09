@@ -1,7 +1,8 @@
 package com.kriptogan.pocketsmonsters.data.models
 
 data class EncounterCreature(
-    val id: String = "",
+    val id: Int = 0,
+    val pokemonId: Int = 0,
     val name: String = "",
     val initiative: String = "",
     val ac: String = "",
