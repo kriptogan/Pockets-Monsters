@@ -3,7 +3,6 @@ package com.kriptogan.pocketsmonsters.ui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,7 +23,6 @@ fun EncounterRow(
     onInfoClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    var showDeleteConfirmation by remember { mutableStateOf(false) }
     
     Card(
         modifier = modifier
@@ -40,19 +38,6 @@ fun EncounterRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Remove button (prefix to name)
-            IconButton(
-                onClick = { showDeleteConfirmation = true },
-                modifier = Modifier.size(32.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Remove",
-                    tint = Color.Red,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-            
             // Info icon
             IconButton(
                 onClick = onInfoClick,
@@ -116,7 +101,15 @@ fun EncounterRow(
             // Current HP field
             OutlinedTextField(
                 value = creature.currentHp,
-                onValueChange = { onUpdate(creature.updateCurrentHp(it)) },
+                onValueChange = { newHp ->
+                    val updatedCreature = creature.updateCurrentHp(newHp)
+                    onUpdate(updatedCreature)
+                    
+                    // Auto-remove if HP reaches -1
+                    if (newHp == "-1") {
+                        onRemove(creature.id)
+                    }
+                },
                 modifier = Modifier
                     .width(45.dp)
                     .height(45.dp),
@@ -125,32 +118,5 @@ fun EncounterRow(
                 textStyle = TextStyle(fontSize = 10.sp)
             )
         }
-    }
-    
-    // Delete confirmation dialog
-    if (showDeleteConfirmation) {
-        AlertDialog(
-            onDismissRequest = { showDeleteConfirmation = false },
-            title = { Text("Remove Creature") },
-            text = { Text("Are you sure you want to remove '${creature.name.ifBlank { "this creature" }}'?") },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        onRemove(creature.id)
-                        showDeleteConfirmation = false
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Red
-                    )
-                ) {
-                    Text("Remove")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDeleteConfirmation = false }) {
-                    Text("Cancel")
-                }
-            }
-        )
     }
 }
