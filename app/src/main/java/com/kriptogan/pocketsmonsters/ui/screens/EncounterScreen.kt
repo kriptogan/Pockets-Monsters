@@ -1,5 +1,8 @@
 package com.kriptogan.pocketsmonsters.ui.screens
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,11 +12,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.kriptogan.pocketsmonsters.data.encounter.EncounterManager
 import com.kriptogan.pocketsmonsters.data.models.EncounterCreature
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
@@ -197,14 +202,153 @@ fun EncounterScreen(
             }
         }
         
-            // Creatures count
-            Text(
-                text = "${creatures.size} creatures",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
+            // Dice buttons
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                // d4 button
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Gray,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                        )
+                        .clickable { /* TODO: Roll d4 */ },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "d4",
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+                
+                // d6 button
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Gray,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                        )
+                        .clickable { /* TODO: Roll d6 */ },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "d6",
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+                
+                // d8 button
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Gray,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                        )
+                        .clickable { /* TODO: Roll d8 */ },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "d8",
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+                
+                // d10 button
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Gray,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                        )
+                        .clickable { /* TODO: Roll d10 */ },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "d10",
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+                
+                // d12 button
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Gray,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                        )
+                        .clickable { /* TODO: Roll d12 */ },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "d12",
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+                
+                // d20 button
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Gray,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                        )
+                        .clickable { /* TODO: Roll d20 */ },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "d20",
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+                
+                // X button
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Gray,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                        )
+                        .clickable { /* TODO: Custom roll */ },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "X",
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            }
         }
     }
 }
