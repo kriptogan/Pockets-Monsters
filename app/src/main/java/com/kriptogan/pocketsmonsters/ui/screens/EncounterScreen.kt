@@ -16,7 +16,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kriptogan.pocketsmonsters.data.encounter.EncounterManager
 import com.kriptogan.pocketsmonsters.data.models.EncounterCreature
+import com.kriptogan.pocketsmonsters.data.models.Pokemon
+import com.kriptogan.pocketsmonsters.data.network.NetworkModule
 import com.kriptogan.pocketsmonsters.ui.components.EncounterRow
+import com.kriptogan.pocketsmonsters.ui.components.PokemonDetailScreen
+import kotlinx.coroutines.launch
 
 @Composable
 fun EncounterScreen(
@@ -26,11 +30,50 @@ fun EncounterScreen(
     val encounterManager = remember { EncounterManager(context) }
     val creatures by encounterManager.creatures.collectAsState()
     
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
+    // Pokemon details state
+    var selectedPokemon by remember { mutableStateOf<Pokemon?>(null) }
+    val repository = remember { NetworkModule.createPokemonRepository(context) }
+    val coroutineScope = rememberCoroutineScope()
+    
+    // Function to load Pokemon by ID
+    fun loadPokemonById(pokemonId: Int) {
+        coroutineScope.launch {
+            try {
+                val result = repository.getPokemonById(pokemonId)
+                result.fold(
+                    onSuccess = { pokemon ->
+                        selectedPokemon = pokemon
+                    },
+                    onFailure = { exception ->
+                        // Handle error - could show a toast or error message
+                        println("Failed to load Pokemon: ${exception.message}")
+                    }
+                )
+            } catch (e: Exception) {
+                println("Error loading Pokemon: ${e.message}")
+            }
+        }
+    }
+    
+    // Function to close Pokemon details
+    fun closePokemonDetails() {
+        selectedPokemon = null
+    }
+    
+    if (selectedPokemon != null) {
+        // Show Pokemon detail screen
+        PokemonDetailScreen(
+            pokemon = selectedPokemon,
+            onBackClick = { closePokemonDetails() },
+            modifier = modifier
+        )
+    } else {
+        // Show encounter table
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
         // Header
         Text(
             text = "Encounter",
@@ -123,7 +166,8 @@ fun EncounterScreen(
                 EncounterRow(
                     creature = creature,
                     onUpdate = { encounterManager.updateCreature(it) },
-                    onRemove = { encounterManager.removeCreature(it) }
+                    onRemove = { encounterManager.removeCreature(it) },
+                    onInfoClick = { loadPokemonById(creature.pokemonId) }
                 )
             }
             
@@ -153,13 +197,14 @@ fun EncounterScreen(
             }
         }
         
-        // Creatures count
-        Text(
-            text = "${creatures.size} creatures",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
+            // Creatures count
+            Text(
+                text = "${creatures.size} creatures",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }

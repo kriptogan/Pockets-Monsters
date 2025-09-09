@@ -21,6 +21,7 @@ fun EncounterRow(
     creature: EncounterCreature,
     onUpdate: (EncounterCreature) -> Unit,
     onRemove: (Int) -> Unit,
+    onInfoClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var showDeleteConfirmation by remember { mutableStateOf(false) }
@@ -53,14 +54,17 @@ fun EncounterRow(
             }
             
             // Info icon
-            Icon(
-                imageVector = Icons.Default.Info,
-                contentDescription = "Information",
-                tint = Color(0xFF666666),
-                modifier = Modifier
-                    .width(15.dp)
-                    .size(16.dp)
-            )
+            IconButton(
+                onClick = onInfoClick,
+                modifier = Modifier.width(15.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Info,
+                    contentDescription = "Information",
+                    tint = Color(0xFF666666),
+                    modifier = Modifier.size(16.dp)
+                )
+            }
             
             // Name field
             OutlinedTextField(
