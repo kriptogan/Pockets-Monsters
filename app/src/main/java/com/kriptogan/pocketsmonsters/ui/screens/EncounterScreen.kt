@@ -50,6 +50,9 @@ fun EncounterScreen(
     // Sorting state
     var isSortedByInitiative by remember { mutableStateOf(false) }
     
+    // Focus state
+    var focusedCreatureId by remember { mutableStateOf<Int?>(null) }
+    
     // Computed list - sorted by initiative if enabled
     val sortedCreatures = remember(creatures, isSortedByInitiative) {
         if (isSortedByInitiative) {
@@ -225,7 +228,15 @@ fun EncounterScreen(
                     creature = creature,
                     onUpdate = { encounterManager.updateCreature(it) },
                     onRemove = { encounterManager.removeCreature(it) },
-                    onInfoClick = { loadPokemonById(creature.pokemonId) }
+                    onInfoClick = { loadPokemonById(creature.pokemonId) },
+                    onFocusChange = { isFocused ->
+                        if (isFocused) {
+                            focusedCreatureId = creature.id
+                        } else if (focusedCreatureId == creature.id) {
+                            focusedCreatureId = null
+                        }
+                    },
+                    isFocused = focusedCreatureId == creature.id
                 )
             }
             

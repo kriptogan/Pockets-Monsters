@@ -8,6 +8,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.TextStyle
@@ -21,6 +24,8 @@ fun EncounterRow(
     onUpdate: (EncounterCreature) -> Unit,
     onRemove: (Int) -> Unit,
     onInfoClick: () -> Unit = {},
+    onFocusChange: (Boolean) -> Unit = {},
+    isFocused: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     
@@ -29,7 +34,10 @@ fun EncounterRow(
             .fillMaxWidth()
             .padding(vertical = 2.dp),
         shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isFocused) Color(0xFFE3F2FD) else Color.Unspecified
+        )
     ) {
         Row(
             modifier = Modifier
@@ -57,7 +65,10 @@ fun EncounterRow(
                 onValueChange = { onUpdate(creature.updateName(it)) },
                 modifier = Modifier
                     .weight(2f)
-                    .height(45.dp),
+                    .height(45.dp)
+                    .onFocusChanged { focusState ->
+                        onFocusChange(focusState.isFocused)
+                    },
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 10.sp)
             )
