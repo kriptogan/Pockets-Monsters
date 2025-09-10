@@ -258,19 +258,19 @@ fun PartyPokemonDetailScreen(
             onClick = {
                 val encounterManager = EncounterManager(context)
                 
-                // Calculate initiative: random roll (1-20) + initiative modifier
+                // Calculate initiative: random roll (1-20) + current initiative modifier
                 val initiativeRoll = Random.nextInt(1, 21) // 1-20
-                val initiativeModifier = dndView.modifiers["Speed"] ?: 0
-                val calculatedInitiative = initiativeRoll + initiativeModifier
+                val currentInitiativeModifier = currentPokemon.calculateCurrentInitiative()
+                val calculatedInitiative = initiativeRoll + currentInitiativeModifier
                 
                 val newCreature = EncounterCreature(
                     id = System.currentTimeMillis().toInt(),
                     pokemonId = currentPokemon.id.toInt(),
                     name = currentPokemon.name.replaceFirstChar { it.uppercase() },
                     initiative = calculatedInitiative.toString(),
-                    ac = dndView.ac.toString(),
-                    maxHp = (dndView.convertedStats["HP"] ?: 0).toString(),
-                    currentHp = (dndView.convertedStats["HP"] ?: 0).toString()
+                    ac = currentPokemon.calculateCurrentArmorClass().toString(),
+                    maxHp = currentPokemon.maxHP.toString(),
+                    currentHp = currentPokemon.currentHP.toString()
                 )
                 encounterManager.addCreature(newCreature)
             },
