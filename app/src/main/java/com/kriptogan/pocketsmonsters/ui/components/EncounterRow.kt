@@ -36,7 +36,7 @@ fun EncounterRow(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isFocused) Color(0xFFE3F2FD) else Color.Unspecified
+            containerColor = if (isFocused) Color(0xFF64B5F6) else Color.Unspecified
         )
     ) {
         Row(

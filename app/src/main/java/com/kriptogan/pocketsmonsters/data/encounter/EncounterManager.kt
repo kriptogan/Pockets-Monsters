@@ -13,12 +13,17 @@ import java.util.UUID
 class EncounterManager(private val context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("encounter", Context.MODE_PRIVATE)
     private val encounterKey = "encounter_creatures"
+    private val focusedCreatureKey = "focused_creature_id"
     
     private val _creatures = MutableStateFlow<List<EncounterCreature>>(emptyList())
     val creatures: StateFlow<List<EncounterCreature>> = _creatures.asStateFlow()
     
+    private val _focusedCreatureId = MutableStateFlow<Int?>(null)
+    val focusedCreatureId: StateFlow<Int?> = _focusedCreatureId.asStateFlow()
+    
     init {
         loadEncounter()
+        loadFocusedCreature()
     }
     
     fun addCreature() {
@@ -51,6 +56,16 @@ class EncounterManager(private val context: Context) {
         currentList.removeAll { it.id == creatureId }
         _creatures.value = currentList
         saveEncounter()
+        
+        // Clear focus if the removed creature was focused
+        if (_focusedCreatureId.value == creatureId) {
+            setFocusedCreature(null)
+        }
+    }
+    
+    fun setFocusedCreature(creatureId: Int?) {
+        _focusedCreatureId.value = creatureId
+        saveFocusedCreature()
     }
     
     private fun loadEncounter() {
@@ -99,6 +114,18 @@ class EncounterManager(private val context: Context) {
         
         prefs.edit()
             .putString(encounterKey, jsonArray.toString())
+            .apply()
+    }
+    
+    private fun loadFocusedCreature() {
+        val focusedId = prefs.getInt(focusedCreatureKey, -1)
+        _focusedCreatureId.value = if (focusedId == -1) null else focusedId
+    }
+    
+    private fun saveFocusedCreature() {
+        val focusedId = _focusedCreatureId.value ?: -1
+        prefs.edit()
+            .putInt(focusedCreatureKey, focusedId)
             .apply()
     }
 }

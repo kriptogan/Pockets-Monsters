@@ -36,6 +36,7 @@ fun EncounterScreen(
     val context = LocalContext.current
     val encounterManager = remember { EncounterManager(context) }
     val creatures by encounterManager.creatures.collectAsState()
+    val focusedCreatureId by encounterManager.focusedCreatureId.collectAsState()
     
     // Pokemon details state
     var selectedPokemon by remember { mutableStateOf<Pokemon?>(null) }
@@ -47,20 +48,10 @@ fun EncounterScreen(
     var isRolling by remember { mutableStateOf(false) }
     var currentDiceType by remember { mutableStateOf<String?>(null) }
     
-    // Sorting state
-    var isSortedByInitiative by remember { mutableStateOf(false) }
-    
-    // Focus state
-    var focusedCreatureId by remember { mutableStateOf<Int?>(null) }
-    
-    // Computed list - sorted by initiative if enabled
-    val sortedCreatures = remember(creatures, isSortedByInitiative) {
-        if (isSortedByInitiative) {
-            creatures.sortedByDescending { creature ->
-                creature.initiative.toIntOrNull() ?: 0
-            }
-        } else {
-            creatures
+    // Computed list - always sorted by initiative (descending)
+    val sortedCreatures = remember(creatures) {
+        creatures.sortedByDescending { creature ->
+            creature.initiative.toIntOrNull() ?: 0
         }
     }
     
@@ -87,11 +78,6 @@ fun EncounterScreen(
     // Function to close Pokemon details
     fun closePokemonDetails() {
         selectedPokemon = null
-    }
-    
-    // Function to toggle initiative sorting
-    fun toggleInitiativeSorting() {
-        isSortedByInitiative = !isSortedByInitiative
     }
     
     // Function to roll dice
@@ -179,15 +165,13 @@ fun EncounterScreen(
                     fontWeight = FontWeight.Bold
                 )
                 
-                // Initiative column (clickable to sort)
+                // Initiative column (always sorted descending)
                 Text(
-                    text = if (isSortedByInitiative) "Init ↓" else "Init",
-                    modifier = Modifier
-                        .width(45.dp)
-                        .clickable { toggleInitiativeSorting() },
+                    text = "Init ↓",
+                    modifier = Modifier.width(45.dp),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = if (isSortedByInitiative) Color(0xFF4CAF50) else Color.Unspecified
+                    color = Color(0xFF4CAF50)
                 )
                 
                 // AC column
@@ -231,38 +215,12 @@ fun EncounterScreen(
                     onInfoClick = { loadPokemonById(creature.pokemonId) },
                     onFocusChange = { isFocused ->
                         if (isFocused) {
-                            focusedCreatureId = creature.id
-                        } else if (focusedCreatureId == creature.id) {
-                            focusedCreatureId = null
+                            encounterManager.setFocusedCreature(creature.id)
                         }
+                        // Don't clear focus when unfocusing - only when another row gets focus
                     },
                     isFocused = focusedCreatureId == creature.id
                 )
-            }
-            
-            // Add button row
-            item {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                ) {
-                    Button(
-                        onClick = { encounterManager.addCreature() },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Red
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Add Creature"
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Add Creature")
-                    }
-                }
             }
         }
         
