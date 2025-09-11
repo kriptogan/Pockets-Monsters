@@ -927,7 +927,7 @@ private fun getSingleTypeWeaknesses(type: String): List<String> {
 private fun getSingleTypeResistances(type: String): List<String> {
     return when (type.lowercase()) {
         "normal" -> emptyList()
-        "fire" -> listOf("fire", "grass", "ice", "bug", "steel")
+        "fire" -> listOf("fire", "grass", "ice", "bug", "steel", "fairy")
         "water" -> listOf("fire", "water", "ice", "steel")
         "electric" -> listOf("electric", "flying", "steel")
         "grass" -> listOf("water", "electric", "grass", "ground")
@@ -954,13 +954,12 @@ private fun getSingleTypeResistances(type: String): List<String> {
 private fun getSingleTypeImmunities(type: String): List<String> {
     return when (type.lowercase()) {
         "normal" -> listOf("ghost")
-        "electric" -> listOf("ground")
-        "fighting" -> listOf("ghost")
-        "poison" -> listOf("steel")
-        "ground" -> listOf("flying")
-        "psychic" -> listOf("dark")
+        "ground" -> listOf("electric")
+        "flying" -> listOf("ground")
         "ghost" -> listOf("normal")
-        "dragon" -> listOf("fairy")
+        "ghost" -> listOf("fighting")
+        "dark" -> listOf("psychic")
+        "steel" -> listOf("poison")
         "fairy" -> listOf("dragon")
         else -> emptyList()
     }

@@ -763,13 +763,13 @@ class PartyManager(context: Context) {
     private fun getSingleTypeImmunities(type: String): List<String> {
         return when (type.lowercase()) {
             "normal" -> listOf("ghost")
-            "electric" -> listOf("ground")
-            "fighting" -> listOf("ghost")
-            "poison" -> listOf("steel")
-            "ground" -> listOf("flying")
-            "psychic" -> listOf("dark")
+            "ground" -> listOf("electric")
+            "flying" -> listOf("ground")
             "ghost" -> listOf("normal")
-            "dragon" -> listOf("fairy")
+            "ghost" -> listOf("fighting")
+            "dark" -> listOf("psychic")
+            "steel" -> listOf("poison")
+            "fairy" -> listOf("dragon")
             else -> emptyList()
         }
     }
