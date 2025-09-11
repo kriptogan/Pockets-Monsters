@@ -2,6 +2,7 @@ package com.kriptogan.pocketsmonsters.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -75,6 +76,10 @@ fun PokemonDetailScreen(
     }
     
     val canAddToParty = remember { derivedStateOf { partySize.value < 6 && !isInParty.value } }
+    
+    // Move description dialog state
+    var showMoveDescriptionDialog by remember { mutableStateOf(false) }
+    var selectedMoveData by remember { mutableStateOf<com.kriptogan.pocketsmonsters.data.models.MoveData?>(null) }
 
     Column(
         modifier = modifier
@@ -458,11 +463,24 @@ fun PokemonDetailScreen(
                         
                         Spacer(modifier = Modifier.height(4.dp))
                         
-                        Text(
-                            text = moves.joinToString(", "),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFF1A1A1A)
-                        )
+                        // Display moves as clickable items
+                        moves.forEach { moveName ->
+                            Text(
+                                text = moveName.replaceFirstChar { it.uppercase() },
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color(0xFF1A1A1A),
+                                modifier = Modifier
+                                    .clickable {
+                                        // Find move data from moves database
+                                        val moveData = findMoveDataByName(context, moveName)
+                                        if (moveData != null) {
+                                            selectedMoveData = moveData
+                                            showMoveDescriptionDialog = true
+                                        }
+                                    }
+                                    .padding(vertical = 2.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -724,6 +742,17 @@ fun PokemonDetailScreen(
                     }
                 }
             }
+        }
+        
+        // Move Description Dialog
+        if (showMoveDescriptionDialog) {
+            MoveDescriptionDialog(
+                moveData = selectedMoveData,
+                onDismiss = {
+                    showMoveDescriptionDialog = false
+                    selectedMoveData = null
+                }
+            )
         }
     }
 }
@@ -1071,5 +1100,142 @@ private fun getTypeEffectiveness(attackingType: String, defendingType: String): 
             else -> 1.0
         }
         else -> 1.0
+    }
+}
+
+// Helper function to find move data by name
+private fun findMoveDataByName(context: android.content.Context, moveName: String): com.kriptogan.pocketsmonsters.data.models.MoveData? {
+    return try {
+        val inputStream = context.assets.open("moves_database.json")
+        val jsonString = inputStream.bufferedReader().use { it.readText() }
+        val jsonArray = org.json.JSONArray(jsonString)
+        
+        for (i in 0 until jsonArray.length()) {
+            val moveJson = jsonArray.getJSONObject(i)
+            val name = moveJson.getString("name")
+            
+            if (name == moveName) {
+                return com.kriptogan.pocketsmonsters.data.models.MoveData(
+                    name = name,
+                    tier = moveJson.getInt("tier"),
+                    power = if (moveJson.has("power") && !moveJson.isNull("power")) moveJson.getInt("power") else null,
+                    accuracy = if (moveJson.has("accuracy") && !moveJson.isNull("accuracy")) moveJson.getInt("accuracy") else null,
+                    type = moveJson.getString("type"),
+                    damage_class = moveJson.getString("damage_class"),
+                    description = moveJson.getString("description"),
+                    effect = moveJson.getString("effect"),
+                    stat_changes = if (moveJson.has("stat_changes") && !moveJson.isNull("stat_changes")) {
+                        val statChangesArray = moveJson.getJSONArray("stat_changes")
+                        val statChangesList = mutableListOf<Any>()
+                        for (j in 0 until statChangesArray.length()) {
+                            statChangesList.add(statChangesArray.get(j))
+                        }
+                        statChangesList
+                    } else {
+                        emptyList()
+                    }
+                )
+            }
+        }
+        null
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
+// Move Description Dialog
+@Composable
+fun MoveDescriptionDialog(
+    moveData: com.kriptogan.pocketsmonsters.data.models.MoveData?,
+    onDismiss: () -> Unit
+) {
+    if (moveData != null) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { 
+                Text(
+                    text = moveData.name.replaceFirstChar { it.uppercase() },
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            },
+            text = { 
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Move description
+                    Text(
+                        text = moveData.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(0xFF1A1A1A)
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    // Move details
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Tier:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF666666)
+                        )
+                        Text(
+                            text = "${moveData.tier}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Type:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF666666)
+                        )
+                        Text(
+                            text = moveData.type.replaceFirstChar { it.uppercase() },
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = getTypeColor(moveData.type)
+                        )
+                    }
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Damage Class:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF666666)
+                        )
+                        Text(
+                            text = moveData.damage_class.replaceFirstChar { it.uppercase() },
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = onDismiss) {
+                    Text("Close")
+                }
+            }
+        )
     }
 }

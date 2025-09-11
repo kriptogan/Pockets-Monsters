@@ -267,7 +267,7 @@
     "accuracy": 100,
     "type": "flying",
     "damage_class": "special",
-    "description": "1d6 s.attack flying dmg. may target up to 2 adjecent targets.push target 10 feet away.",
+    "description": "1d6 S.Attack flying dmg. may target up to 2 adjecent targets.push target 10 feet away.",
     "effect": "No special effects",
     "stat_changes": [],
     "ailment": null,
@@ -829,7 +829,7 @@
     "accuracy": 100,
     "type": "normal",
     "damage_class": "Special status",
-    "description": "On a failed special defense save. Reduces the affected character's defense and special defense modifiers by 1 for 10 rounds.",
+    "description": "On a failed S.Defense save. Reduces the affected character's defense and S.Defense modifiers by 1 for 10 rounds.",
     "effect": "Lowers Defense by 1",
     "stat_changes": [
       {
@@ -880,7 +880,7 @@
     "accuracy": 100,
     "type": "normal",
     "damage_class": "physical status",
-    "description": "On a failed s.defense save, Reduces the target's attack and s.attack modifiers by 1 for 10 rounds.",
+    "description": "On a failed S.Defense save, Reduces the target's attack and S.Attack modifiers by 1 for 10 rounds.",
     "effect": "Lowers Attack by 1",
     "stat_changes": [
       {
@@ -1000,8 +1000,8 @@
     "accuracy": 100,
     "type": "poison",
     "damage_class": "special",
-    "description": "1d4 s.attack poison dmg. Lowers defense and s. defense by 1 for 3 rounds.",
-    "effect": "Lowers Special Defense by 1",
+    "description": "1d4 S.Attack poison dmg. Lowers defense and s. defense by 1 for 3 rounds.",
+    "effect": "Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -1028,7 +1028,7 @@
     "accuracy": 100,
     "type": "fire",
     "damage_class": "special",
-    "description": "1d4 s.attack fire dmg. On a failed special defense save, the target is also inflicted with a burn for 2 rounds.",
+    "description": "1d4 S.Attack fire dmg. On a failed S.Defense save, the target is also inflicted with a burn for 2 rounds.",
     "effect": "No special effects",
     "stat_changes": [],
     "ailment": null,
@@ -1263,7 +1263,7 @@
     "accuracy": 100,
     "type": "ice",
     "damage_class": "special",
-    "description": "4d8 s.attack ice dmg. On a failed s.defense save, target's attack is lowered by 1 for 5 rounds.",
+    "description": "4d8 S.Attack ice dmg. On a failed S.Defense save, target's attack is lowered by 1 for 5 rounds.",
     "effect": "Lowers Attack by 1",
     "stat_changes": [
       {
@@ -1475,7 +1475,7 @@
     "accuracy": 100,
     "type": "grass",
     "damage_class": "special",
-    "description": "1d4 s.attack grass dmg. heal 1/2 of the damage dealt.",
+    "description": "1d4 S.Attack grass dmg. heal 1/2 of the damage dealt.",
     "effect": "No special effects",
     "stat_changes": [],
     "ailment": null,
@@ -1545,7 +1545,7 @@
     "type": "normal",
     "damage_class": "status",
     "description": "Raises the S.ATK rating by 1 for 10 rounds.",
-    "effect": "Raises Attack by 1; Raises Special Attack by 1",
+    "effect": "Raises Attack by 1; Raises S.Attack by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -1996,7 +1996,7 @@
     "type": "psychic",
     "damage_class": "special",
     "description": "An attack that may lower SPCL.DEF.",
-    "effect": "Lowers Special Defense by 1",
+    "effect": "Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -2708,7 +2708,7 @@
     "type": "psychic",
     "damage_class": "status",
     "description": "Sharply raises the user's SPCL.DEF.",
-    "effect": "Raises Special Defense by 2",
+    "effect": "Raises S.Defense by 2",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -5046,8 +5046,8 @@
     "accuracy": 100,
     "type": "rock",
     "damage_class": "special",
-    "description": "6d10 s.attack rocl dmg. Roll d20: on 10+, raises all stats by 1 for 10 rounds.",
-    "effect": "Raises Attack by 1; Raises Defense by 1; Raises Special Attack by 1; Raises Special Defense by 1; Raises Speed by 1",
+    "description": "6d10 S.Attack rocl dmg. Roll d20: on 10+, raises all stats by 1 for 10 rounds.",
+    "effect": "Raises Attack by 1; Raises Defense by 1; Raises S.Attack by 1; Raises S.Defense by 1; Raises Speed by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -5091,7 +5091,7 @@
     "type": "ghost",
     "damage_class": "special",
     "description": "An attack that may lower SPCL.DEF.",
-    "effect": "Lowers Special Defense by 1",
+    "effect": "Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -5262,7 +5262,7 @@
     "type": "normal",
     "damage_class": "status",
     "description": "Charges up power for up to 3 turns.",
-    "effect": "Raises Defense by 1; Raises Special Defense by 1",
+    "effect": "Raises Defense by 1; Raises S.Defense by 1",
     "stat_changes": [
       {
         "stat": "defense",
@@ -5409,7 +5409,7 @@
     "type": "dark",
     "damage_class": "status",
     "description": "Confuses the foe, but raises its SP. ATK.",
-    "effect": "Raises Special Attack by 1",
+    "effect": "Raises S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -5460,7 +5460,7 @@
     "type": "dark",
     "damage_class": "status",
     "description": "The user faints and lowers the foe’s abilities.",
-    "effect": "Lowers Attack by 2; Lowers Special Attack by 2",
+    "effect": "Lowers Attack by 2; Lowers S.Attack by 2",
     "stat_changes": [
       {
         "stat": "attack",
@@ -5584,7 +5584,7 @@
     "type": "electric",
     "damage_class": "status",
     "description": "Charges power to boost the electric move used next.",
-    "effect": "Raises Special Defense by 1",
+    "effect": "Raises S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -6081,7 +6081,7 @@
     "type": "bug",
     "damage_class": "status",
     "description": "Flashes a light that sharply raises SP. ATK.",
-    "effect": "Raises Special Attack by 3",
+    "effect": "Raises S.Attack by 3",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -6109,7 +6109,7 @@
     "type": "psychic",
     "damage_class": "special",
     "description": "Attacks with a burst of light. May lower SP. DEF.",
-    "effect": "Lowers Special Defense by 1",
+    "effect": "Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -6137,7 +6137,7 @@
     "type": "psychic",
     "damage_class": "special",
     "description": "Attacks with a flurry of down. May lower SP. ATK.",
-    "effect": "Lowers Special Attack by 1",
+    "effect": "Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -6386,7 +6386,7 @@
     "accuracy": 100,
     "type": "ghost",
     "damage_class": "physical",
-    "description": "1d4 ghost s.attack dmg. target rolls s.defense save. on fail, target paralyzed for 1 round.",
+    "description": "1d4 ghost S.Attack dmg. target rolls S.Defense save. on fail, target paralyzed for 1 round.",
     "effect": "No special effects",
     "stat_changes": [],
     "ailment": null,
@@ -6456,7 +6456,7 @@
     "type": "dark",
     "damage_class": "status",
     "description": "Feigns crying to sharply lower the foe’s SP. DEF.",
-    "effect": "Lowers Special Defense by 2",
+    "effect": "Lowers S.Defense by 2",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -6507,7 +6507,7 @@
     "type": "fire",
     "damage_class": "special",
     "description": "Allows a full-power attack, but sharply lowers SP. ATK.",
-    "effect": "Lowers Special Attack by 2",
+    "effect": "Lowers S.Attack by 2",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -6563,7 +6563,7 @@
     "type": "bug",
     "damage_class": "special",
     "description": "A powdery attack that may raise abilities.",
-    "effect": "Raises Attack by 1; Raises Defense by 1; Raises Special Attack by 1; Raises Special Defense by 1; Raises Speed by 1",
+    "effect": "Raises Attack by 1; Raises Defense by 1; Raises S.Attack by 1; Raises S.Defense by 1; Raises Speed by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -6607,7 +6607,7 @@
     "type": "steel",
     "damage_class": "status",
     "description": "Emits a horrible screech that sharply lowers SP. DEF.",
-    "effect": "Lowers Special Defense by 2",
+    "effect": "Lowers S.Defense by 2",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -6667,7 +6667,7 @@
     "type": "psychic",
     "damage_class": "status",
     "description": "Raises DEFENSE and SP. DEF with a mystic power.",
-    "effect": "Raises Defense by 1; Raises Special Defense by 1",
+    "effect": "Raises Defense by 1; Raises S.Defense by 1",
     "stat_changes": [
       {
         "stat": "defense",
@@ -7165,7 +7165,7 @@
     "type": "psychic",
     "damage_class": "status",
     "description": "Raises SP. ATK and SP. DEF by focusing the mind.",
-    "effect": "Raises Special Attack by 1; Raises Special Defense by 1",
+    "effect": "Raises S.Attack by 1; Raises S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -7344,7 +7344,7 @@
     "type": "psychic",
     "damage_class": "special",
     "description": "Allows a full-power attack, but sharply lowers SP. ATK.",
-    "effect": "Lowers Special Attack by 2",
+    "effect": "Lowers S.Attack by 2",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -7653,7 +7653,7 @@
     "type": "fighting",
     "damage_class": "physical",
     "description": "The user fights the foe in close without guarding itself. It also cuts the user’s Defense and Sp. Def.",
-    "effect": "Lowers Defense by 1; Lowers Special Defense by 1",
+    "effect": "Lowers Defense by 1; Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "defense",
@@ -8311,7 +8311,7 @@
     "type": "bug",
     "damage_class": "special",
     "description": "The user vibrates its wings to generate a damaging sound wave. It may also lower the foe’s Sp. Def stat.",
-    "effect": "Lowers Special Defense by 1",
+    "effect": "Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -8454,7 +8454,7 @@
     "type": "fighting",
     "damage_class": "special",
     "description": "The user heightens its mental focus and unleashes its power. It may also lower the target’s Sp. Def.",
-    "effect": "Lowers Special Defense by 1",
+    "effect": "Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -8482,7 +8482,7 @@
     "type": "grass",
     "damage_class": "special",
     "description": "The user draws power from nature and fires it at the foe. It may also lower the target’s Sp. Def.",
-    "effect": "Lowers Special Defense by 1",
+    "effect": "Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -8533,7 +8533,7 @@
     "type": "ground",
     "damage_class": "special",
     "description": "The user makes the ground under the foe erupt with power. It may also lower the target’s Sp. Def.",
-    "effect": "Lowers Special Defense by 1",
+    "effect": "Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -8607,7 +8607,7 @@
     "type": "dark",
     "damage_class": "status",
     "description": "The user stimulates its brain by thinking bad thoughts. It sharply raises the user’s Sp. Atk.",
-    "effect": "Raises Special Attack by 2",
+    "effect": "Raises S.Attack by 2",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -8893,7 +8893,7 @@
     "type": "steel",
     "damage_class": "special",
     "description": "The user gathers all its light energy and releases it at once. It may also lower the foe’s Sp. Def stat.",
-    "effect": "Lowers Special Defense by 1",
+    "effect": "Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -9018,7 +9018,7 @@
     "type": "grass",
     "damage_class": "special",
     "description": "A storm of sharp leaves is whipped up. The attack’s recoil sharply reduces the user’s Sp. Atk stat.",
-    "effect": "Lowers Special Attack by 2",
+    "effect": "Lowers S.Attack by 2",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -9299,7 +9299,7 @@
     "type": "electric",
     "damage_class": "special",
     "description": "The user fires a concentrated bundle of electricity. It may also raise the user’s Sp. Atk stat.",
-    "effect": "Raises Special Attack by 1",
+    "effect": "Raises S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -9396,7 +9396,7 @@
     "type": "bug",
     "damage_class": "status",
     "description": "The user calls out its underlings to make a living shield, raising its Defense and Sp. Def stats.",
-    "effect": "Raises Defense by 1; Raises Special Defense by 1",
+    "effect": "Raises Defense by 1; Raises S.Defense by 1",
     "stat_changes": [
       {
         "stat": "defense",
@@ -9612,7 +9612,7 @@
     "type": "grass",
     "damage_class": "special",
     "description": "The user generates a shock wave from within its body. It may also lower the target’s Sp. Def.",
-    "effect": "Lowers Special Defense by 2",
+    "effect": "Lowers S.Defense by 2",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -9640,7 +9640,7 @@
     "type": "ghost",
     "damage_class": "special",
     "description": "The user creates a gust of repulsive wind. It may also raise all the user’s stats at once.",
-    "effect": "Raises Attack by 1; Raises Defense by 1; Raises Special Attack by 1; Raises Special Defense by 1; Raises Speed by 1",
+    "effect": "Raises Attack by 1; Raises Defense by 1; Raises S.Attack by 1; Raises S.Defense by 1; Raises Speed by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -10020,7 +10020,7 @@
     "type": "bug",
     "damage_class": "status",
     "description": "The user lightly performs a beautiful, mystic dance. It boosts the user’s Sp. Atk, Sp. Def, and Speed stats.",
-    "effect": "Raises Special Attack by 1; Raises Special Defense by 1; Raises Speed by 1",
+    "effect": "Raises S.Attack by 1; Raises S.Defense by 1; Raises Speed by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -10217,7 +10217,7 @@
     "type": "poison",
     "damage_class": "special",
     "description": "The user spits fluid that works to melt the target. This harshly reduces the target’s Sp. Def stat.",
-    "effect": "Lowers Special Defense by 2",
+    "effect": "Lowers S.Defense by 2",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -10498,7 +10498,7 @@
     "type": "normal",
     "damage_class": "status",
     "description": "The user breaks its shell, lowering its Defense and Sp. Def stats but sharply raising Attack, Sp. Atk, and Speed stats.",
-    "effect": "Lowers Defense by 1; Lowers Special Defense by 1; Raises Attack by 2; Raises Special Attack by 2; Raises Speed by 2",
+    "effect": "Lowers Defense by 1; Lowers S.Defense by 1; Raises Attack by 2; Raises S.Attack by 2; Raises Speed by 2",
     "stat_changes": [
       {
         "stat": "defense",
@@ -10827,7 +10827,7 @@
     "type": "bug",
     "damage_class": "special",
     "description": "While resisting, the user attacks the opposing Pokémon. The targets’ Sp. Atk stat is reduced.",
-    "effect": "Lowers Special Attack by 1",
+    "effect": "Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -10929,7 +10929,7 @@
     "type": "normal",
     "damage_class": "status",
     "description": "The user is roused, and its Attack and Sp. Atk stats increase.",
-    "effect": "Raises Attack by 1; Raises Special Attack by 1",
+    "effect": "Raises Attack by 1; Raises S.Attack by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -11520,7 +11520,7 @@
     "type": "fire",
     "damage_class": "special",
     "description": "Cloaked in flames, the user dances and flaps its wings. It may also raise the user’s Sp. Atk stat.",
-    "effect": "Raises Special Attack by 1",
+    "effect": "Raises S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -11548,7 +11548,7 @@
     "type": "dark",
     "damage_class": "special",
     "description": "The user yells as if it is ranting about something, making the target’s Sp. Atk stat decrease.",
-    "effect": "Lowers Special Attack by 1",
+    "effect": "Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -11599,7 +11599,7 @@
     "type": "fire",
     "damage_class": "physical",
     "description": "With a hot flame on its forehead, the user hurls itself at its target. It lowers the user’s Defense, Sp. Def, and Speed stats.",
-    "effect": "Lowers Defense by 1; Lowers Special Defense by 1; Lowers Speed by 1",
+    "effect": "Lowers Defense by 1; Lowers S.Defense by 1; Lowers Speed by 1",
     "stat_changes": [
       {
         "stat": "defense",
@@ -11819,7 +11819,7 @@
     "type": "normal",
     "damage_class": "status",
     "description": "Letting out a noble roar, the user intimidates the target and lowers its Attack and Sp. Atk stats.",
-    "effect": "Lowers Attack by 1; Lowers Special Attack by 1",
+    "effect": "Lowers Attack by 1; Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -11966,7 +11966,7 @@
     "type": "dark",
     "damage_class": "status",
     "description": "With a parting threat, the user lowers the target’s Attack and Sp. Atk stats. Then it switches with a party Pokémon.",
-    "effect": "Lowers Attack by 1; Lowers Special Attack by 1",
+    "effect": "Lowers Attack by 1; Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -12215,7 +12215,7 @@
     "type": "fairy",
     "damage_class": "special",
     "description": "Borrowing the power of the moon, the user attacks the target. This may also lower the target’s Sp. Atk stat.",
-    "effect": "Lowers Special Attack by 1",
+    "effect": "Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -12340,7 +12340,7 @@
     "type": "normal",
     "damage_class": "status",
     "description": "The user tells the target a secret, and the target loses its ability to concentrate. This lowers the target’s Sp. Atk stat.",
-    "effect": "Lowers Special Attack by 1",
+    "effect": "Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -12465,7 +12465,7 @@
     "type": "fire",
     "damage_class": "special",
     "description": "The user attacks by breathing a special, hot fire. This also lowers the target’s Sp. Atk stat.",
-    "effect": "Lowers Special Attack by 1",
+    "effect": "Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -12516,7 +12516,7 @@
     "type": "fairy",
     "damage_class": "status",
     "description": "The user raises the Sp. Def stat of an ally Pokémon by using a mysterious aroma.",
-    "effect": "Raises Special Defense by 1",
+    "effect": "Raises S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -12544,7 +12544,7 @@
     "type": "electric",
     "damage_class": "status",
     "description": "The user’s body generates an eerie impulse. Exposing the target to it harshly lowers the target’s Sp. Atk stat.",
-    "effect": "Lowers Special Attack by 2",
+    "effect": "Lowers S.Attack by 2",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -12572,7 +12572,7 @@
     "type": "poison",
     "damage_class": "status",
     "description": "Opposing Pokémon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.",
-    "effect": "Lowers Attack by 1; Lowers Special Attack by 1; Lowers Speed by 1",
+    "effect": "Lowers Attack by 1; Lowers S.Attack by 1; Lowers Speed by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -12608,7 +12608,7 @@
     "type": "fairy",
     "damage_class": "status",
     "description": "The user absorbs energy and sharply raises its Sp. Atk, Sp. Def, and Speed stats on the next turn.",
-    "effect": "Raises Special Attack by 2; Raises Special Defense by 2; Raises Speed by 2",
+    "effect": "Raises S.Attack by 2; Raises S.Defense by 2; Raises Speed by 2",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -12644,7 +12644,7 @@
     "type": "electric",
     "damage_class": "status",
     "description": "The user manipulates magnetic fields, which raises the Defense and Sp. Def stats of ally Pokémon with the Plus or Minus Ability.",
-    "effect": "Raises Defense by 1; Raises Special Defense by 1",
+    "effect": "Raises Defense by 1; Raises S.Defense by 1",
     "stat_changes": [
       {
         "stat": "defense",
@@ -12962,7 +12962,7 @@
     "type": "flying",
     "damage_class": "physical",
     "description": "After soaring upward, the user attacks its target by dropping out of the sky at high speeds, although it lowers its own Defense and Sp. Def in the process.",
-    "effect": "Lowers Defense by 1; Lowers Special Defense by 1",
+    "effect": "Lowers Defense by 1; Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "defense",
@@ -13308,7 +13308,7 @@
     "type": "steel",
     "damage_class": "status",
     "description": "The user engages its gears to raise the Attack and Sp. Atk stats of ally Pokémon with the Plus or Minus Ability.",
-    "effect": "Raises Attack by 1; Raises Special Attack by 1",
+    "effect": "Raises Attack by 1; Raises S.Attack by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -13843,7 +13843,7 @@
     "type": "fairy",
     "damage_class": "special",
     "description": "The user unleashes a strong beam. The attack’s recoil harshly lowers the user’s Sp. Atk stat.",
-    "effect": "Lowers Special Attack by 2",
+    "effect": "Lowers S.Attack by 2",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -14060,7 +14060,7 @@
     "type": "normal",
     "damage_class": "status",
     "description": "The user gets teary eyed to make the target lose its combative spirit. This lowers the target’s Attack and Sp. Atk stats.",
-    "effect": "Lowers Attack by 1; Lowers Special Attack by 1",
+    "effect": "Lowers Attack by 1; Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -14350,7 +14350,7 @@
     "type": "fighting",
     "damage_class": "status",
     "description": "This move raises all the user’s stats but prevents the user from switching out or fleeing.",
-    "effect": "Raises Attack by 1; Raises Defense by 1; Raises Special Attack by 1; Raises Special Defense by 1; Raises Speed by 1",
+    "effect": "Raises Attack by 1; Raises Defense by 1; Raises S.Attack by 1; Raises S.Defense by 1; Raises Speed by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -14583,7 +14583,7 @@
     "type": "dragon",
     "damage_class": "status",
     "description": "The user raises all its stats by using some of its HP.",
-    "effect": "Raises Attack by 1; Raises Defense by 1; Raises Special Attack by 1; Raises Special Defense by 1; Raises Speed by 1",
+    "effect": "Raises Attack by 1; Raises Defense by 1; Raises S.Attack by 1; Raises S.Defense by 1; Raises Speed by 1",
     "stat_changes": [
       {
         "stat": "attack",
@@ -14650,7 +14650,7 @@
     "type": "fairy",
     "damage_class": "status",
     "description": "The user sharply raises the target’s Attack and Sp. Atk stats by decorating the target.",
-    "effect": "Raises Attack by 2; Raises Special Attack by 2",
+    "effect": "Raises Attack by 2; Raises S.Attack by 2",
     "stat_changes": [
       {
         "stat": "attack",
@@ -14835,7 +14835,7 @@
     "type": "grass",
     "damage_class": "special",
     "description": "The user attacks the target with an acidic liquid created from tart apples. This also lowers the target’s Sp. Def stat.",
-    "effect": "Lowers Special Defense by 1",
+    "effect": "Lowers S.Defense by 1",
     "stat_changes": [
       {
         "stat": "special-defense",
@@ -14891,7 +14891,7 @@
     "type": "fairy",
     "damage_class": "physical",
     "description": "The user attacks the target with so much force that it could break the target’s spirit. This also lowers the target’s Sp. Atk stat.",
-    "effect": "Lowers Special Attack by 1",
+    "effect": "Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",
@@ -15103,7 +15103,7 @@
     "type": "bug",
     "damage_class": "physical",
     "description": "The user skitters behind the target to attack. This also lowers the target’s Sp. Atk stat.",
-    "effect": "Lowers Special Attack by 1",
+    "effect": "Lowers S.Attack by 1",
     "stat_changes": [
       {
         "stat": "special-attack",

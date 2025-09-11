@@ -48,18 +48,18 @@ fun CustomBottomNavigation(
             onClick = { onNavigate("utilities") }
         )
         
-        // My Party Tab - Circle icon
-        CustomNavigationButton(
-            icon = Icons.Default.Favorite,
-            isSelected = currentRoute == "my_party",
-            onClick = { onNavigate("my_party") }
-        )
-        
         // Inventory Tab - Face icon
         CustomNavigationButton(
             icon = Icons.Default.Face,
             isSelected = currentRoute == "inventory",
             onClick = { onNavigate("inventory") }
+        )
+
+        // My Party Tab - Circle icon
+        CustomNavigationButton(
+            icon = Icons.Default.Favorite,
+            isSelected = currentRoute == "my_party",
+            onClick = { onNavigate("my_party") }
         )
         
         // Encounter Tab - Place icon
