@@ -14,18 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import kotlinx.coroutines.launch
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kriptogan.pocketsmonsters.ui.components.PokedexContainer
 import com.kriptogan.pocketsmonsters.ui.screens.PokedexScreen
-import com.kriptogan.pocketsmonsters.ui.screens.UtilitiesScreen
-import com.kriptogan.pocketsmonsters.ui.screens.WeaknessesScreen
-import com.kriptogan.pocketsmonsters.ui.screens.NaturesScreen
-import com.kriptogan.pocketsmonsters.ui.screens.EnergySlotsScreen
-import com.kriptogan.pocketsmonsters.ui.screens.MyPartyScreen
-import com.kriptogan.pocketsmonsters.ui.screens.DiceRollingScreen
-import com.kriptogan.pocketsmonsters.ui.screens.InventoryScreen
-import com.kriptogan.pocketsmonsters.ui.screens.EncounterScreen
 import com.kriptogan.pocketsmonsters.ui.theme.PocketsMonstersTheme
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonScreen
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonViewModel
@@ -110,9 +104,51 @@ fun MainScreen(
     val pokemonList by viewModel.filteredPokemonList.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val lastViewedPokemonIndex by viewModel.lastViewedPokemonIndex.collectAsState()
+    val ownedPokemonIds by viewModel.ownedPokemonIds.collectAsState()
+    val tcgData by viewModel.tcgData.collectAsState()
+    val isLoadingTCG by viewModel.isLoadingTCG.collectAsState()
     
-    // Content area
-    Box(modifier = Modifier.fillMaxSize()) {
+    // Snackbar state for toast messages
+    val snackbarHostState = remember { SnackbarHostState() }
+    var lastOwnedCount by remember { mutableStateOf(ownedPokemonIds.size) }
+    
+    // Show snackbar when collection changes
+    LaunchedEffect(ownedPokemonIds.size) {
+        if (ownedPokemonIds.size != lastOwnedCount) {
+            val message = if (ownedPokemonIds.size > lastOwnedCount) {
+                "Added to collection!"
+            } else {
+                "Removed from collection"
+            }
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+            lastOwnedCount = ownedPokemonIds.size
+        }
+    }
+    
+    // Content area with SnackbarHost
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { snackbarData ->
+                    Snackbar(
+                        snackbarData = snackbarData,
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                }
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
         when (currentTab) {
             "pokedex" -> {
                 PokedexScreen(
@@ -132,64 +168,49 @@ fun MainScreen(
                         viewModel.navigateToList()
                     },
                     onPartyUpdated = {
-                        viewModel.refreshPartyState() // Refresh party state when party changes
+                        // No longer needed - kept for compatibility
                     },
+                    onPokemonLongPress = { pokemonId, pokemonName ->
+                        viewModel.togglePokemonOwnership(pokemonId, pokemonName)
+                    },
+                    ownedPokemonIds = ownedPokemonIds,
+                    tcgData = tcgData,
+                    isLoadingTCG = isLoadingTCG,
                     modifier = Modifier
                 )
             }
-            "utilities" -> {
-                when (currentUtilityScreen) {
-                    "weaknesses" -> {
-                        WeaknessesScreen(
-                            onBackClick = { currentUtilityScreen = null },
-                            modifier = Modifier
-                        )
-                    }
-                    "natures" -> {
-                        NaturesScreen(
-                            onBackClick = { currentUtilityScreen = null },
-                            modifier = Modifier
-                        )
-                    }
-                    "energy_slots" -> {
-                        EnergySlotsScreen(
-                            onBackClick = { currentUtilityScreen = null },
-                            modifier = Modifier
-                        )
-                    }
-                    "dice_rolling" -> {
-                        DiceRollingScreen(
-                            onBackClick = { currentUtilityScreen = null },
-                            modifier = Modifier
-                        )
-                    }
-                    else -> {
-                        UtilitiesScreen(
-                            onWeaknessesClick = { currentUtilityScreen = "weaknesses" },
-                            onNaturesClick = { currentUtilityScreen = "natures" },
-                            onEnergySlotsClick = { currentUtilityScreen = "energy_slots" },
-                            onDiceRollingClick = { currentUtilityScreen = "dice_rolling" },
-                            modifier = Modifier
-                        )
-                    }
-                }
-            }
-            "my_party" -> {
-                MyPartyScreen(
-                    modifier = Modifier,
-                    mainViewModel = viewModel // Pass the main ViewModel to observe party state
-                )
-            }
-            "inventory" -> {
-                InventoryScreen(
+            // Other tabs removed - only Pokédex is needed for TCG collection tracking
+            else -> {
+                // Default to Pokédex if unknown route
+                PokedexScreen(
+                    uiState = uiState,
+                    pokemonList = pokemonList,
+                    searchQuery = searchQuery,
+                    lastViewedPokemonIndex = lastViewedPokemonIndex,
+                    selectedPokemon = selectedPokemon,
+                    onPokemonClick = { pokemonName ->
+                        viewModel.saveClickedPokemonIndex(pokemonName)
+                        viewModel.loadPokemon(pokemonName)
+                    },
+                    onSearchQueryChange = { query ->
+                        viewModel.updateSearchQuery(query)
+                    },
+                    onBackClick = {
+                        viewModel.navigateToList()
+                    },
+                    onPartyUpdated = {
+                        // No longer needed - kept for compatibility
+                    },
+                    onPokemonLongPress = { pokemonId, pokemonName ->
+                        viewModel.togglePokemonOwnership(pokemonId, pokemonName)
+                    },
+                    ownedPokemonIds = ownedPokemonIds,
+                    tcgData = tcgData,
+                    isLoadingTCG = isLoadingTCG,
                     modifier = Modifier
                 )
             }
-            "encounter" -> {
-                EncounterScreen(
-                    modifier = Modifier
-                )
-            }
+        }
         }
     }
 }

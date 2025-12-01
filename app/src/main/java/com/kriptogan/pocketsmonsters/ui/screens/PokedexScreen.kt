@@ -18,6 +18,10 @@ fun PokedexScreen(
     onSearchQueryChange: (String) -> Unit,
     onBackClick: () -> Unit,
     onPartyUpdated: () -> Unit = {}, // Callback for party updates
+    onPokemonLongPress: ((Int, String) -> Unit)? = null, // Callback for long press
+    ownedPokemonIds: Set<Int> = emptySet(), // Set of owned Pokémon IDs
+    tcgData: com.kriptogan.pocketsmonsters.data.tcg.PokemonTCGData? = null, // TCG data for selected Pokémon
+    isLoadingTCG: Boolean = false, // Loading state for TCG data
     modifier: Modifier = Modifier
 ) {
     if (selectedPokemon != null) {
@@ -26,6 +30,8 @@ fun PokedexScreen(
             pokemon = selectedPokemon,
             onBackClick = onBackClick,
             onPartyUpdated = onPartyUpdated, // Pass the callback
+            tcgData = tcgData,
+            isLoadingTCG = isLoadingTCG,
             modifier = modifier
         )
     } else {
@@ -36,7 +42,9 @@ fun PokedexScreen(
             searchQuery = searchQuery,
             lastViewedPokemonIndex = lastViewedPokemonIndex,
             onPokemonClick = onPokemonClick,
-            onSearchQueryChange = onSearchQueryChange
+            onSearchQueryChange = onSearchQueryChange,
+            onPokemonLongPress = onPokemonLongPress,
+            ownedPokemonIds = ownedPokemonIds
         )
     }
 }

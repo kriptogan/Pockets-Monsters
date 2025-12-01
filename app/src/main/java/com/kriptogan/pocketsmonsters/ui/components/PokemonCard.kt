@@ -1,6 +1,11 @@
 package com.kriptogan.pocketsmonsters.ui.components
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -10,38 +15,77 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
-import android.util.Log
-import kotlinx.coroutines.launch
 
 @Composable
 fun PokemonCard(
     pokemon: Pokemon,
     onClick: () -> Unit,
+    onLongPress: (() -> Unit)? = null,
+    isOwned: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    val spritePath = "file:///android_asset/sprites/${pokemon.spritePath}"
+    val haptic = LocalHapticFeedback.current
     
-    // Debug logging when component is created
-    LaunchedEffect(pokemon.name) {
-        Log.d("PokemonCard", "Created card for ${pokemon.name} with sprite: $spritePath")
-        println("🐛 DEBUG: Created card for ${pokemon.name} with sprite: $spritePath")
-    }
+    // Animation for card scale on press
+    var isPressed by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        animationSpec = tween(durationMillis = 150),
+        label = "cardScale"
+    )
+    
+    // Green border color for owned Pokémon with animation
+    val borderColor = if (isOwned) Color(0xFF4CAF50) else Color.Transparent
+    val borderWidth by animateDpAsState(
+        targetValue = if (isOwned) 3.dp else 0.dp,
+        animationSpec = tween(durationMillis = 300),
+        label = "borderWidth"
+    )
     
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .border(
+                width = borderWidth,
+                color = borderColor,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .scale(scale)
+            .pointerInput(pokemon.id) {
+                detectTapGestures(
+                    onLongPress = {
+                        if (onLongPress != null) {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            onLongPress()
+                        }
+                    },
+                    onTap = { 
+                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        onClick() 
+                    },
+                    onPress = {
+                        isPressed = true
+                        tryAwaitRelease()
+                        isPressed = false
+                    }
+                )
+            },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        onClick = onClick
+        onClick = {} // Disable default onClick, handled by pointerInput
     ) {
         Row(
             modifier = Modifier

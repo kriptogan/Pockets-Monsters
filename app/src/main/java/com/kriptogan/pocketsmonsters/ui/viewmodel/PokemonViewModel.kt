@@ -6,7 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.data.network.NetworkModule
-import com.kriptogan.pocketsmonsters.data.party.PartyManager
+import com.kriptogan.pocketsmonsters.data.collection.CollectionManager
+import com.kriptogan.pocketsmonsters.data.tcg.TCGRepository
+import com.kriptogan.pocketsmonsters.data.tcg.PokemonTCGData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 class PokemonViewModel(application: Application) : AndroidViewModel(application) {
     
     private val repository = NetworkModule.createPokemonRepository(application)
+    private val tcgRepository = NetworkModule.createTCGRepository(application)
     
     // UI State
     private val _uiState = MutableStateFlow<PokemonUiState>(PokemonUiState.Loading)
@@ -50,20 +53,24 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     private val _lastViewedPokemonIndex = MutableStateFlow<Int>(-1)
     val lastViewedPokemonIndex: StateFlow<Int> = _lastViewedPokemonIndex.asStateFlow()
     
-    // Party state
-    private val _partySize = MutableStateFlow(0)
-    val partySize: StateFlow<Int> = _partySize.asStateFlow()
-    
-    private val _partyPokemonIds = MutableStateFlow<Set<Int>>(emptySet())
-    val partyPokemonIds: StateFlow<Set<Int>> = _partyPokemonIds.asStateFlow()
-    
     // Offline data status
     private val _isOfflineDataAvailable = MutableStateFlow(false)
     val isOfflineDataAvailable: StateFlow<Boolean> = _isOfflineDataAvailable.asStateFlow()
     
+    // Collection state
+    private val collectionManager = CollectionManager(application)
+    private val _ownedPokemonIds = MutableStateFlow<Set<Int>>(emptySet())
+    val ownedPokemonIds: StateFlow<Set<Int>> = _ownedPokemonIds.asStateFlow()
+    
+    // TCG data state
+    private val _tcgData = MutableStateFlow<PokemonTCGData?>(null)
+    val tcgData: StateFlow<PokemonTCGData?> = _tcgData.asStateFlow()
+    private val _isLoadingTCG = MutableStateFlow(false)
+    val isLoadingTCG: StateFlow<Boolean> = _isLoadingTCG.asStateFlow()
+    
     init {
         loadPokemonList()
-        refreshPartyState() // Initialize party state
+        refreshCollectionState() // Initialize collection state
     }
     
     /**
@@ -128,6 +135,8 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
                     onSuccess = { pokemon ->
                         _selectedPokemon.value = pokemon
                         _currentScreen.value = PokemonScreen.Detail
+                        // Load TCG data for this Pokémon
+                        loadTCGData(pokemon.id, pokemon.name)
                     },
                     onFailure = { exception ->
                         _errorMessage.value = "Pokémon not found: $name"
@@ -256,6 +265,7 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     fun navigateToList() {
         _currentScreen.value = PokemonScreen.List
         _selectedPokemon.value = null
+        clearTCGData() // Clear TCG data when navigating away
     }
     
     /**
@@ -294,40 +304,58 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     }
     
     /**
-     * Refresh party state from PartyManager
+     * Refresh collection state from CollectionManager
      */
-    fun refreshPartyState() {
-        val partyManager = PartyManager(getApplication())
-        val party = partyManager.getParty()
-        _partySize.value = party.size
-        _partyPokemonIds.value = party.map { it.id }.toSet()
+    fun refreshCollectionState() {
+        _ownedPokemonIds.value = collectionManager.getAllOwnedPokemon()
     }
     
     /**
-     * Add Pokemon to party
+     * Toggle ownership status for a Pokémon
+     * @param pokemonId The ID of the Pokémon
+     * @param pokemonName The name of the Pokémon
+     * @return The new ownership status (true if now owned, false if now unowned)
      */
-    fun addPokemonToParty(pokemon: Pokemon) {
-        val partyManager = PartyManager(getApplication())
-        val result = partyManager.addToParty(pokemon)
-        
-        if (result.isSuccess) {
-            // Refresh party state to update UI
-            refreshPartyState()
+    fun togglePokemonOwnership(pokemonId: Int, pokemonName: String): Boolean {
+        val newStatus = collectionManager.toggleOwnership(pokemonId, pokemonName)
+        refreshCollectionState() // Refresh state to update UI
+        return newStatus
+    }
+    
+    /**
+     * Check if a Pokémon is owned (has at least 1 card)
+     * @param pokemonId The ID of the Pokémon
+     * @return true if owned, false otherwise
+     */
+    fun isPokemonOwned(pokemonId: Int): Boolean {
+        return _ownedPokemonIds.value.contains(pokemonId)
+    }
+    
+    /**
+     * Load TCG data for a specific Pokémon
+     * @param pokemonId The national Pokédex number
+     * @param pokemonName The name of the Pokémon
+     */
+    fun loadTCGData(pokemonId: Int, pokemonName: String) {
+        viewModelScope.launch {
+            _isLoadingTCG.value = true
+            try {
+                val tcgData = tcgRepository.getTCGDataForPokemon(pokemonId, pokemonName)
+                _tcgData.value = tcgData
+            } catch (e: Exception) {
+                _errorMessage.value = "Failed to load TCG data: ${e.message}"
+                _tcgData.value = null
+            } finally {
+                _isLoadingTCG.value = false
+            }
         }
     }
     
     /**
-     * Check if Pokemon is in party
+     * Clear TCG data
      */
-    fun isPokemonInParty(pokemonId: Int): Boolean {
-        return _partyPokemonIds.value.contains(pokemonId)
-    }
-    
-    /**
-     * Get current party size
-     */
-    fun getCurrentPartySize(): Int {
-        return _partySize.value
+    fun clearTCGData() {
+        _tcgData.value = null
     }
 }
 

@@ -25,6 +25,16 @@ import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonUiState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.draw.scale
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @Composable
 fun PokemonGridScreen(
@@ -33,7 +43,9 @@ fun PokemonGridScreen(
     searchQuery: String,
     lastViewedPokemonIndex: Int,
     onPokemonClick: (String) -> Unit,
-    onSearchQueryChange: (String) -> Unit
+    onSearchQueryChange: (String) -> Unit,
+    onPokemonLongPress: ((Int, String) -> Unit)? = null,
+    ownedPokemonIds: Set<Int> = emptySet()
 ) {
     val gridState = rememberLazyGridState()
     
@@ -84,12 +96,24 @@ fun PokemonGridScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "No Pokémon found",
-                            style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Center,
-                            color = Color(0xFF1A1A1A) // Dark text for better readability on gradient
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "No Pokémon found",
+                                style = MaterialTheme.typography.titleLarge,
+                                textAlign = TextAlign.Center,
+                                color = Color(0xFF1A1A1A),
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "Try adjusting your search",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                                color = Color(0xFF666666)
+                            )
+                        }
                     }
                 } else {
                     LazyVerticalGrid(
@@ -99,10 +123,18 @@ fun PokemonGridScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         contentPadding = PaddingValues(bottom = 16.dp)
                     ) {
-                        items(pokemonList) { pokemon ->
+                        items(
+                            items = pokemonList,
+                            key = { pokemon -> "${pokemon.id}_${ownedPokemonIds.contains(pokemon.id)}" }
+                        ) { pokemon ->
+                            val isOwned = ownedPokemonIds.contains(pokemon.id)
                             PokemonGridCard(
                                 pokemon = pokemon,
-                                onClick = { onPokemonClick(pokemon.name) }
+                                onClick = { onPokemonClick(pokemon.name) },
+                                onLongPress = onPokemonLongPress?.let { 
+                                    { it(pokemon.id, pokemon.name) }
+                                },
+                                isOwned = isOwned
                             )
                         }
                     }
@@ -144,8 +176,28 @@ fun PokemonGridScreen(
 fun PokemonGridCard(
     pokemon: Pokemon,
     onClick: () -> Unit,
+    onLongPress: (() -> Unit)? = null,
+    isOwned: Boolean = false,
     modifier: Modifier = Modifier
 ) {
+    val haptic = LocalHapticFeedback.current
+    
+    // Animation for card scale on press
+    var isPressed by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.92f else 1f,
+        animationSpec = tween(durationMillis = 150),
+        label = "gridCardScale"
+    )
+    
+    // Green border for owned Pokémon, white border for unowned with animation
+    val borderColor = if (isOwned) Color(0xFF4CAF50) else Color.White
+    val borderWidth by animateDpAsState(
+        targetValue = if (isOwned) 3.dp else 2.dp,
+        animationSpec = tween(durationMillis = 300),
+        label = "gridBorderWidth"
+    )
+    
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -153,11 +205,30 @@ fun PokemonGridCard(
             .clip(RoundedCornerShape(16.dp))
             .background(Color.Transparent) // Fully transparent background
             .border(
-                width = 2.dp,
-                color = Color.White, // White border
+                width = borderWidth,
+                color = borderColor,
                 shape = RoundedCornerShape(16.dp)
             )
-            .clickable { onClick() }
+            .scale(scale)
+            .pointerInput(pokemon.id) {
+                detectTapGestures(
+                    onLongPress = {
+                        if (onLongPress != null) {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            onLongPress()
+                        }
+                    },
+                    onTap = { 
+                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        onClick() 
+                    },
+                    onPress = {
+                        isPressed = true
+                        tryAwaitRelease()
+                        isPressed = false
+                    }
+                )
+            }
     ) {
         Column(
             modifier = Modifier

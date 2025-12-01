@@ -2,13 +2,15 @@
 
 ## 📋 Project Overview
 
-**Pockets & Monsters** is an Android application that combines Pokémon data with Dungeons & Dragons (D&D) mechanics. The app serves as a comprehensive companion tool for managing Pokémon in a D&D-style tabletop RPG format, featuring offline data support, party management, encounter tracking, and utility tools.
+**Pockets & Monsters** is an Android application for tracking Pokémon Trading Card Game (TCG) collections. The app allows users to browse all Pokémon, mark which cards they own, and view TCG sets and card images for each Pokémon. It features offline data support, collection tracking, and integration with the official Pokémon TCG API.
 
 ### Key Characteristics
 - **Platform**: Android (Kotlin)
 - **UI Framework**: Jetpack Compose
 - **Architecture**: MVVM (Model-View-ViewModel)
-- **Data Source**: PokéAPI (with offline fallback)
+- **Data Sources**: 
+  - PokéAPI (with offline fallback) for Pokémon data
+  - Pokémon TCG API (api.pokemontcg.io/v2/) for TCG data
 - **Target SDK**: 36 (Android 15)
 - **Min SDK**: 24 (Android 7.0)
 - **Package**: `com.kriptogan.pocketsmonsters`
@@ -17,13 +19,13 @@
 
 ## 🎯 Core Concept
 
-The application converts traditional Pokémon game mechanics into D&D 5th Edition rules:
-- Pokémon stats are converted to D&D ability scores
-- Moves are organized by D&D spell slot tiers (1st-9th level)
-- Experience follows D&D progression tables (levels 1-20)
-- Energy slots follow Wizard spell slot progression
-- Natures provide proficiency bonuses and penalties
-- Status effects and conditions are tracked per round
+The application is a TCG collection tracking tool:
+- Browse all Pokémon in a grid or list view
+- Mark Pokémon as owned (long press gesture)
+- Visual indicator (green border) for owned Pokémon
+- View TCG sets containing each Pokémon
+- Display card images from different sets
+- Collection status persists across app restarts
 
 ---
 
@@ -36,19 +38,15 @@ app/src/main/java/com/kriptogan/pocketsmonsters/
 ├── MainActivity.kt                    # Entry point, fullscreen immersive mode
 ├── data/
 │   ├── api/
-│   │   └── PokeApiService.kt          # Retrofit API service for PokéAPI
-│   ├── converter/
-│   │   └── DnDConverter.kt            # Converts Pokémon stats to D&D format
-│   ├── encounter/
-│   │   └── EncounterManager.kt        # Manages encounter creatures
-│   ├── inventory/
-│   │   └── InventoryManager.kt        # Manages inventory items
+│   │   ├── PokeApiService.kt          # Retrofit API service for PokéAPI
+│   │   └── TCGApiService.kt           # Retrofit API service for Pokémon TCG API
+│   ├── collection/
+│   │   ├── CollectionManager.kt       # Manages collection status persistence
+│   │   └── CollectionStatus.kt        # Collection status data model
 │   ├── local/
 │   │   └── LocalStorage.kt            # SharedPreferences data persistence
 │   ├── models/
 │   │   ├── Pokemon.kt                  # Base Pokémon data model
-│   │   ├── PartyPokemon.kt            # Party Pokémon with D&D stats
-│   │   ├── Nature.kt                   # Nature system for stat bonuses
 │   │   ├── Stat.kt                     # Stat definitions
 │   │   ├── Type.kt                     # Type information
 │   │   └── ...                         # Other data models
@@ -56,166 +54,110 @@ app/src/main/java/com/kriptogan/pocketsmonsters/
 │   │   └── NetworkModule.kt           # Retrofit/OkHttp configuration
 │   ├── offline/
 │   │   └── OfflineDataLoader.kt       # Loads data from assets
-│   ├── party/
-│   │   └── PartyManager.kt             # Party management and persistence
-│   └── repository/
-│       └── PokemonRepository.kt       # Data access layer
+│   ├── repository/
+│   │   └── PokemonRepository.kt       # Data access layer
+│   └── tcg/
+│       ├── TCGRepository.kt            # TCG data access layer
+│       ├── TCGSet.kt                   # TCG set data model
+│       ├── TCGCard.kt                  # TCG card data model
+│       └── PokemonTCGData.kt            # Aggregated TCG data model
 ├── ui/
 │   ├── components/                    # Reusable UI components
 │   │   ├── PokedexContainer.kt        # Main container with Pokedex design
-│   │   ├── PokemonCard.kt             # Pokémon display card
-│   │   ├── PartyPokemonDetailScreen.kt # Detailed party Pokémon view
-│   │   └── ...                         # Other components
+│   │   ├── PokemonCard.kt             # Pokémon display card (list view)
+│   │   ├── PokemonGridScreen.kt       # Grid view with PokemonGridCard
+│   │   ├── PokemonDetailScreen.kt     # Detailed Pokémon view with TCG data
+│   │   └── CustomBottomNavigation.kt  # Bottom navigation bar
 │   ├── screens/                       # Main application screens
-│   │   ├── PokedexScreen.kt           # Pokémon search and browse
-│   │   ├── MyPartyScreen.kt           # Party management
-│   │   ├── UtilitiesScreen.kt         # Utility tools menu
-│   │   ├── WeaknessesScreen.kt        # Type effectiveness chart
-│   │   ├── NaturesScreen.kt           # Nature information
-│   │   ├── EnergySlotsScreen.kt       # Energy slot reference
-│   │   ├── DiceRollingScreen.kt       # Dice rolling utility
-│   │   ├── InventoryScreen.kt         # Inventory management
-│   │   └── EncounterScreen.kt         # Encounter tracking
+│   │   └── PokedexScreen.kt           # Pokémon search and browse
 │   ├── theme/                         # Material Design 3 theming
 │   └── viewmodel/
-│       ├── PokemonViewModel.kt        # Main state management
-│       └── PartyViewModel.kt          # Party state management
+│       └── PokemonViewModel.kt        # Main state management
 └── ...
 ```
 
 ### Data Flow
 
-1. **Data Loading Priority**:
+1. **Pokémon Data Loading Priority**:
    - Offline assets (bundled in APK) → Primary source
    - Local storage (SharedPreferences) → Fallback
    - PokéAPI → Last resort
 
-2. **State Management**:
+2. **TCG Data Loading**:
+   - Pokémon TCG API (api.pokemontcg.io/v2/) → Primary source
+   - Offline assets → Future enhancement (placeholder)
+   - Searches by national Pokédex number
+
+3. **State Management**:
    - ViewModels hold UI state
    - Repository pattern for data access
-   - Local persistence via SharedPreferences
+   - Local persistence via SharedPreferences for collection status
 
-3. **Pokémon Conversion**:
-   - Base Pokémon data loaded from assets
-   - DnDConverter transforms stats to D&D format
+4. **Collection Tracking**:
+   - CollectionManager handles ownership status
+   - Persisted in SharedPreferences
+   - Visual indicator (green border) in UI
    - PartyPokemon adds runtime state (level, HP, moves, etc.)
 
 ---
 
 ## 📱 Main Features
 
-### 1. Pokédex Screen
+### 1. Pokédex Screen (Collection Tracker)
 - **Search & Browse**: Search through all Pokémon (1000+)
-- **Grid/List View**: Toggle between display modes
-- **Pokémon Details**: View stats, types, moves, abilities
-- **Add to Party**: Convert Pokémon to party member
-- **Swipe Navigation**: Navigate between Pokémon in detail view
-
-### 2. My Party Screen
-- **Party Management**: Up to 6 Pokémon per party
+- **Grid View**: 4-column grid display with Pokémon images
+- **Collection Tracking**: 
+  - Long press to mark/unmark Pokémon as owned
+  - Green border indicator (3dp) for owned Pokémon
+  - Collection status persists across app restarts
 - **Pokémon Details**: 
-  - Current HP/Max HP
-  - D&D stats (Attack, Defense, Sp.Atk, Sp.Def, Speed, HP)
-  - Level and experience
-  - Proficiency bonus
-  - Nature and bonuses/penalties
-  - Available moves by tier
-  - Prepared moves (4 moves + free moves)
-  - Energy slots (1st-9th level)
-  - Status effects and conditions
-  - Evolution information
-- **Level Management**: Click level to add/remove experience
-- **Move Management**: Prepare moves with energy costs
-- **Status Effects**: Add effects/conditions with duration
-- **Round Tracking**: Pass rounds to decrement effect durations
+  - Pokémon image and name
+  - Type information
+  - TCG sets containing the Pokémon
+  - Card images from different sets
+  - Set information (name, release date, symbol)
+- **Visual Feedback**:
+  - Haptic feedback on interactions
+  - Toast messages for collection changes
+  - Smooth animations and transitions
 
-### 3. Utilities Screen
-- **Type Effectiveness Chart**: View weaknesses/resistances
-- **Natures Reference**: All 25 natures with descriptions
-- **Energy Slots Reference**: Spell slot progression table
-- **Dice Rolling**: D&D dice rolling utility
-
-### 4. Inventory Screen
-- **Item Management**: Track items and quantities
-- **Add/Edit Items**: Manage inventory items
-
-### 5. Encounter Screen
-- **Encounter Tracking**: Manage encounter creatures
-- **Combat Management**: Track HP, status, etc.
+### 2. TCG Data Integration
+- **TCG Sets Display**: Shows all sets containing the selected Pokémon
+- **Card Images**: Displays card images from the official Pokémon TCG API
+- **Set Information**: 
+  - Set name and release date
+  - Set symbol/logo
+  - Number of cards per set
+- **API Integration**: 
+  - Official Pokémon TCG API (api.pokemontcg.io/v2/)
+  - Searches by national Pokédex number
+  - Automatic image caching via Coil
 
 ---
 
-## 🎲 D&D Conversion System
+## 🎴 Collection Tracking System
 
-### Stat Conversion Formula
+### Collection Status
+- **Ownership Tracking**: Boolean flag for each Pokémon
+- **Persistence**: Stored in SharedPreferences
+- **Visual Indicator**: Green border (3dp) around owned Pokémon images
+- **Toggle Method**: Long press gesture on any Pokémon card
 
-**Standard Stats** (Attack, Defense, Sp.Atk, Sp.Def, Speed):
-```
-D&D Stat = floor((Base Stat ÷ 10) + 5)
-```
+### Collection Manager
+- **CollectionManager**: Handles all collection-related operations
+- **Methods**:
+  - `getCollectionStatus(pokemonId: Int)`: Get ownership status
+  - `toggleOwnership(pokemonId: Int, pokemonName: String)`: Toggle ownership
+  - `isPokemonOwned(pokemonId: Int)`: Check if owned
+  - `getAllOwnedPokemon()`: Get all owned Pokémon IDs
 
-**HP Stat**:
-```
-D&D HP = floor(Base HP ÷ 3)
-```
-
-**Modifiers**:
-```
-Modifier = floor((Stat - 10) ÷ 2)
-```
-
-### Movement Speed Calculation
-
-Complex formula based on:
-- Speed stat
-- Weight categories:
-  - < 10 kg: +1
-  - 10-49.9 kg: +0
-  - 50-149.9 kg: -1
-  - 150-299.9 kg: -2
-  - ≥ 300 kg: -3
-- Final movement = (adjusted score × 2.5) rounded to nearest 5
-
-### Armor Class (AC)
-```
-AC = 10 + Speed Modifier + Proficiency Bonus (if Speed is proficient)
-```
-
-### Initiative
-```
-Initiative = Speed Modifier + Proficiency Bonus (if Speed is proficient)
-```
-
-### Hit Dice
-Based on HP ranges:
-- ≤ 50 HP: d6
-- 51-80 HP: d8
-- 81-120 HP: d10
-- > 120 HP: d12
-
-### Move Tiers
-Pokémon moves are organized by D&D spell slot tiers:
-- **Tier 1-9**: Corresponds to 1st-9th level spell slots
-- Conversion: `D&D Level = ceil(Pokémon Level ÷ 5)`
-- Moves learned at Pokémon levels 1-5 → D&D level 1
-- Moves learned at Pokémon levels 6-10 → D&D level 2
-- etc.
-
-### Energy Slots
-Follows Wizard spell slot progression:
-- Level 1: 2 × 1st level slots
-- Level 2: 3 × 1st level slots
-- Level 3: 4 × 1st level, 2 × 2nd level
-- ...continues to level 20 with 9th level slots
-
-### Experience & Leveling
-- **D&D Experience Table**: Levels 1-20
-- **Proficiency Bonus**: 
-  - Levels 1-4: +2
-  - Levels 5-8: +3
-  - Levels 9-12: +4
-  - Levels 13-16: +5
-  - Levels 17-20: +6
+### TCG Data Integration
+- **TCGRepository**: Manages TCG data fetching
+- **API Integration**: Official Pokémon TCG API
+- **Data Models**:
+  - `TCGSet`: Set information (name, release date, symbol)
+  - `TCGCard`: Card information (images, rarity, number)
+  - `PokemonTCGData`: Aggregated data for a Pokémon
 
 ---
 
@@ -237,17 +179,40 @@ data class Pokemon(
 )
 ```
 
-### PartyPokemon (Runtime State)
+### CollectionStatus
 ```kotlin
-data class PartyPokemon(
-    val id: Int,
+data class CollectionStatus(
+    val pokemonId: Int,
+    val pokemonName: String,
+    var isOwned: Boolean,
+    val ownedSince: Long? = null,
+    val notes: String? = null
+)
+```
+
+### TCGSet
+```kotlin
+data class TCGSet(
+    val id: String,
     val name: String,
-    val basePokemon: Pokemon,
-    val level: Int = 1,
-    val currentHP: Int,
-    val maxHP: Int,
-    val actualSize: Int,              # Base ±5 variation
-    val actualWeight: Int,             # Base ±5 variation
+    val series: String?,
+    val releaseDate: String?,
+    val images: TCGSetImages?,
+    val total: Int?
+)
+```
+
+### TCGCard
+```kotlin
+data class TCGCard(
+    val id: String,
+    val name: String,
+    val set: TCGCardSet?,
+    val images: TCGCardImages?,
+    val nationalPokedexNumbers: List<Int>?,
+    val rarity: String?,
+    val number: String?
+)
     val availableMoves: List<LevelUpMove>,
     val currentMoveSet: List<String>,  # Selected 4 moves
     val movesData: List<MoveData>,

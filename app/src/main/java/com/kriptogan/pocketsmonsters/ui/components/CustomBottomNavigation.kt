@@ -31,42 +31,14 @@ fun CustomBottomNavigation(
                 shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
             )
             .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Pokedex Tab - Square icon
+        // Pokedex Tab - Only tab for TCG collection tracking
         CustomNavigationButton(
             icon = Icons.Default.Menu,
             isSelected = currentRoute == "pokedex",
             onClick = { onNavigate("pokedex") }
-        )
-        
-        // Utilities Tab - Star icon
-        CustomNavigationButton(
-            icon = Icons.Default.Star,
-            isSelected = currentRoute == "utilities",
-            onClick = { onNavigate("utilities") }
-        )
-        
-        // Inventory Tab - Face icon
-        CustomNavigationButton(
-            icon = Icons.Default.Face,
-            isSelected = currentRoute == "inventory",
-            onClick = { onNavigate("inventory") }
-        )
-
-        // My Party Tab - Circle icon
-        CustomNavigationButton(
-            icon = Icons.Default.Favorite,
-            isSelected = currentRoute == "my_party",
-            onClick = { onNavigate("my_party") }
-        )
-        
-        // Encounter Tab - Place icon
-        CustomNavigationButton(
-            icon = Icons.Default.Place,
-            isSelected = currentRoute == "encounter",
-            onClick = { onNavigate("encounter") }
         )
     }
 }
