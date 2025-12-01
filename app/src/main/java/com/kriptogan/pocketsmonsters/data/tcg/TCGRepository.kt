@@ -36,25 +36,75 @@ class TCGRepository(
             // Fallback to API if available
             if (apiService != null) {
                 try {
-                    // Query format: "nationalPokedexNumbers:25" for Pikachu
-                    val query = "nationalPokedexNumbers:$pokemonId"
-                    val response = apiService.searchCards(q = query, pageSize = 250)
+                    // Try searching by national Pokédex number
+                    // API format: nationalPokedexNumbers:[6] or nationalPokedexNumbers:6
+                    val queryByNumber = "nationalPokedexNumbers:$pokemonId"
+                    Log.d(TAG, "Searching TCG API for $pokemonName (ID: $pokemonId) with query: $queryByNumber")
+                    var response = apiService.searchCards(q = queryByNumber, pageSize = 250)
+                    
+                    Log.d(TAG, "Query response - Success: ${response.isSuccessful}, Code: ${response.code()}")
+                    
+                    // If the first format doesn't work, try with brackets (array format)
+                    if (!response.isSuccessful || response.body()?.data.isNullOrEmpty()) {
+                        val queryWithBrackets = "nationalPokedexNumbers:[$pokemonId]"
+                        Log.d(TAG, "Trying alternative query format: $queryWithBrackets")
+                        response = apiService.searchCards(q = queryWithBrackets, pageSize = 250)
+                        Log.d(TAG, "Alternative query response - Success: ${response.isSuccessful}, Code: ${response.code()}")
+                    }
                     
                     if (response.isSuccessful && response.body() != null) {
-                        val cards = response.body()!!.data
-                        val sets = extractUniqueSets(cards)
-                        
-                        Log.d(TAG, "Loaded ${cards.size} cards from API for $pokemonName")
-                        return@withContext PokemonTCGData(
-                            pokemonId = pokemonId,
-                            pokemonName = pokemonName,
-                            sets = sets,
-                            cards = cards
-                        )
+                        Log.d(TAG, "Query returned ${response.body()!!.data.size} cards")
+                    } else {
+                        val errorBody = try {
+                            response.errorBody()?.string() ?: "No error body"
+                        } catch (e: Exception) {
+                            "Error reading error body: ${e.message}"
+                        }
+                        Log.e(TAG, "Query failed - Code: ${response.code()}, Error: $errorBody")
+                    }
+                    
+                    if (response.isSuccessful) {
+                        val body = response.body()
+                        if (body != null) {
+                            val cards = body.data
+                            val sets = extractUniqueSets(cards)
+                            
+                            Log.d(TAG, "API Response - Total: ${body.totalCount}, Count: ${body.count}, Cards: ${cards.size}")
+                            Log.d(TAG, "Loaded ${cards.size} cards from API for $pokemonName (ID: $pokemonId)")
+                            
+                            if (cards.isEmpty()) {
+                                Log.w(TAG, "No cards found for $pokemonName (ID: $pokemonId) - API returned empty result")
+                                Log.w(TAG, "Response details - Page: ${body.page}, PageSize: ${body.pageSize}, TotalCount: ${body.totalCount}")
+                            } else {
+                                Log.d(TAG, "Found ${sets.size} unique sets for $pokemonName")
+                            }
+                            
+                            return@withContext PokemonTCGData(
+                                pokemonId = pokemonId,
+                                pokemonName = pokemonName,
+                                sets = sets,
+                                cards = cards
+                            )
+                        } else {
+                            Log.e(TAG, "API response body is null for $pokemonName (ID: $pokemonId)")
+                        }
+                    } else {
+                        val errorBody = try {
+                            response.errorBody()?.string() ?: "No error body"
+                        } catch (e: Exception) {
+                            "Error reading error body: ${e.message}"
+                        }
+                        Log.e(TAG, "API request failed for $pokemonName (ID: $pokemonId)")
+                        Log.e(TAG, "  Status Code: ${response.code()}")
+                        Log.e(TAG, "  Error Body: $errorBody")
+                        Log.e(TAG, "  Message: ${response.message()}")
                     }
                 } catch (e: Exception) {
-                    Log.e(TAG, "Error fetching TCG data from API: ${e.message}")
+                    Log.e(TAG, "Error fetching TCG data from API for $pokemonName (ID: $pokemonId): ${e.message}", e)
+                    e.printStackTrace()
                 }
+            } else {
+                Log.w(TAG, "TCG API service is null - cannot fetch TCG data")
             }
             
             // Return empty data if nothing found

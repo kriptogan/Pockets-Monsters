@@ -6,6 +6,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -36,6 +38,41 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
+/**
+ * Get the generation number for a Pokémon ID
+ */
+fun getPokemonGeneration(pokemonId: Int): Int {
+    return when {
+        pokemonId <= 151 -> 1
+        pokemonId <= 251 -> 2
+        pokemonId <= 386 -> 3
+        pokemonId <= 493 -> 4
+        pokemonId <= 649 -> 5
+        pokemonId <= 721 -> 6
+        pokemonId <= 809 -> 7
+        pokemonId <= 905 -> 8
+        else -> 9
+    }
+}
+
+/**
+ * Get the start ID for a generation
+ */
+fun getGenerationStartId(generation: Int): Int {
+    return when (generation) {
+        1 -> 1
+        2 -> 152
+        3 -> 252
+        4 -> 387
+        5 -> 494
+        6 -> 650
+        7 -> 722
+        8 -> 810
+        9 -> 906
+        else -> 1
+    }
+}
+
 @Composable
 fun PokemonGridScreen(
     uiState: PokemonUiState,
@@ -48,6 +85,30 @@ fun PokemonGridScreen(
     ownedPokemonIds: Set<Int> = emptySet()
 ) {
     val gridState = rememberLazyGridState()
+    
+    // Group Pokémon by generation
+    val pokemonByGeneration = remember(pokemonList) {
+        pokemonList.groupBy { getPokemonGeneration(it.id) }
+    }
+    
+    // Find the grid index (accounting for headers) of each generation header
+    val generationIndices = remember(pokemonList, searchQuery) {
+        if (searchQuery.isNotEmpty()) {
+            // When searching, no headers, return empty map (generation selector hidden)
+            emptyMap<Int, Int>()
+        } else {
+            // When not searching, calculate indices accounting for headers
+            val indices = mutableMapOf<Int, Int>()
+            var currentIndex = 0
+            pokemonByGeneration.keys.sorted().forEach { generation ->
+                indices[generation] = currentIndex // Header index
+                currentIndex += 1 // Skip header
+                val generationPokemon = pokemonByGeneration[generation] ?: emptyList()
+                currentIndex += generationPokemon.size // Skip Pokémon in this generation
+            }
+            indices
+        }
+    }
     
     // Restore scroll position to the last viewed Pokémon index
     LaunchedEffect(lastViewedPokemonIndex) {
@@ -68,7 +129,7 @@ fun PokemonGridScreen(
             label = { Text("Search Pokémon...") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
+                .padding(bottom = 8.dp),
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color(0xFFD32F2F), // Pokedex red
@@ -77,6 +138,51 @@ fun PokemonGridScreen(
                 unfocusedLabelColor = Color(0xFF666666) // Dark gray
             )
         )
+        
+        // Generation selector row
+        if (pokemonList.isNotEmpty() && searchQuery.isEmpty()) {
+            var scrollToGeneration by remember { mutableStateOf<Int?>(null) }
+            
+            // Handle scroll when generation is selected
+            LaunchedEffect(scrollToGeneration) {
+                scrollToGeneration?.let { gen ->
+                    generationIndices[gen]?.let { index ->
+                        gridState.animateScrollToItem(index)
+                    }
+                    scrollToGeneration = null
+                }
+            }
+            
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                (1..9).forEach { gen ->
+                    FilterChip(
+                        selected = false,
+                        onClick = {
+                            scrollToGeneration = gen
+                        },
+                        label = {
+                            Text(
+                                text = gen.toString(),
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        },
+                        modifier = Modifier.weight(1f),
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = Color(0xFFD32F2F),
+                            selectedLabelColor = Color.White,
+                            containerColor = Color(0xFFF5F5F5),
+                            labelColor = Color(0xFF1A1A1A)
+                        )
+                    )
+                }
+            }
+        }
         
         when (uiState) {
             is PokemonUiState.Loading -> {
@@ -123,19 +229,55 @@ fun PokemonGridScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         contentPadding = PaddingValues(bottom = 16.dp)
                     ) {
-                        items(
-                            items = pokemonList,
-                            key = { pokemon -> "${pokemon.id}_${ownedPokemonIds.contains(pokemon.id)}" }
-                        ) { pokemon ->
-                            val isOwned = ownedPokemonIds.contains(pokemon.id)
-                            PokemonGridCard(
-                                pokemon = pokemon,
-                                onClick = { onPokemonClick(pokemon.name) },
-                                onLongPress = onPokemonLongPress?.let { 
-                                    { it(pokemon.id, pokemon.name) }
-                                },
-                                isOwned = isOwned
-                            )
+                        // Only show generation headers if not searching
+                        if (searchQuery.isEmpty()) {
+                            // Group and display by generation
+                            pokemonByGeneration.keys.sorted().forEach { generation ->
+                                val generationPokemon = pokemonByGeneration[generation] ?: emptyList()
+                                
+                                // Generation header
+                                item(
+                                    key = "header_gen_$generation",
+                                    span = { GridItemSpan(4) }
+                                ) {
+                                    GenerationHeader(
+                                        generation = generation,
+                                        modifier = Modifier.padding(vertical = 16.dp, horizontal = 4.dp)
+                                    )
+                                }
+                                
+                                // Pokémon in this generation
+                                items(
+                                    items = generationPokemon,
+                                    key = { pokemon -> "${pokemon.id}_${ownedPokemonIds.contains(pokemon.id)}" }
+                                ) { pokemon ->
+                                    val isOwned = ownedPokemonIds.contains(pokemon.id)
+                                    PokemonGridCard(
+                                        pokemon = pokemon,
+                                        onClick = { onPokemonClick(pokemon.name) },
+                                        onLongPress = onPokemonLongPress?.let { 
+                                            { it(pokemon.id, pokemon.name) }
+                                        },
+                                        isOwned = isOwned
+                                    )
+                                }
+                            }
+                        } else {
+                            // When searching, show all results without generation headers
+                            items(
+                                items = pokemonList,
+                                key = { pokemon -> "${pokemon.id}_${ownedPokemonIds.contains(pokemon.id)}" }
+                            ) { pokemon ->
+                                val isOwned = ownedPokemonIds.contains(pokemon.id)
+                                PokemonGridCard(
+                                    pokemon = pokemon,
+                                    onClick = { onPokemonClick(pokemon.name) },
+                                    onLongPress = onPokemonLongPress?.let { 
+                                        { it(pokemon.id, pokemon.name) }
+                                    },
+                                    isOwned = isOwned
+                                )
+                            }
                         }
                     }
                 }
@@ -261,5 +403,30 @@ fun PokemonGridCard(
                 fontSize = 16.sp
             )
         }
+    }
+}
+
+/**
+ * Generation header component
+ */
+@Composable
+private fun GenerationHeader(
+    generation: Int,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFFD32F2F).copy(alpha = 0.1f)
+        ),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Text(
+            text = "Generation $generation",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFD32F2F),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+        )
     }
 }
