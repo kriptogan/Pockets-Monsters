@@ -50,21 +50,11 @@ fun PokedexContainer(
                 .zIndex(2f)
         )
         
-        // Custom bottom navigation - positioned adjacent to the bottom Pokedex border
-        CustomBottomNavigation(
-            currentRoute = currentRoute,
-            onNavigate = onNavigate,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 108.dp) // Position exactly at the bottom border (no gap)
-                .zIndex(3f) // Above the Pokedex borders
-        )
-        
-        // Content area - positioned between borders and above navigation bar
+        // Content area - positioned between top and bottom borders
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 108.dp, bottom = 180.dp) // Top border + bottom border + navigation bar height
+                .padding(top = 108.dp, bottom = 108.dp) // Top border + bottom border
                 .zIndex(1f)
         ) {
             content()
