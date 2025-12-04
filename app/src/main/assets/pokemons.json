@@ -11472,6 +11472,72 @@
     }
   },
   {
+    "id": 70,
+    "name": "weepinbell",
+    "height": 10,
+    "weight": 64,
+    "base_experience": 137,
+    "sprite_path": "weepinbell.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "grass"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "poison"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 65,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 90,
+        "effort": 2,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 50,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 85,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 45,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 55,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ]
+  },
+  {
     "id": 71,
     "name": "victreebel",
     "height": 17,
@@ -35416,6 +35482,72 @@
         "held_item": "razor-fang"
       }
     }
+  },
+  {
+    "id": 208,
+    "name": "steelix",
+    "height": 92,
+    "weight": 4000,
+    "base_experience": 179,
+    "sprite_path": "steelix.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "steel"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "ground"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 75,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 85,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 200,
+        "effort": 2,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 55,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 65,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 30,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ]
   },
   {
     "id": 209,
@@ -71904,6 +72036,66 @@
     ]
   },
   {
+    "id": 424,
+    "name": "ambipom",
+    "height": 12,
+    "weight": 203,
+    "base_experience": 169,
+    "sprite_path": "ambipom.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "normal"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 75,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 100,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 66,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 60,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 66,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 115,
+        "effort": 2,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ]
+  },
+  {
     "id": 425,
     "name": "drifloon",
     "height": 4,
@@ -74546,6 +74738,72 @@
         "move": "mimic"
       }
     }
+  },
+  {
+    "id": 439,
+    "name": "mime-jr",
+    "height": 6,
+    "weight": 130,
+    "base_experience": 62,
+    "sprite_path": "mime-jr.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "psychic"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "fairy"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 20,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 25,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 45,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 70,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 90,
+        "effort": 1,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 60,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ]
   },
   {
     "id": 440,
@@ -80384,6 +80642,66 @@
         "name": "last-resort",
         "level_learned_at": 55,
         "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 471,
+    "name": "glaceon",
+    "height": 8,
+    "weight": 259,
+    "base_experience": 184,
+    "sprite_path": "glaceon.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "ice"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 65,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 60,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 110,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 130,
+        "effort": 2,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 95,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 65,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
       }
     ]
   },
@@ -110952,6 +111270,72 @@
     }
   },
   {
+    "id": 660,
+    "name": "diggersby",
+    "height": 10,
+    "weight": 424,
+    "base_experience": 148,
+    "sprite_path": "diggersby.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "normal"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "ground"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 85,
+        "effort": 2,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 56,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 77,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 50,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 77,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 78,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ]
+  },
+  {
     "id": 661,
     "name": "fletchling",
     "height": 3,
@@ -113237,6 +113621,66 @@
         "name": "hammer-arm",
         "level_learned_at": 58,
         "version_group": "sword-shield"
+      }
+    ]
+  },
+  {
+    "id": 676,
+    "name": "furfrou",
+    "height": 12,
+    "weight": 280,
+    "base_experience": 165,
+    "sprite_path": "furfrou.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "normal"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 75,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 60,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 65,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 90,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 102,
+        "effort": 1,
+        "stat": {
+          "name": "speed"
+        }
       }
     ]
   },
@@ -124609,6 +125053,66 @@
     ]
   },
   {
+    "id": 746,
+    "name": "wishiwashi-solo",
+    "height": 2,
+    "weight": 3,
+    "base_experience": 61,
+    "sprite_path": "wishiwashi-solo.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "water"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 45,
+        "effort": 1,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 20,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 20,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 25,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 25,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 40,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ]
+  },
+  {
     "id": 747,
     "name": "mareanie",
     "height": 4,
@@ -124770,6 +125274,72 @@
       "method": "level-up",
       "conditions": {}
     }
+  },
+  {
+    "id": 748,
+    "name": "toxapex",
+    "height": 7,
+    "weight": 145,
+    "base_experience": 173,
+    "sprite_path": "toxapex.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "poison"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "water"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 50,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 63,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 152,
+        "effort": 2,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 53,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 142,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 35,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ]
   },
   {
     "id": 749,
@@ -126537,6 +127107,72 @@
       "method": "level-up",
       "conditions": {}
     }
+  },
+  {
+    "id": 760,
+    "name": "bewear",
+    "height": 21,
+    "weight": 1350,
+    "base_experience": 175,
+    "sprite_path": "bewear.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "normal"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "fighting"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 120,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 125,
+        "effort": 2,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 55,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 60,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 60,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ]
   },
   {
     "id": 761,
@@ -139256,6 +139892,72 @@
         "name": "sand-tomb",
         "level_learned_at": 51,
         "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 845,
+    "name": "cramorant",
+    "height": 8,
+    "weight": 180,
+    "base_experience": 166,
+    "sprite_path": "cramorant.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "flying"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "water"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 70,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 85,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 55,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 85,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 95,
+        "effort": 2,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 85,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
       }
     ]
   },
@@ -165501,6 +166203,138 @@
         "name": "hyper-beam",
         "level_learned_at": 98,
         "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1009,
+    "name": "walking-wake",
+    "height": 35,
+    "weight": 2800,
+    "base_experience": 295,
+    "sprite_path": "walking-wake.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "water"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "dragon"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 99,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 83,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 91,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 125,
+        "effort": 3,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 83,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 109,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ]
+  },
+  {
+    "id": 1010,
+    "name": "iron-leaves",
+    "height": 15,
+    "weight": 1250,
+    "base_experience": 295,
+    "sprite_path": "iron-leaves.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "grass"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "psychic"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 90,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 130,
+        "effort": 3,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 88,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 70,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 108,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 104,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
       }
     ]
   }

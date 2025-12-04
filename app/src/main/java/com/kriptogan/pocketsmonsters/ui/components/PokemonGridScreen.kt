@@ -86,9 +86,19 @@ fun PokemonGridScreen(
 ) {
     val gridState = rememberLazyGridState()
     
-    // Group Pokémon by generation
-    val pokemonByGeneration = remember(pokemonList) {
-        pokemonList.groupBy { getPokemonGeneration(it.id) }
+    // Group Pokémon by generation - ensure all are included and sorted by ID
+    // Use the actual pokemonList directly to avoid any missing Pokémon
+    val pokemonByGeneration = remember(pokemonList.size, pokemonList.firstOrNull()?.id) {
+        pokemonList
+            .sortedBy { it.id } // Sort by ID first to ensure proper ordering
+            .groupBy { getPokemonGeneration(it.id) }
+            .also { grouped ->
+                // Debug: Log if any generation is missing Pokémon
+                val totalGrouped = grouped.values.sumOf { it.size }
+                if (totalGrouped != pokemonList.size) {
+                    android.util.Log.w("PokemonGridScreen", "Warning: Grouped ${totalGrouped} Pokémon but list has ${pokemonList.size}")
+                }
+            }
     }
     
     // Find the grid index (accounting for headers) of each generation header
@@ -157,28 +167,19 @@ fun PokemonGridScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 (1..9).forEach { gen ->
-                    FilterChip(
-                        selected = false,
-                        onClick = {
-                            scrollToGeneration = gen
-                        },
-                        label = {
-                            Text(
-                                text = gen.toString(),
-                                style = MaterialTheme.typography.labelMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        },
-                        modifier = Modifier.weight(1f),
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color(0xFFD32F2F),
-                            selectedLabelColor = Color.White,
-                            containerColor = Color(0xFFF5F5F5),
-                            labelColor = Color(0xFF1A1A1A)
-                        )
+                    Text(
+                        text = gen.toString(),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFD32F2F),
+                        modifier = Modifier
+                            .clickable {
+                                scrollToGeneration = gen
+                            }
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
             }
@@ -231,22 +232,31 @@ fun PokemonGridScreen(
                     ) {
                         // Only show generation headers if not searching
                         if (searchQuery.isEmpty()) {
-                            // Group and display by generation
+                            // Use the pre-computed grouping to ensure consistency
+                            // Verify all Pokémon are included (debug check)
+                            val totalInGroups = pokemonByGeneration.values.sumOf { it.size }
+                            if (totalInGroups != pokemonList.size) {
+                                android.util.Log.e("PokemonGridScreen", "Mismatch: ${pokemonList.size} total Pokémon but ${totalInGroups} in groups. Missing: ${pokemonList.size - totalInGroups}")
+                            }
+                            
                             pokemonByGeneration.keys.sorted().forEach { generation ->
                                 val generationPokemon = pokemonByGeneration[generation] ?: emptyList()
                                 
-                                // Generation header
+                                // Generation header with owned/total counter
                                 item(
                                     key = "header_gen_$generation",
                                     span = { GridItemSpan(4) }
                                 ) {
+                                    val ownedInGen = generationPokemon.count { ownedPokemonIds.contains(it.id) }
                                     GenerationHeader(
                                         generation = generation,
+                                        totalCount = generationPokemon.size,
+                                        ownedCount = ownedInGen,
                                         modifier = Modifier.padding(vertical = 16.dp, horizontal = 4.dp)
                                     )
                                 }
                                 
-                                // Pokémon in this generation
+                                // Pokémon in this generation - already sorted by ID from grouping
                                 items(
                                     items = generationPokemon,
                                     key = { pokemon -> "${pokemon.id}_${ownedPokemonIds.contains(pokemon.id)}" }
@@ -407,11 +417,13 @@ fun PokemonGridCard(
 }
 
 /**
- * Generation header component
+ * Generation header component with owned/total counter
  */
 @Composable
 private fun GenerationHeader(
     generation: Int,
+    totalCount: Int,
+    ownedCount: Int,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -421,12 +433,25 @@ private fun GenerationHeader(
         ),
         shape = RoundedCornerShape(8.dp)
     ) {
-        Text(
-            text = "Generation $generation",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFFD32F2F),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Generation $generation",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFD32F2F)
+            )
+            Text(
+                text = "$ownedCount/$totalCount",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF666666)
+            )
+        }
     }
 }
