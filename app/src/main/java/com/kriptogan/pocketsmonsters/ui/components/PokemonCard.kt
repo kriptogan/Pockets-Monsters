@@ -31,8 +31,8 @@ import com.kriptogan.pocketsmonsters.data.models.Pokemon
 @Composable
 fun PokemonCard(
     pokemon: Pokemon,
-    onClick: () -> Unit,
-    onLongPress: (() -> Unit)? = null,
+    onClick: () -> Unit, // Now toggles ownership
+    onLongPress: (() -> Unit)? = null, // Now opens details
     isOwned: Boolean = false,
     modifier: Modifier = Modifier
 ) {
@@ -67,12 +67,14 @@ fun PokemonCard(
             .pointerInput(pokemon.id) {
                 detectTapGestures(
                     onLongPress = {
+                        // Long press opens details
                         if (onLongPress != null) {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             onLongPress()
                         }
                     },
                     onTap = { 
+                        // Tap toggles ownership
                         haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                         onClick() 
                     },

@@ -264,9 +264,13 @@ fun PokemonGridScreen(
                                     val isOwned = ownedPokemonIds.contains(pokemon.id)
                                     PokemonGridCard(
                                         pokemon = pokemon,
-                                        onClick = { onPokemonClick(pokemon.name) },
-                                        onLongPress = onPokemonLongPress?.let { 
-                                            { it(pokemon.id, pokemon.name) }
+                                        onClick = { 
+                                            // Tap toggles ownership
+                                            onPokemonLongPress?.invoke(pokemon.id, pokemon.name)
+                                        },
+                                        onLongPress = { 
+                                            // Long press opens details
+                                            onPokemonClick(pokemon.name)
                                         },
                                         isOwned = isOwned
                                     )
@@ -281,9 +285,13 @@ fun PokemonGridScreen(
                                 val isOwned = ownedPokemonIds.contains(pokemon.id)
                                 PokemonGridCard(
                                     pokemon = pokemon,
-                                    onClick = { onPokemonClick(pokemon.name) },
-                                    onLongPress = onPokemonLongPress?.let { 
-                                        { it(pokemon.id, pokemon.name) }
+                                    onClick = { 
+                                        // Tap toggles ownership
+                                        onPokemonLongPress?.invoke(pokemon.id, pokemon.name)
+                                    },
+                                    onLongPress = { 
+                                        // Long press opens details
+                                        onPokemonClick(pokemon.name)
                                     },
                                     isOwned = isOwned
                                 )
@@ -327,8 +335,8 @@ fun PokemonGridScreen(
 @Composable
 fun PokemonGridCard(
     pokemon: Pokemon,
-    onClick: () -> Unit,
-    onLongPress: (() -> Unit)? = null,
+    onClick: () -> Unit, // Now toggles ownership
+    onLongPress: (() -> Unit)? = null, // Now opens details
     isOwned: Boolean = false,
     modifier: Modifier = Modifier
 ) {
@@ -365,12 +373,14 @@ fun PokemonGridCard(
             .pointerInput(pokemon.id) {
                 detectTapGestures(
                     onLongPress = {
+                        // Long press opens details
                         if (onLongPress != null) {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             onLongPress()
                         }
                     },
                     onTap = { 
+                        // Tap toggles ownership
                         haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                         onClick() 
                     },
