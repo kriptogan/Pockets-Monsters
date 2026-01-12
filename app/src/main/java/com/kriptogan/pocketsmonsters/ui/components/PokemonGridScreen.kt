@@ -28,6 +28,8 @@ import com.kriptogan.pocketsmonsters.ui.viewmodel.PokemonUiState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -73,6 +75,39 @@ fun getGenerationStartId(generation: Int): Int {
     }
 }
 
+/**
+ * TCG type to digital type mapping
+ */
+val TCG_TYPE_MAPPING = mapOf(
+    "Colorless" to listOf("normal", "flying"),
+    "Fire" to listOf("fire"),
+    "Water" to listOf("water", "ice"),
+    "Lightning" to listOf("electric"),
+    "Grass" to listOf("grass", "bug"),
+    "Fighting" to listOf("fighting", "ground", "rock"),
+    "Psychic" to listOf("psychic", "ghost", "fairy"),
+    "Darkness" to listOf("dark", "poison"),
+    "Metal" to listOf("steel"),
+    "Dragon" to listOf("dragon")
+)
+
+/**
+ * Get all TCG types
+ */
+fun getAllTCGTypes(): List<String> {
+    return TCG_TYPE_MAPPING.keys.sorted()
+}
+
+/**
+ * Check if a Pokémon matches a TCG type
+ */
+fun pokemonMatchesTCGType(pokemon: Pokemon, tcgType: String): Boolean {
+    val digitalTypes = TCG_TYPE_MAPPING[tcgType] ?: return false
+    return pokemon.types.any { typeSlot ->
+        digitalTypes.contains(typeSlot.type.name.lowercase())
+    }
+}
+
 @Composable
 fun PokemonGridScreen(
     uiState: PokemonUiState,
@@ -86,23 +121,46 @@ fun PokemonGridScreen(
 ) {
     val gridState = rememberLazyGridState()
     
-    // Group Pokémon by generation - ensure all are included and sorted by ID
-    // Use the actual pokemonList directly to avoid any missing Pokémon
-    val pokemonByGeneration = remember(pokemonList.size, pokemonList.firstOrNull()?.id) {
+    // Filter states
+    var showMissingOnly by remember { mutableStateOf(false) }
+    var selectedTCGType by remember { mutableStateOf<String?>(null) }
+    
+    // Get all TCG types
+    val allTCGTypes = remember { getAllTCGTypes() }
+    
+    // Filter Pokémon list based on "Missing" and "Type" filters
+    val filteredPokemonList = remember(pokemonList, ownedPokemonIds, showMissingOnly, selectedTCGType) {
+        val currentTCGType = selectedTCGType // Store in local variable to avoid smart cast issue
         pokemonList
+            .filter { pokemon ->
+                // Apply "Missing" filter
+                val passesMissingFilter = !showMissingOnly || !ownedPokemonIds.contains(pokemon.id)
+                
+                // Apply "Type" filter (TCG format)
+                val passesTypeFilter = currentTCGType == null || 
+                    pokemonMatchesTCGType(pokemon, currentTCGType)
+                
+                passesMissingFilter && passesTypeFilter
+            }
+    }
+    
+    // Group Pokémon by generation - ensure all are included and sorted by ID
+    // Use the filtered list to respect the "Missing" filter
+    val pokemonByGeneration = remember(filteredPokemonList.size, filteredPokemonList.firstOrNull()?.id) {
+        filteredPokemonList
             .sortedBy { it.id } // Sort by ID first to ensure proper ordering
             .groupBy { getPokemonGeneration(it.id) }
             .also { grouped ->
                 // Debug: Log if any generation is missing Pokémon
                 val totalGrouped = grouped.values.sumOf { it.size }
-                if (totalGrouped != pokemonList.size) {
-                    android.util.Log.w("PokemonGridScreen", "Warning: Grouped ${totalGrouped} Pokémon but list has ${pokemonList.size}")
+                if (totalGrouped != filteredPokemonList.size) {
+                    android.util.Log.w("PokemonGridScreen", "Warning: Grouped ${totalGrouped} Pokémon but list has ${filteredPokemonList.size}")
                 }
             }
     }
     
     // Find the grid index (accounting for headers) of each generation header
-    val generationIndices = remember(pokemonList, searchQuery) {
+    val generationIndices = remember(filteredPokemonList, searchQuery) {
         if (searchQuery.isNotEmpty()) {
             // When searching, no headers, return empty map (generation selector hidden)
             emptyMap<Int, Int>()
@@ -149,8 +207,11 @@ fun PokemonGridScreen(
             )
         )
         
-        // Generation selector row
-        if (pokemonList.isNotEmpty() && searchQuery.isEmpty()) {
+        // Filter buttons row
+        if (pokemonList.isNotEmpty()) {
+            var showGenerationDialog by remember { mutableStateOf(false) }
+            var showTypeDialog by remember { mutableStateOf(false) }
+            var showDataDialog by remember { mutableStateOf(false) }
             var scrollToGeneration by remember { mutableStateOf<Int?>(null) }
             
             // Handle scroll when generation is selected
@@ -167,21 +228,482 @@ fun PokemonGridScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.Start
             ) {
-                (1..9).forEach { gen ->
+                // Gen button - only show when not searching
+                if (searchQuery.isEmpty()) {
+                    Button(
+                        onClick = { showGenerationDialog = true },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFD32F2F) // Pokedex red
+                        ),
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(
+                            text = "Gen",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                
+                // Type button - show always
+                Button(
+                    onClick = { showTypeDialog = true },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedTCGType != null) Color(0xFF4CAF50) else Color(0xFFD32F2F) // Green when active, red when inactive
+                    ),
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
                     Text(
-                        text = gen.toString(),
+                        text = selectedTCGType ?: "Type",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFD32F2F),
-                        modifier = Modifier
-                            .clickable {
-                                scrollToGeneration = gen
-                            }
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                        fontWeight = FontWeight.Bold
                     )
                 }
+                
+                // Missing button - show always
+                Button(
+                    onClick = { showMissingOnly = !showMissingOnly },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (showMissingOnly) Color(0xFF4CAF50) else Color(0xFFD32F2F) // Green when active, red when inactive
+                    ),
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Text(
+                        text = "Missing",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                
+                // Data button - show always
+                Button(
+                    onClick = { showDataDialog = true },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFD32F2F) // Pokedex red
+                    ),
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Text(
+                        text = "%",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            
+            // Generation selection dialog
+            if (showGenerationDialog) {
+                AlertDialog(
+                    onDismissRequest = { showGenerationDialog = false },
+                    title = {
+                        Text(
+                            text = "Select Generation",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFD32F2F)
+                        )
+                    },
+                    text = {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            (1..9).forEach { gen ->
+                                val generationPokemon = pokemonByGeneration[gen] ?: emptyList()
+                                val ownedInGen = generationPokemon.count { ownedPokemonIds.contains(it.id) }
+                                
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            scrollToGeneration = gen
+                                            showGenerationDialog = false
+                                        },
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = Color.White
+                                    ),
+                                    shape = RoundedCornerShape(8.dp)
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = "Generation $gen",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color(0xFF1A1A1A)
+                                        )
+                                        Text(
+                                            text = "$ownedInGen/${generationPokemon.size}",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = Color(0xFF666666)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    confirmButton = {},
+                    dismissButton = {
+                        TextButton(
+                            onClick = { showGenerationDialog = false }
+                        ) {
+                            Text("Cancel")
+                        }
+                    },
+                    containerColor = Color.White,
+                    shape = RoundedCornerShape(16.dp)
+                )
+            }
+            
+            // Type selection dialog
+            if (showTypeDialog) {
+                AlertDialog(
+                    onDismissRequest = { showTypeDialog = false },
+                    title = {
+                        Text(
+                            text = "Select Type",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFD32F2F)
+                        )
+                    },
+                    text = {
+                        val scrollState = rememberScrollState()
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(scrollState),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            // Option to clear type filter
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        selectedTCGType = null
+                                        showTypeDialog = false
+                                    },
+                                colors = CardDefaults.cardColors(
+                                    containerColor = if (selectedTCGType == null) Color(0xFF4CAF50).copy(alpha = 0.2f) else Color.White
+                                ),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "All Types",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF1A1A1A)
+                                    )
+                                    val totalCount = if (showMissingOnly) {
+                                        pokemonList.count { !ownedPokemonIds.contains(it.id) }
+                                    } else {
+                                        pokemonList.size
+                                    }
+                                    Text(
+                                        text = "$totalCount",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Color(0xFF666666)
+                                    )
+                                }
+                            }
+                            
+                            // TCG Type options
+                            allTCGTypes.forEach { tcgType ->
+                                val tcgTypePokemon = pokemonList.filter { pokemon ->
+                                    pokemonMatchesTCGType(pokemon, tcgType)
+                                }
+                                val filteredTCGTypePokemon = if (showMissingOnly) {
+                                    tcgTypePokemon.filter { !ownedPokemonIds.contains(it.id) }
+                                } else {
+                                    tcgTypePokemon
+                                }
+                                
+                                // Get the digital types included in this TCG type
+                                val digitalTypes = TCG_TYPE_MAPPING[tcgType] ?: emptyList()
+                                val typeLabel = if (digitalTypes.size > 1) {
+                                    "$tcgType (${digitalTypes.joinToString(", ") { it.replaceFirstChar { char -> char.uppercaseChar() } }})"
+                                } else {
+                                    tcgType
+                                }
+                                
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            selectedTCGType = tcgType
+                                            showTypeDialog = false
+                                        },
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = if (selectedTCGType == tcgType) Color(0xFF4CAF50).copy(alpha = 0.2f) else Color.White
+                                    ),
+                                    shape = RoundedCornerShape(8.dp)
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Column {
+                                            Text(
+                                                text = tcgType,
+                                                style = MaterialTheme.typography.titleMedium,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color(0xFF1A1A1A)
+                                            )
+                                            if (digitalTypes.size > 1) {
+                                                Text(
+                                                    text = digitalTypes.joinToString(", ") { it.replaceFirstChar { char -> char.uppercaseChar() } },
+                                                    style = MaterialTheme.typography.bodySmall,
+                                                    color = Color(0xFF666666),
+                                                    fontSize = 12.sp
+                                                )
+                                            }
+                                        }
+                                        Text(
+                                            text = "${filteredTCGTypePokemon.size}",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = Color(0xFF666666)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    confirmButton = {},
+                    dismissButton = {
+                        TextButton(
+                            onClick = { showTypeDialog = false }
+                        ) {
+                            Text("Cancel")
+                        }
+                    },
+                    containerColor = Color.White,
+                    shape = RoundedCornerShape(16.dp)
+                )
+            }
+            
+            // Data statistics dialog
+            if (showDataDialog) {
+                // Calculate statistics
+                val totalPokemon = pokemonList.size
+                val totalOwned = ownedPokemonIds.size
+                val totalOwnedPercentage = if (totalPokemon > 0) {
+                    (totalOwned.toFloat() / totalPokemon * 100).toInt()
+                } else 0
+                
+                // Calculate by generation
+                val ownedByGen = remember(pokemonList, ownedPokemonIds) {
+                    (1..9).map { gen ->
+                        val genPokemon = pokemonList.filter { getPokemonGeneration(it.id) == gen }
+                        val genOwned = genPokemon.count { ownedPokemonIds.contains(it.id) }
+                        val genPercentage = if (genPokemon.isNotEmpty()) {
+                            (genOwned.toFloat() / genPokemon.size * 100).toInt()
+                        } else 0
+                        gen to Triple(genOwned, genPokemon.size, genPercentage)
+                    }.toMap()
+                }
+                
+                // Calculate by TCG type
+                val ownedByTCGType = remember(pokemonList, ownedPokemonIds) {
+                    getAllTCGTypes().map { tcgType ->
+                        val typePokemon = pokemonList.filter { pokemonMatchesTCGType(it, tcgType) }
+                        val typeOwned = typePokemon.count { ownedPokemonIds.contains(it.id) }
+                        val typePercentage = if (typePokemon.isNotEmpty()) {
+                            (typeOwned.toFloat() / typePokemon.size * 100).toInt()
+                        } else 0
+                        tcgType to Triple(typeOwned, typePokemon.size, typePercentage)
+                    }.toMap()
+                }
+                
+                val scrollState = rememberScrollState()
+                
+                AlertDialog(
+                    onDismissRequest = { showDataDialog = false },
+                    title = {
+                        Text(
+                            text = "Collection Statistics",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFD32F2F)
+                        )
+                    },
+                    text = {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(scrollState),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            // Total owned percentage
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Color(0xFFD32F2F).copy(alpha = 0.1f)
+                                ),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Text(
+                                        text = "Total Collection",
+                                        style = MaterialTheme.typography.titleLarge,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFFD32F2F)
+                                    )
+                                    Text(
+                                        text = "$totalOwned / $totalPokemon",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = Color(0xFF1A1A1A)
+                                    )
+                                    Text(
+                                        text = "$totalOwnedPercentage%",
+                                        style = MaterialTheme.typography.headlineMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF4CAF50)
+                                    )
+                                }
+                            }
+                            
+                            // By generation
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Color.White
+                                ),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Text(
+                                        text = "By Generation",
+                                        style = MaterialTheme.typography.titleLarge,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF1A1A1A)
+                                    )
+                                    (1..9).forEach { gen ->
+                                        val (owned, total, percentage) = ownedByGen[gen] ?: Triple(0, 0, 0)
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Text(
+                                                text = "Gen $gen",
+                                                style = MaterialTheme.typography.bodyLarge,
+                                                fontWeight = FontWeight.Medium,
+                                                color = Color(0xFF1A1A1A)
+                                            )
+                                            Row(
+                                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Text(
+                                                    text = "$owned/$total",
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    color = Color(0xFF666666)
+                                                )
+                                                Text(
+                                                    text = "$percentage%",
+                                                    style = MaterialTheme.typography.bodyLarge,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = Color(0xFF4CAF50)
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            // By TCG type
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Color.White
+                                ),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Text(
+                                        text = "By TCG Type",
+                                        style = MaterialTheme.typography.titleLarge,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF1A1A1A)
+                                    )
+                                    getAllTCGTypes().forEach { tcgType ->
+                                        val (owned, total, percentage) = ownedByTCGType[tcgType] ?: Triple(0, 0, 0)
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Text(
+                                                text = tcgType,
+                                                style = MaterialTheme.typography.bodyLarge,
+                                                fontWeight = FontWeight.Medium,
+                                                color = Color(0xFF1A1A1A)
+                                            )
+                                            Row(
+                                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Text(
+                                                    text = "$owned/$total",
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    color = Color(0xFF666666)
+                                                )
+                                                Text(
+                                                    text = "$percentage%",
+                                                    style = MaterialTheme.typography.bodyLarge,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = Color(0xFF4CAF50)
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    confirmButton = {},
+                    dismissButton = {
+                        TextButton(
+                            onClick = { showDataDialog = false }
+                        ) {
+                            Text("Close")
+                        }
+                    },
+                    containerColor = Color.White,
+                    shape = RoundedCornerShape(16.dp)
+                )
             }
         }
         
@@ -198,7 +720,7 @@ fun PokemonGridScreen(
             }
             
             is PokemonUiState.Success -> {
-                if (pokemonList.isEmpty()) {
+                if (filteredPokemonList.isEmpty()) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -235,8 +757,8 @@ fun PokemonGridScreen(
                             // Use the pre-computed grouping to ensure consistency
                             // Verify all Pokémon are included (debug check)
                             val totalInGroups = pokemonByGeneration.values.sumOf { it.size }
-                            if (totalInGroups != pokemonList.size) {
-                                android.util.Log.e("PokemonGridScreen", "Mismatch: ${pokemonList.size} total Pokémon but ${totalInGroups} in groups. Missing: ${pokemonList.size - totalInGroups}")
+                            if (totalInGroups != filteredPokemonList.size) {
+                                android.util.Log.e("PokemonGridScreen", "Mismatch: ${filteredPokemonList.size} total Pokémon but ${totalInGroups} in groups. Missing: ${filteredPokemonList.size - totalInGroups}")
                             }
                             
                             pokemonByGeneration.keys.sorted().forEach { generation ->
@@ -277,9 +799,9 @@ fun PokemonGridScreen(
                                 }
                             }
                         } else {
-                            // When searching, show all results without generation headers
+                            // When searching, show filtered results without generation headers
                             items(
-                                items = pokemonList,
+                                items = filteredPokemonList,
                                 key = { pokemon -> "${pokemon.id}_${ownedPokemonIds.contains(pokemon.id)}" }
                             ) { pokemon ->
                                 val isOwned = ownedPokemonIds.contains(pokemon.id)

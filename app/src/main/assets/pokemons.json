@@ -166337,5 +166337,2320 @@
         }
       }
     ]
+  },
+  {
+    "id": 1011,
+    "name": "dipplin",
+    "height": 4,
+    "weight": 97,
+    "base_experience": 170,
+    "sprite_path": "dipplin.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "grass"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "dragon"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 110,
+        "effort": 2,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 95,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 40,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "supersweet-syrup"
+        },
+        "is_hidden": false,
+        "slot": 1
+      },
+      {
+        "ability": {
+          "name": "gluttony"
+        },
+        "is_hidden": false,
+        "slot": 2
+      },
+      {
+        "ability": {
+          "name": "sticky-hold"
+        },
+        "is_hidden": true,
+        "slot": 3
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "double-hit",
+        "level_learned_at": 0,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "withdraw",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "sweet-scent",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "recycle",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "astonish",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-tail",
+        "level_learned_at": 4,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "growth",
+        "level_learned_at": 8,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-breath",
+        "level_learned_at": 12,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "protect",
+        "level_learned_at": 16,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "bullet-seed",
+        "level_learned_at": 20,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "syrup-bomb",
+        "level_learned_at": 28,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-pulse",
+        "level_learned_at": 32,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "recover",
+        "level_learned_at": 36,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "energy-ball",
+        "level_learned_at": 40,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "substitute",
+        "level_learned_at": 44,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1012,
+    "name": "poltchageist",
+    "height": 1,
+    "weight": 11,
+    "base_experience": 62,
+    "sprite_path": "poltchageist.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "grass"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "ghost"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 40,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 45,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 45,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 74,
+        "effort": 1,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 54,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 50,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "hospitality"
+        },
+        "is_hidden": false,
+        "slot": 1
+      },
+      {
+        "ability": {
+          "name": "heatproof"
+        },
+        "is_hidden": true,
+        "slot": 3
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "stun-spore",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "withdraw",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "astonish",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "absorb",
+        "level_learned_at": 6,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "life-dew",
+        "level_learned_at": 12,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "foul-play",
+        "level_learned_at": 18,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "mega-drain",
+        "level_learned_at": 24,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "hex",
+        "level_learned_at": 30,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "rage-powder",
+        "level_learned_at": 36,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "giga-drain",
+        "level_learned_at": 42,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "shadow-ball",
+        "level_learned_at": 48,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "memento",
+        "level_learned_at": 54,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "leaf-storm",
+        "level_learned_at": 60,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1013,
+    "name": "sinistcha",
+    "height": 2,
+    "weight": 22,
+    "base_experience": 178,
+    "sprite_path": "sinistcha.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "grass"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "ghost"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 71,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 60,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 106,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 121,
+        "effort": 2,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 70,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "hospitality"
+        },
+        "is_hidden": false,
+        "slot": 1
+      },
+      {
+        "ability": {
+          "name": "heatproof"
+        },
+        "is_hidden": true,
+        "slot": 3
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "matcha-gotcha",
+        "level_learned_at": 0,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "stun-spore",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "withdraw",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "astonish",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "absorb",
+        "level_learned_at": 6,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "life-dew",
+        "level_learned_at": 12,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "foul-play",
+        "level_learned_at": 18,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "mega-drain",
+        "level_learned_at": 24,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "hex",
+        "level_learned_at": 30,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "rage-powder",
+        "level_learned_at": 36,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "strength-sap",
+        "level_learned_at": 42,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "shadow-ball",
+        "level_learned_at": 48,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "memento",
+        "level_learned_at": 54,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "leaf-storm",
+        "level_learned_at": 60,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1014,
+    "name": "okidogi",
+    "height": 18,
+    "weight": 922,
+    "base_experience": 278,
+    "sprite_path": "okidogi.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "poison"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "fighting"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 88,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 128,
+        "effort": 3,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 115,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 58,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 86,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "toxic-chain"
+        },
+        "is_hidden": false,
+        "slot": 1
+      },
+      {
+        "ability": {
+          "name": "guard-dog"
+        },
+        "is_hidden": true,
+        "slot": 3
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "bite",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "low-kick",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "bulk-up",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "howl",
+        "level_learned_at": 8,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "poison-fang",
+        "level_learned_at": 16,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "force-palm",
+        "level_learned_at": 24,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "counter",
+        "level_learned_at": 32,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "poison-jab",
+        "level_learned_at": 40,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "brutal-swing",
+        "level_learned_at": 48,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "crunch",
+        "level_learned_at": 56,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "superpower",
+        "level_learned_at": 64,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "giga-impact",
+        "level_learned_at": 72,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1015,
+    "name": "munkidori",
+    "height": 10,
+    "weight": 122,
+    "base_experience": 278,
+    "sprite_path": "munkidori.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "poison"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "psychic"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 88,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 75,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 66,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 130,
+        "effort": 3,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 90,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 106,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "toxic-chain"
+        },
+        "is_hidden": false,
+        "slot": 1
+      },
+      {
+        "ability": {
+          "name": "frisk"
+        },
+        "is_hidden": true,
+        "slot": 3
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "scratch",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "confusion",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "fake-out",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "flatter",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "helping-hand",
+        "level_learned_at": 8,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "psybeam",
+        "level_learned_at": 16,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "clear-smog",
+        "level_learned_at": 24,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "poison-jab",
+        "level_learned_at": 32,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "psychic",
+        "level_learned_at": 40,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "sludge-wave",
+        "level_learned_at": 48,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "nasty-plot",
+        "level_learned_at": 56,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "future-sight",
+        "level_learned_at": 64,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "parting-shot",
+        "level_learned_at": 72,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1016,
+    "name": "fezandipiti",
+    "height": 14,
+    "weight": 301,
+    "base_experience": 278,
+    "sprite_path": "fezandipiti.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "poison"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "fairy"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 88,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 91,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 82,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 70,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 125,
+        "effort": 3,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 99,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "toxic-chain"
+        },
+        "is_hidden": false,
+        "slot": 1
+      },
+      {
+        "ability": {
+          "name": "technician"
+        },
+        "is_hidden": true,
+        "slot": 3
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "double-kick",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "peck",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "poison-gas",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "disarming-voice",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "quick-attack",
+        "level_learned_at": 8,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "attract",
+        "level_learned_at": 16,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "wing-attack",
+        "level_learned_at": 24,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "cross-poison",
+        "level_learned_at": 32,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "tail-slap",
+        "level_learned_at": 40,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "beat-up",
+        "level_learned_at": 48,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "swagger",
+        "level_learned_at": 56,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "flatter",
+        "level_learned_at": 56,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "roost",
+        "level_learned_at": 64,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "moonblast",
+        "level_learned_at": 72,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1017,
+    "name": "ogerpon",
+    "height": 12,
+    "weight": 398,
+    "base_experience": 275,
+    "sprite_path": "ogerpon.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "grass"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 120,
+        "effort": 3,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 84,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 60,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 96,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 110,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "defiant"
+        },
+        "is_hidden": false,
+        "slot": 1
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "vine-whip",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "leech-seed",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "quick-attack",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "follow-me",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "focus-energy",
+        "level_learned_at": 6,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "growth",
+        "level_learned_at": 12,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "slam",
+        "level_learned_at": 18,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "low-sweep",
+        "level_learned_at": 24,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "ivy-cudgel",
+        "level_learned_at": 30,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "throat-chop",
+        "level_learned_at": 36,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "synthesis",
+        "level_learned_at": 42,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "spiky-shield",
+        "level_learned_at": 48,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "power-whip",
+        "level_learned_at": 54,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "superpower",
+        "level_learned_at": 60,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "wood-hammer",
+        "level_learned_at": 66,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1018,
+    "name": "archaludon",
+    "height": 20,
+    "weight": 600,
+    "base_experience": 300,
+    "sprite_path": "archaludon.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "steel"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "dragon"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 90,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 105,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 130,
+        "effort": 3,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 125,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 65,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 85,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "stamina"
+        },
+        "is_hidden": false,
+        "slot": 1
+      },
+      {
+        "ability": {
+          "name": "sturdy"
+        },
+        "is_hidden": false,
+        "slot": 2
+      },
+      {
+        "ability": {
+          "name": "stalwart"
+        },
+        "is_hidden": true,
+        "slot": 3
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "electro-shot",
+        "level_learned_at": 0,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "leer",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "metal-claw",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "rock-smash",
+        "level_learned_at": 6,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "hone-claws",
+        "level_learned_at": 12,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "metal-sound",
+        "level_learned_at": 18,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "breaking-swipe",
+        "level_learned_at": 24,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-tail",
+        "level_learned_at": 30,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "iron-defense",
+        "level_learned_at": 36,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "focus-energy",
+        "level_learned_at": 42,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-claw",
+        "level_learned_at": 48,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "flash-cannon",
+        "level_learned_at": 54,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "metal-burst",
+        "level_learned_at": 60,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "hyper-beam",
+        "level_learned_at": 66,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1019,
+    "name": "hydrapple",
+    "height": 18,
+    "weight": 930,
+    "base_experience": 270,
+    "sprite_path": "hydrapple.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "grass"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "dragon"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 106,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 110,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 120,
+        "effort": 3,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 44,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "supersweet-syrup"
+        },
+        "is_hidden": false,
+        "slot": 1
+      },
+      {
+        "ability": {
+          "name": "regenerator"
+        },
+        "is_hidden": false,
+        "slot": 2
+      },
+      {
+        "ability": {
+          "name": "sticky-hold"
+        },
+        "is_hidden": true,
+        "slot": 3
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "fickle-beam",
+        "level_learned_at": 0,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "withdraw",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "sweet-scent",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "recycle",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "astonish",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-tail",
+        "level_learned_at": 4,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "growth",
+        "level_learned_at": 8,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-breath",
+        "level_learned_at": 12,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "protect",
+        "level_learned_at": 16,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "bullet-seed",
+        "level_learned_at": 20,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "syrup-bomb",
+        "level_learned_at": 28,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-pulse",
+        "level_learned_at": 32,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "recover",
+        "level_learned_at": 36,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "energy-ball",
+        "level_learned_at": 40,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "substitute",
+        "level_learned_at": 44,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "power-whip",
+        "level_learned_at": 54,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1020,
+    "name": "gouging-fire",
+    "height": 35,
+    "weight": 5900,
+    "base_experience": 295,
+    "sprite_path": "gouging-fire.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "fire"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "dragon"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 105,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 115,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 121,
+        "effort": 3,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 65,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 93,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 91,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "protosynthesis"
+        },
+        "is_hidden": false,
+        "slot": 1
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "stomp",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "leer",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "sunny-day",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "incinerate",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "fire-fang",
+        "level_learned_at": 7,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "howl",
+        "level_learned_at": 14,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "bite",
+        "level_learned_at": 21,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-claw",
+        "level_learned_at": 28,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "crush-claw",
+        "level_learned_at": 35,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "morning-sun",
+        "level_learned_at": 42,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "burning-bulwark",
+        "level_learned_at": 49,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-rush",
+        "level_learned_at": 56,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "fire-blast",
+        "level_learned_at": 63,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "lava-plume",
+        "level_learned_at": 70,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "outrage",
+        "level_learned_at": 77,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "flare-blitz",
+        "level_learned_at": 84,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "raging-fury",
+        "level_learned_at": 91,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1021,
+    "name": "raging-bolt",
+    "height": 52,
+    "weight": 4800,
+    "base_experience": 295,
+    "sprite_path": "raging-bolt.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "electric"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "dragon"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 125,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 73,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 91,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 137,
+        "effort": 3,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 89,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 75,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "protosynthesis"
+        },
+        "is_hidden": false,
+        "slot": 1
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "stomp",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "twister",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "sunny-day",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "shock-wave",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "charge",
+        "level_learned_at": 7,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-breath",
+        "level_learned_at": 14,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "electric-terrain",
+        "level_learned_at": 21,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "discharge",
+        "level_learned_at": 28,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-tail",
+        "level_learned_at": 35,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "calm-mind",
+        "level_learned_at": 42,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "thunderclap",
+        "level_learned_at": 49,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-hammer",
+        "level_learned_at": 56,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "rising-voltage",
+        "level_learned_at": 63,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "dragon-pulse",
+        "level_learned_at": 70,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "zap-cannon",
+        "level_learned_at": 77,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "body-press",
+        "level_learned_at": 84,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "thunder",
+        "level_learned_at": 91,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1022,
+    "name": "iron-boulder",
+    "height": 15,
+    "weight": 1625,
+    "base_experience": 295,
+    "sprite_path": "iron-boulder.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "rock"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "psychic"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 90,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 120,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 80,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 68,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 108,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 124,
+        "effort": 3,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "quark-drive"
+        },
+        "is_hidden": false,
+        "slot": 1
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "horn-attack",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "leer",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "rock-throw",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "electric-terrain",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "quick-attack",
+        "level_learned_at": 7,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "slash",
+        "level_learned_at": 14,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "agility",
+        "level_learned_at": 21,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "psycho-cut",
+        "level_learned_at": 28,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "counter",
+        "level_learned_at": 35,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "rock-tomb",
+        "level_learned_at": 42,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "sacred-sword",
+        "level_learned_at": 49,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "mighty-cleave",
+        "level_learned_at": 56,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "swords-dance",
+        "level_learned_at": 63,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "megahorn",
+        "level_learned_at": 70,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "quick-guard",
+        "level_learned_at": 77,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "stone-edge",
+        "level_learned_at": 84,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "giga-impact",
+        "level_learned_at": 91,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1023,
+    "name": "iron-crown",
+    "height": 16,
+    "weight": 1560,
+    "base_experience": 295,
+    "sprite_path": "iron-crown.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "steel"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "psychic"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 90,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 72,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 100,
+        "effort": 0,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 122,
+        "effort": 3,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 108,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 98,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "quark-drive"
+        },
+        "is_hidden": false,
+        "slot": 1
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "leer",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "confusion",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "metal-claw",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "electric-terrain",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "smart-strike",
+        "level_learned_at": 7,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "slash",
+        "level_learned_at": 14,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "iron-defense",
+        "level_learned_at": 21,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "psyshock",
+        "level_learned_at": 28,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "psycho-cut",
+        "level_learned_at": 35,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "flash-cannon",
+        "level_learned_at": 42,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "sacred-sword",
+        "level_learned_at": 49,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "tachyon-cutter",
+        "level_learned_at": 56,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "future-sight",
+        "level_learned_at": 63,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "volt-switch",
+        "level_learned_at": 70,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "quick-guard",
+        "level_learned_at": 77,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "metal-burst",
+        "level_learned_at": 84,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "hyper-beam",
+        "level_learned_at": 91,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1024,
+    "name": "terapagos",
+    "height": 2,
+    "weight": 65,
+    "base_experience": 90,
+    "sprite_path": "terapagos.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "normal"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 90,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 65,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 85,
+        "effort": 1,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 65,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 85,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 60,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "tera-shift"
+        },
+        "is_hidden": false,
+        "slot": 1
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "withdraw",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "tri-attack",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "rapid-spin",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "ancient-power",
+        "level_learned_at": 10,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "headbutt",
+        "level_learned_at": 20,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "protect",
+        "level_learned_at": 30,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "earth-power",
+        "level_learned_at": 40,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "heavy-slam",
+        "level_learned_at": 50,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "tera-starstorm",
+        "level_learned_at": 60,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "double-edge",
+        "level_learned_at": 70,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "rock-polish",
+        "level_learned_at": 80,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "gyro-ball",
+        "level_learned_at": 90,
+        "version_group": "scarlet-violet"
+      }
+    ]
+  },
+  {
+    "id": 1025,
+    "name": "pecharunt",
+    "height": 3,
+    "weight": 3,
+    "base_experience": 300,
+    "sprite_path": "pecharunt.png",
+    "types": [
+      {
+        "slot": 1,
+        "type": {
+          "name": "poison"
+        }
+      },
+      {
+        "slot": 2,
+        "type": {
+          "name": "ghost"
+        }
+      }
+    ],
+    "stats": [
+      {
+        "base_stat": 88,
+        "effort": 0,
+        "stat": {
+          "name": "hp"
+        }
+      },
+      {
+        "base_stat": 88,
+        "effort": 0,
+        "stat": {
+          "name": "attack"
+        }
+      },
+      {
+        "base_stat": 160,
+        "effort": 3,
+        "stat": {
+          "name": "defense"
+        }
+      },
+      {
+        "base_stat": 88,
+        "effort": 0,
+        "stat": {
+          "name": "special-attack"
+        }
+      },
+      {
+        "base_stat": 88,
+        "effort": 0,
+        "stat": {
+          "name": "special-defense"
+        }
+      },
+      {
+        "base_stat": 88,
+        "effort": 0,
+        "stat": {
+          "name": "speed"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "ability": {
+          "name": "poison-puppeteer"
+        },
+        "is_hidden": false,
+        "slot": 1
+      }
+    ],
+    "level_up_moves": [
+      {
+        "name": "smog",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "poison-gas",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "memento",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "astonish",
+        "level_learned_at": 1,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "withdraw",
+        "level_learned_at": 8,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "destiny-bond",
+        "level_learned_at": 16,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "fake-tears",
+        "level_learned_at": 24,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "parting-shot",
+        "level_learned_at": 32,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "shadow-ball",
+        "level_learned_at": 40,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "malignant-chain",
+        "level_learned_at": 48,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "toxic",
+        "level_learned_at": 56,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "nasty-plot",
+        "level_learned_at": 64,
+        "version_group": "scarlet-violet"
+      },
+      {
+        "name": "recover",
+        "level_learned_at": 72,
+        "version_group": "scarlet-violet"
+      }
+    ]
   }
 ]
