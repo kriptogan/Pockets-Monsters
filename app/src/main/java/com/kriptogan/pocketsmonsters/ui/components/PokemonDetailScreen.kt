@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,13 +28,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.activity.compose.BackHandler
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.kriptogan.pocketsmonsters.data.models.Pokemon
 import com.kriptogan.pocketsmonsters.data.tcg.PokemonTCGData
 import com.kriptogan.pocketsmonsters.data.tcg.TCGSet
 import com.kriptogan.pocketsmonsters.data.tcg.TCGCard
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun PokemonDetailScreen(
@@ -172,7 +179,16 @@ fun PokemonDetailScreen(
         
         Spacer(modifier = Modifier.height(32.dp))
         
-        // TCG Sets Section
+        // TCG Sets Section - Offline Images
+        // For now, only Charizard (ID 4) is supported
+        if (pokemon.id == 4) {
+            OfflineTCGSetsSection(
+                pokemonId = pokemon.id,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        
+        // Original TCG Sets Section (API-based)
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
@@ -188,7 +204,7 @@ fun PokemonDetailScreen(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "TCG Sets",
+                    text = "TCG Sets (API)",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF1A1A1A),
@@ -414,6 +430,278 @@ private fun TCGCardImage(
                 )
             }
         }
+    }
+}
+
+/**
+ * Display offline TCG sets section
+ */
+@Composable
+private fun OfflineTCGSetsSection(
+    pokemonId: Int,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    val gson = Gson()
+    
+    // Load set index and sets data
+    val imageDir = "tcg_images/$pokemonId"
+    val setIndex = remember(pokemonId) {
+        try {
+            val json = context.assets.open("$imageDir/index.json").bufferedReader().use { it.readText() }
+            val type = object : TypeToken<Map<String, String>>() {}.type
+            gson.fromJson<Map<String, String>>(json, type) ?: emptyMap()
+        } catch (e: Exception) {
+            emptyMap<String, String>()
+        }
+    }
+    
+    val setsData = remember {
+        try {
+            val json = context.assets.open("sets_data.json").bufferedReader().use { it.readText() }
+            val type = object : TypeToken<Map<String, Any>>() {}.type
+            val data = gson.fromJson<Map<String, Any>>(json, type)
+            val setsList = (data?.get("data") as? List<Map<String, Any>>) ?: emptyList()
+            setsList.associate { (it["id"] as? String) to (it["name"] as? String) }
+        } catch (e: Exception) {
+            emptyMap<String, String>()
+        }
+    }
+    
+    // Get available images for this Pokémon
+    // For now, only Charizard (ID 4) is supported
+    // Images are named: setId_cardNumber.png
+    // Directory structure: tcg_images/{pokemonId}/
+    val availableImages = remember(pokemonId) {
+        try {
+            val imageFiles = context.assets.list(imageDir)
+            imageFiles?.filter { it.endsWith(".png") && it != "index.json" }
+                ?.mapNotNull { filename ->
+                    // Extract set ID from filename (format: setId_cardNumber.png)
+                    val match = Regex("^([^_]+)_(\\d+)\\.png$").find(filename)
+                    match?.let {
+                        val setId = it.groupValues[1]
+                        Pair(setId, "$imageDir/$filename")
+                    }
+                } ?: emptyList()
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+    
+    // Group images by set ID
+    val imagesBySet = remember(availableImages) {
+        availableImages.groupBy({ it.first }, { it.second })
+    }
+    
+    // State for enlarged image dialog
+    var selectedImagePath by remember { mutableStateOf<String?>(null) }
+    
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        border = androidx.compose.foundation.BorderStroke(
+            width = 1.dp,
+            color = Color(0xFFD32F2F).copy(alpha = 0.3f)
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = "TCG Sets",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1A1A1A),
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            
+            if (imagesBySet.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No TCG card images found",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(0xFF666666),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            } else {
+                // Display each set with its cards
+                imagesBySet.forEach { (setId, imagePaths) ->
+                    val setName = setsData[setId] ?: setIndex[setId] ?: setId
+                    
+                    OfflineTCGSetCard(
+                        setName = setName,
+                        imagePaths = imagePaths,
+                        onImageClick = { imagePath ->
+                            selectedImagePath = imagePath
+                        },
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                }
+            }
+        }
+    }
+    
+    // Enlarged image dialog
+    selectedImagePath?.let { imagePath ->
+        Dialog(
+            onDismissRequest = { selectedImagePath = null },
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false,
+                decorFitsSystemWindows = true
+            )
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.9f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Close button
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        IconButton(
+                            onClick = { selectedImagePath = null },
+                            modifier = Modifier
+                                .background(
+                                    Color.White.copy(alpha = 0.2f),
+                                    RoundedCornerShape(8.dp)
+                                )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Close",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                    
+                    Spacer(modifier = Modifier.weight(1f))
+                    
+                    // Enlarged image
+                    AsyncImage(
+                        model = ImageRequest.Builder(context)
+                            .data("file:///android_asset/$imagePath")
+                            .build(),
+                        contentDescription = "Enlarged card",
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .fillMaxHeight(0.8f),
+                        contentScale = ContentScale.Fit
+                    )
+                    
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Display a single offline TCG set with its card images
+ */
+@Composable
+private fun OfflineTCGSetCard(
+    setName: String,
+    imagePaths: List<String>,
+    onImageClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFFF5F5F5)
+        ),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp)
+        ) {
+            // Set name
+            Text(
+                text = setName,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1A1A1A),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            
+            // Card images
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(imagePaths) { imagePath ->
+                    OfflineTCGCardImage(
+                        imagePath = imagePath,
+                        onClick = { onImageClick(imagePath) },
+                        modifier = Modifier.size(120.dp, 168.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Display a single offline TCG card image
+ */
+@Composable
+private fun OfflineTCGCardImage(
+    imagePath: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    var isHovered by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (isHovered) 1.05f else 1f,
+        animationSpec = tween(durationMillis = 200),
+        label = "cardHoverScale"
+    )
+    
+    Card(
+        modifier = modifier
+            .scale(scale)
+            .pointerInput(imagePath) {
+                detectTapGestures(
+                    onPress = {
+                        isHovered = true
+                        tryAwaitRelease()
+                        isHovered = false
+                        onClick()
+                    }
+                )
+            },
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (isHovered) 8.dp else 4.dp
+        )
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(context)
+                .data("file:///android_asset/$imagePath")
+                .crossfade(true)
+                .build(),
+            contentDescription = "TCG card",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Fit
+        )
     }
 }
 

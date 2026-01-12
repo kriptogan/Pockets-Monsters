@@ -25,3 +25,4 @@ app/src/main/assets/sprite_urls.json
 
 # Development scripts (can be regenerated)
 scripts/
+tcg_images/
