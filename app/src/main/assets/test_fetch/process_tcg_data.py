@@ -215,55 +215,38 @@ with open(index_path, 'w', encoding='utf-8') as f:
 
 print(f"Created index.json with {len(index)} set entries")
 
-# Step 8: Download images
-print("\nStep 7: Downloading card images...")
-print(f"Total images to download: {len(set_id_card_pairs)}\n")
+# Step 8: Create cards.json with image URLs
+print("\nStep 7: Creating cards.json with image URLs...")
+print(f"Total cards to process: {len(set_id_card_pairs)}\n")
 
+cards_data = {}
 total = len(set_id_card_pairs)
-success = 0
-failed = 0
-skipped = 0
 
 for i, (set_id, card_number) in enumerate(set_id_card_pairs, 1):
     # Construct URL: images.pokemontcg.io/[baseCode]/[cardIndex]_hires.png
     url = f"https://images.pokemontcg.io/{set_id}/{card_number}_hires.png"
     
-    # Construct filename: setId_cardNumber.png
-    filename = f"{set_id}_{card_number}.png"
-    filepath = os.path.join(image_dir, filename)
+    # Use setId_cardNumber as the key
+    card_key = f"{set_id}_{card_number}"
+    cards_data[card_key] = {
+        "setId": set_id,
+        "cardNumber": card_number,
+        "imageUrl": url
+    }
     
-    # Skip if file already exists
-    if os.path.exists(filepath):
-        print(f"[{i}/{total}] Skipped (exists): {filename}")
-        skipped += 1
-        continue
-    
-    try:
-        # Download image
-        response = requests.get(url, timeout=30)
-        response.raise_for_status()
-        
-        # Save image
-        with open(filepath, 'wb') as f:
-            f.write(response.content)
-        
-        print(f"[{i}/{total}] OK Downloaded: {filename}")
-        success += 1
-        
-    except requests.exceptions.RequestException as e:
-        print(f"[{i}/{total}] FAILED: {filename} - {str(e)}")
-        failed += 1
-    except Exception as e:
-        print(f"[{i}/{total}] ERROR: {filename} - {str(e)}")
-        failed += 1
+    if i % 50 == 0 or i == total:
+        print(f"Processed {i}/{total} cards...")
+
+# Save cards.json
+cards_json_path = os.path.join(image_dir, 'cards.json')
+with open(cards_json_path, 'w', encoding='utf-8') as f:
+    json.dump(cards_data, f, indent=2, ensure_ascii=False)
 
 print(f"\n{'='*50}")
-print(f"Download complete!")
-print(f"Total: {total}")
-print(f"Success: {success}")
-print(f"Skipped: {skipped}")
-print(f"Failed: {failed}")
+print(f"Cards JSON created successfully!")
+print(f"Total cards: {total}")
+print(f"Saved to: {cards_json_path}")
 print(f"{'='*50}")
 
-print(f"\nAll done! Files saved to: {image_dir}")
+print(f"\nAll done! Cards data saved to: {image_dir}")
 
